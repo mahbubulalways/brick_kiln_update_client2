@@ -16,6 +16,7 @@ import { useTitleStore } from "@/zustand/store/titleStore";
 import { TQuery } from "@/interface/query";
 import DownloadAppPage from "../DownloadAppPage/DownloadAppPage";
 import SmsSettings from "./SmsSettings";
+import SeasonCreate from "./SeasonCreate";
 
 const DashboardSettings = ({
     limit,
@@ -70,6 +71,8 @@ const DashboardSettings = ({
             case 8: return <SmsSettings />
 
             case 9: return <DownloadAppPage />
+
+            case 10: return <SeasonCreate />
 
             default:
                 return <VataInformation />;

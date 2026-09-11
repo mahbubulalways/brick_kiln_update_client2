@@ -1,39 +1,48 @@
 import { baseApi } from "../baseApi";
 
 const seasonApi = baseApi.injectEndpoints({
-    overrideExisting: true,
+  overrideExisting: true,
 
-    endpoints: (builder) => ({
-        // GET ALL SEASONS
-        getAllSeasons: builder.query({
-            query: () => ({
-                url: "/season",
-                method: "GET",
-            }),
-            providesTags: ["SEASON"],
-        }),
-
-        // GET ACTIVE SEASON
-        getActiveSeason: builder.query({
-            query: () => ({
-                url: "/season/active",
-                method: "GET",
-            }),
-            providesTags: ["SEASON"],
-        }),
-
-        changeActiveSeason: builder.mutation({
-            query: (id) => ({
-                url: `/season/select/${id}`,
-                method: "PATCH",
-            }),
-            invalidatesTags: ["SEASON"],
-        }),
+  endpoints: (builder) => ({
+    // GET ALL SEASONS
+    getAllSeasons: builder.query({
+      query: () => ({
+        url: "/season",
+        method: "GET",
+      }),
+      providesTags: ["SEASON"],
     }),
+
+    // GET ACTIVE SEASON
+    getActiveSeason: builder.query({
+      query: () => ({
+        url: "/season/active",
+        method: "GET",
+      }),
+      providesTags: ["SEASON"],
+    }),
+
+    changeActiveSeason: builder.mutation({
+      query: (id) => ({
+        url: `/season/select/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["SEASON"],
+    }),
+
+    createSeason: builder.mutation({
+      query: (id) => ({
+        url: `/season/create`,
+        method: "POST",
+      }),
+      invalidatesTags: ["SEASON"],
+    }),
+  }),
 });
 
 export const {
-    useGetAllSeasonsQuery,
-    useGetActiveSeasonQuery,
-    useChangeActiveSeasonMutation
+  useGetAllSeasonsQuery,
+  useGetActiveSeasonQuery,
+  useChangeActiveSeasonMutation,
+  useCreateSeasonMutation,
 } = seasonApi;
