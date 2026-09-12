@@ -19,11 +19,15 @@ import { useRouter } from "next/navigation";
 
 const DocumentPage = () => {
     const [searchItems, setSearchItem] = useState("");
-    const [openFolderModal, setOpenFolderModal] = useState<boolean>(false);
+    const [openFolderModal, setOpenFolderModal] =
+        useState<boolean>(false);
+
     const [orientation, setOrientation] = useState<
         "grid" | "list" | "image"
     >("grid");
-    const router = useRouter()
+
+    const router = useRouter();
+
     const {
         data,
         isLoading,
@@ -31,66 +35,68 @@ const DocumentPage = () => {
         refetch,
     } = useGetAllDocumentsQuery(undefined);
 
-
-
-    const filteredDocuments = data?.data?.filter((document: any) =>
-        document?.name
-            ?.toLowerCase()
-            .includes(searchItems.toLowerCase())
+    const filteredDocuments = data?.data?.documents?.filter(
+        (document: any) =>
+            document?.name
+                ?.toLowerCase()
+                .includes(searchItems.toLowerCase()),
     );
+
+    const storage = data?.data?.storage;
+
+    const usedGB = Number(storage?.usedGB ?? 0);
+    const limitGB = Number(storage?.limitGB ?? 0);
+    const remainingGB = Number(storage?.remainingGB ?? 0);
+
+    const storagePercentage =
+        limitGB > 0
+            ? Math.min((usedGB / limitGB) * 100, 100)
+            : 0;
 
     return (
         <div className="min-h-screen w-full rounded bg-white p-3">
             <div className="flex w-full flex-col gap-3 rounded-2xl border border-[#e2e8f0] bg-white px-3 py-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] sm:h-[74px] sm:min-h-0 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-0">
-
-                {/* Left Section */}
                 <div className="flex w-full items-center gap-2 sm:w-auto sm:gap-3">
-
                     <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                        {/* Back */}
                         <button
-                        onClick={()=>router.back()}
-                            className="flex cursor-pointer h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#dfe3e8] bg-[#f8f9fa] text-[#a0a5ab] transition hover:bg-gray-100 sm:h-10 sm:w-10"
+                            onClick={() => router.back()}
+                            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#dfe3e8] bg-[#f8f9fa] text-[#a0a5ab] transition hover:bg-gray-100 sm:h-10 sm:w-10"
                         >
                             <ArrowLeft size={19} />
                         </button>
 
-                        {/* Home */}
-                        <button
-                            className="shrink-0 rounded-full bg-[#e8eef5] px-4 py-2 text-xs font-medium text-[#526174] sm:px-5 sm:text-sm"
-                        >
+                        <button className="shrink-0 rounded-full bg-[#e8eef5] px-4 py-2 text-xs font-medium text-[#526174] sm:px-5 sm:text-sm">
                             Home
                         </button>
                     </div>
 
-                    {/* Mobile Search */}
                     <div className="min-w-0 flex-1 sm:hidden">
                         <SearchBar
                             value={searchItems}
-                            onChange={(e) => setSearchItem(e.target.value)}
+                            onChange={(e) =>
+                                setSearchItem(e.target.value)
+                            }
                             onClear={() => setSearchItem("")}
                         />
                     </div>
                 </div>
 
-                {/* Desktop / Right Section */}
                 <div className="flex w-full shrink-0 items-center gap-2 overflow-x-auto sm:w-auto sm:gap-3">
-
-                    {/* Desktop Search */}
                     <div className="hidden sm:block">
                         <SearchBar
                             value={searchItems}
-                            onChange={(e) => setSearchItem(e.target.value)}
+                            onChange={(e) =>
+                                setSearchItem(e.target.value)
+                            }
                             onClear={() => setSearchItem("")}
                         />
                     </div>
 
-                    {/* View Orientation */}
                     <div className="flex h-9 shrink-0 items-center rounded-xl bg-[#f1f4f8] p-1 sm:h-10">
-
-                        {/* Grid */}
                         <button
-                            onClick={() => setOrientation("grid")}
+                            onClick={() =>
+                                setOrientation("grid")
+                            }
                             className={`flex h-7 w-8 items-center justify-center rounded-lg sm:h-8 sm:w-9 ${orientation === "grid"
                                     ? "bg-white text-[#00a474] shadow-sm"
                                     : "text-[#8290a1]"
@@ -99,9 +105,10 @@ const DocumentPage = () => {
                             <Grid2X2 size={16} />
                         </button>
 
-                        {/* List */}
                         <button
-                            onClick={() => setOrientation("list")}
+                            onClick={() =>
+                                setOrientation("list")
+                            }
                             className={`flex h-7 w-8 items-center justify-center rounded-lg sm:h-8 sm:w-9 ${orientation === "list"
                                     ? "bg-white text-[#00a474] shadow-sm"
                                     : "text-[#8290a1]"
@@ -110,9 +117,10 @@ const DocumentPage = () => {
                             <List size={17} />
                         </button>
 
-                        {/* Image */}
                         <button
-                            onClick={() => setOrientation("image")}
+                            onClick={() =>
+                                setOrientation("image")
+                            }
                             className={`flex h-7 w-8 items-center justify-center rounded-lg sm:h-8 sm:w-9 ${orientation === "image"
                                     ? "bg-white text-[#00a474] shadow-sm"
                                     : "text-[#8290a1]"
@@ -122,21 +130,62 @@ const DocumentPage = () => {
                         </button>
                     </div>
 
-                    {/* Folder */}
                     <button
-                        onClick={() => setOpenFolderModal(true)}
+                        onClick={() =>
+                            setOpenFolderModal(true)
+                        }
                         className="flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-[#d9dde3] bg-white px-3 text-xs font-medium text-[#4b5563] transition hover:bg-gray-50 sm:h-10 sm:gap-2 sm:px-4 sm:text-sm"
                     >
                         <FolderPlus size={16} />
                         <span>ফোল্ডার</span>
                     </button>
 
-                    {/* Upload */}
                     <UploadDocument refetch={refetch} />
                 </div>
             </div>
 
-            {/* Documents */}
+            {!isLoading && !isError && (
+                <div className="mt-3 rounded-2xl border border-[#e2e8f0] bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <h3 className="text-sm font-semibold text-[#263238]">
+                                    স্টোরেজ ব্যবহার
+                                </h3>
+
+                                <span className="rounded-full bg-[#e9f8f2] px-2 py-0.5 text-[11px] font-semibold text-[#039A63]">
+                                    {storagePercentage.toFixed(0)}%
+                                </span>
+                            </div>
+
+                            <p className="mt-1 text-xs text-[#8290a1]">
+                                {usedGB.toFixed(2)} GB ব্যবহৃত /{" "}
+                                {limitGB.toFixed(2)} GB
+                            </p>
+                        </div>
+
+                        <div className="text-left sm:text-right">
+                            <p className="text-sm font-semibold text-[#039A63]">
+                                {remainingGB.toFixed(2)} GB
+                            </p>
+
+                            <p className="text-[11px] text-[#8290a1]">
+                                অবশিষ্ট
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[#edf1f4]">
+                        <div
+                            className="h-full rounded-full bg-[#039A63] transition-all duration-500"
+                            style={{
+                                width: `${storagePercentage}%`,
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
+
             {isLoading ? (
                 <CustomLoader cls="h-[50vh]" />
             ) : isError ? (
@@ -148,11 +197,12 @@ const DocumentPage = () => {
                 />
             )}
 
-            {/* Create Folder Modal */}
             {openFolderModal && (
                 <CreateFolderModal
                     isOpen={openFolderModal}
-                    onClose={() => setOpenFolderModal(false)}
+                    onClose={() =>
+                        setOpenFolderModal(false)
+                    }
                 />
             )}
         </div>

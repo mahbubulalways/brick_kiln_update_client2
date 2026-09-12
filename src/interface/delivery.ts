@@ -2,6 +2,7 @@ import { IChallanForDataShow } from "@/types/types";
 import { IUser } from "./user";
 import { TCustomer } from "./customer";
 import { TDriver } from "./driver";
+import { TSeason } from "@/components/Dashboard/Modals/SeasonModal";
 
 export type TInvoiceCustomer = {
   id: number;
@@ -60,4 +61,5 @@ export type TDeliveryWithCustomer = {
   isDeleted: boolean;
   createdAt: string;
   invoice: IChallanForDataShow;
+  season: TSeason;
 };

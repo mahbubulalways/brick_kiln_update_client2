@@ -63,22 +63,112 @@ const UnloadPagePrint = ({
           HEADER
       ================================================= */}
 
-      <div className="text-center">
-        <h1 className="text-[24px] font-bold leading-tight">
-          {vataInfo?.nameBangla}
-        </h1>
+      {/* Watermark */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
+      >
+        <span
+          className="rotate-[-18deg] whitespace-nowrap font-extrabold text-black opacity-[0.04]"
+          style={{
+            fontSize: "170px",
+          }}
+        >
+          {vataInfo?.shortForm
+            ?.split("")
+            .join(".")}
+        </span>
+      </div>
 
-        <p className="text-[14px] font-medium mt-1">
-          {vataInfo?.address}
-        </p>
+      {/* Main Content */}
+      <div className="relative z-10 text-black">
+        <div className="flex items-center justify-between border-b-2 border-black pb-2">
+          {/* Short Form */}
+          <div className="flex h-11 w-[85px] items-center justify-center rounded border-2 border-black bg-white text-[22px] font-extrabold leading-none tracking-wide">
+            {vataInfo?.shortForm
+              ?.split("")
+              .join(".")}
+          </div>
 
-        <p className="text-[13px] mt-1">
-          {vataInfo?.challanManagerPhoneNumber}
-        </p>
+          {/* Owner Information */}
+          <div className="min-w-[150px] text-right leading-tight">
+            {vataInfo?.ownerName && (
+              <p className="text-[13px] font-bold">
+                প্রোঃ {vataInfo.ownerName}
+              </p>
+            )}
 
-        <p className="text-[13px]">
-          {vataInfo?.ownerName}
-        </p>
+            {vataInfo?.ownerPhoneNumber && (
+              <p className="mt-0.5 text-[14px] font-bold">
+                {vataInfo.ownerPhoneNumber}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Vata Name */}
+        <div className="mt-3 text-center">
+          <h1 className="text-[32px] font-extrabold leading-tight tracking-tight">
+            {vataInfo?.nameBangla}
+          </h1>
+
+          {vataInfo?.shortDescription && (
+            <p className="mt-1 text-[12px] font-semibold">
+              {vataInfo.shortDescription}
+            </p>
+          )}
+        </div>
+
+        {/* Address */}
+        {(vataInfo?.additionalAddress ||
+          vataInfo?.address) && (
+            <div className="mt-2 border-y border-black py-1.5 text-center text-[12px] font-semibold leading-tight">
+              {vataInfo?.additionalAddress}
+
+              {vataInfo?.additionalAddress &&
+                vataInfo?.address
+                ? " • "
+                : ""}
+
+              {vataInfo?.address}
+            </div>
+          )}
+
+        {/* Contact Information */}
+        {(vataInfo?.challanPersonOneName ||
+          vataInfo?.challanPersonTwoName ||
+          vataInfo?.challanManagerPhoneNumber) && (
+            <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center text-[11px] font-semibold">
+              {vataInfo?.challanPersonOneName && (
+                <span>
+                  <span className="font-bold">
+                    {vataInfo.challanPersonOneName}
+                  </span>
+                  :{" "}
+                  {vataInfo.challanPersonOnePhoneNumber}
+                </span>
+              )}
+
+              {vataInfo?.challanPersonTwoName && (
+                <span>
+                  <span className="font-bold">
+                    {vataInfo.challanPersonTwoName}
+                  </span>
+                  :{" "}
+                  {vataInfo.challanPersonTwoPhoneNumber}
+                </span>
+              )}
+
+              {vataInfo?.challanManagerPhoneNumber && (
+                <span>
+                  <span className="font-bold">
+                    ম্যানেজার
+                  </span>
+                  : {vataInfo.challanManagerPhoneNumber}
+                </span>
+              )}
+            </div>
+          )}
       </div>
 
       {/* =================================================

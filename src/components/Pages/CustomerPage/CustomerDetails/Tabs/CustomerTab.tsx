@@ -263,19 +263,25 @@ const CustomerTabs = ({
                 ref={invoicePrintRef}
                 title="customer_invoice"
             >
-                <CustomerChalanPrint invoiceInfo={invoiceInfo} customerInfo={customer} />
+                <CustomerChalanPrint
+                    vataInformation={vata?.data}
+                    invoiceInfo={invoiceInfo} customerInfo={customer} />
             </CommonPrint>
             <CommonPrint
                 ref={duePrintRef}
                 title="customer_due"
             >
-                <DueCollectionPrint dueInfo={dueInfo} customerInfo={customer} />
+                <DueCollectionPrint
+                    vataInformation={vata?.data}
+                    dueInfo={dueInfo} customerInfo={customer} />
             </CommonPrint>
             <CommonPrint
                 ref={deliveryPrintRef}
                 title="customer_due"
             >
-                <DeliveryHistoryPrint deliveryInfo={deliveryInfo} customerInfo={customer} />
+                <DeliveryHistoryPrint
+                    vataInformation={vata?.data}
+                    deliveryInfo={deliveryInfo} customerInfo={customer} />
             </CommonPrint>
 
         </div>

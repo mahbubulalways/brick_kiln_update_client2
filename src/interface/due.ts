@@ -1,4 +1,5 @@
 import { TSeason } from "@/components/Dashboard/Modals/SeasonModal";
+import { ISeason } from "./season";
 
 export interface ICustomer {
   id: number;
@@ -11,8 +12,8 @@ export interface ICustomer {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
-  customerCode:string
-   note: string | null;
+  customerCode: string;
+  note: string | null;
 }
 
 export interface IDueResponse {
@@ -29,8 +30,6 @@ export interface IDueResponse {
   updatedAt: string;
 }
 
-
-
 export interface TDueData {
   id: number;
   due: number;
@@ -38,14 +37,13 @@ export interface TDueData {
   newDue: number;
   nextDate: string;
   customerId: number;
-  season: string;
+  // season: string;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
   customer: ICustomer;
+  season: ISeason;
 }
-
-
 
 // FORM ER DATA
 export type TDueCollection = {
@@ -56,5 +54,5 @@ export type TDueCollection = {
   collect?: number | string;
   newDue?: number;
   nextDate?: Date;
-  season:string
+  season: string;
 };

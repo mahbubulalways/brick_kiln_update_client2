@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import NextTopLoader from 'nextjs-toploader';
 
 import { Anek_Bangla, Hind_Siliguri } from "next/font/google";
 import Providers from "@/components/Providers/Providers";
@@ -29,7 +30,13 @@ export default function RootLayout({
       <body
         cz-shortcut-listen="true"
         className={`${anekBangla.className} antialiased no-scrollbar`}
-      ><LayoutGuard>
+      >
+        <LayoutGuard>
+          <NextTopLoader
+            color="#039A63"
+            showSpinner={false}
+            height={3}
+          />
           <Providers>
             {/* <NetworkStatusProvider> */}
             {children}

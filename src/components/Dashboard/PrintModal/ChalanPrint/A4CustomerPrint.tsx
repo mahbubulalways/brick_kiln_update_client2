@@ -9,6 +9,7 @@ import {
     TClassAndRate,
 } from "@/types/types";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
+import { numberToBanglaWords } from "@/utils/numberToBanglaWord";
 
 interface A4CustomerPrintProps {
     invoice: IChallanForDataShow;
@@ -482,7 +483,13 @@ const A4CustomerPrint = ({
                             </div>
                         </div>
                     </div>
+                    <div className="pt-4">
+                        <div className="text-xs font-semibold text-[#8b3158]">
+                            কথায়: {numberToBanglaWords(invoice?.cash)} টাকা মাত্র
+                        </div>
 
+                        <div className="mt-1 border-b border-dotted border-gray-500" />
+                    </div>
                     <div
                         className={`grid grid-cols-3 text-center ${compact
                             ? "mt-3 gap-3"

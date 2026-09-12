@@ -129,6 +129,16 @@ export const navigationItems: TNavigationItem[] = [
     icon: FaQ,
     href: "/system/about",
   },
+  {
+    label: "Help",
+    icon: FaQ,
+    href: "/system/helpline",
+  },
+  {
+    label: "Video Link",
+    icon: FaQ,
+    href: "/system/video",
+  },
 
   // {
   //     label: "প্ল্যাটফর্ম রিপোর্ট",

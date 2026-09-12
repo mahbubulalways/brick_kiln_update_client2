@@ -195,7 +195,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
                 <tr>
                   <td colSpan={5}>
                     <CustomStatus
-                      type="empty"
+                      type="error"
                       description={SERVER_ERROR_MESSAGE}
                     />
                   </td>
@@ -204,7 +204,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
                   <tr>
                     <td colSpan={5}>
                       <CustomStatus
-                        type="error"
+                        type="empty"
                         description="কোনো লোড পাওয়া যায়নি"
                       />
                     </td>
@@ -286,7 +286,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
         <LoadPagePrint
           loadData={loads}
           date={new Date()}
-          vataInfo={vataInfo?.data}
+          vataInformation={vataInfo?.data}
         />
       </CommonPrint>
 

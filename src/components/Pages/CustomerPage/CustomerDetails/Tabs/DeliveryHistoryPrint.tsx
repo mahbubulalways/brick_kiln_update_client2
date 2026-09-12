@@ -2,15 +2,18 @@ import TableData from "@/components/Reusable/TableData";
 import TableHead from "@/components/Reusable/TableHead";
 import { TCustomer } from "@/interface/customer";
 import { TDeliveryWithCustomer } from "@/interface/delivery";
+import { TVataInformation } from "@/interface/vata";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 
 const DeliveryHistoryPrint = ({
     deliveryInfo,
+    vataInformation,
     customerInfo,
 }: {
     deliveryInfo: TDeliveryWithCustomer[] | undefined;
     customerInfo: TCustomer;
+    vataInformation: TVataInformation
 }) => {
 
 
@@ -33,22 +36,111 @@ const DeliveryHistoryPrint = ({
                     text-black
                 "
             >
-                <div className="text-center leading-tight">
-                    <h1 className="text-[28px] font-bold">
-                        ডেমো ব্রিকস
-                    </h1>
+                <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
+                >
+                    <span
+                        className="rotate-[-18deg] whitespace-nowrap font-extrabold text-black opacity-[0.04]"
+                        style={{
+                            fontSize: "170px",
+                        }}
+                    >
+                        {vataInformation?.shortForm
+                            ?.split("")
+                            .join(".")}
+                    </span>
+                </div>
 
-                    <p className="mt-1 text-[14px] font-medium">
-                        হেলালিপাড়া,চকবাড়িয়া,শরিফগঞ্জ
-                    </p>
+                {/* Main Content */}
+                <div className="relative z-10 text-black">
+                    <div className="flex items-center justify-between border-b-2 border-black pb-2">
+                        {/* Short Form */}
+                        <div className="flex h-11 w-[85px] items-center justify-center rounded border-2 border-black bg-white text-[22px] font-extrabold leading-none tracking-wide">
+                            {vataInformation?.shortForm
+                                ?.split("")
+                                .join(".")}
+                        </div>
 
-                    <p className="text-[13px] font-semibold">
-                        মোবাইল: ০১৯৮০৪৯৮৯৬৬,০১৯৮০৪৯৮৯৬৬
-                    </p>
+                        {/* Owner Information */}
+                        <div className="min-w-[150px] text-right leading-tight">
+                            {vataInformation?.ownerName && (
+                                <p className="text-[13px] font-bold">
+                                    প্রোঃ {vataInformation.ownerName}
+                                </p>
+                            )}
 
-                    <p className="text-[12px]">
-                        (প্রামাণিক ও মালিক বিক্রয়)
-                    </p>
+                            {vataInformation?.ownerPhoneNumber && (
+                                <p className="mt-0.5 text-[14px] font-bold">
+                                    {vataInformation.ownerPhoneNumber}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Vata Name */}
+                    <div className="mt-3 text-center">
+                        <h1 className="text-[32px] font-extrabold leading-tight tracking-tight">
+                            {vataInformation?.nameBangla}
+                        </h1>
+
+                        {vataInformation?.shortDescription && (
+                            <p className="mt-1 text-[12px] font-semibold">
+                                {vataInformation.shortDescription}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Address */}
+                    {(vataInformation?.additionalAddress ||
+                        vataInformation?.address) && (
+                            <div className="mt-2 border-y border-black py-1.5 text-center text-[12px] font-semibold leading-tight">
+                                {vataInformation?.additionalAddress}
+
+                                {vataInformation?.additionalAddress &&
+                                    vataInformation?.address
+                                    ? " • "
+                                    : ""}
+
+                                {vataInformation?.address}
+                            </div>
+                        )}
+
+                    {/* Contact Information */}
+                    {(vataInformation?.challanPersonOneName ||
+                        vataInformation?.challanPersonTwoName ||
+                        vataInformation?.challanManagerPhoneNumber) && (
+                            <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center text-[11px] font-semibold">
+                                {vataInformation?.challanPersonOneName && (
+                                    <span>
+                                        <span className="font-bold">
+                                            {vataInformation.challanPersonOneName}
+                                        </span>
+                                        :{" "}
+                                        {vataInformation.challanPersonOnePhoneNumber}
+                                    </span>
+                                )}
+
+                                {vataInformation?.challanPersonTwoName && (
+                                    <span>
+                                        <span className="font-bold">
+                                            {vataInformation.challanPersonTwoName}
+                                        </span>
+                                        :{" "}
+                                        {vataInformation.challanPersonTwoPhoneNumber}
+                                    </span>
+                                )}
+
+                                {vataInformation?.challanManagerPhoneNumber && (
+                                    <span>
+                                        <span className="font-bold">
+                                            ম্যানেজার
+                                        </span>
+                                        : {vataInformation.challanManagerPhoneNumber}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                 </div>
 
                 <div
@@ -63,7 +155,7 @@ const DeliveryHistoryPrint = ({
                         font-bold
                     "
                 >
-                    কাস্টমার স্টেটমেন্ট (সেব তথ্য)
+                    কাস্টমার স্টেটমেন্ট
                 </div>
 
                 <div
@@ -84,8 +176,6 @@ const DeliveryHistoryPrint = ({
                         </h2>
 
                         <p className="mt-1 text-[11px]">
-                            {toBanglaNumber(customerInfo.id)}
-                            {" | "}
                             মোবাইল: {customerInfo.phoneNumber}
                         </p>
 
@@ -97,7 +187,7 @@ const DeliveryHistoryPrint = ({
                     <div className="text-right text-[11px] leading-tight">
                         <p>
                             <span className="font-semibold">
-                                সিজন:
+                                সিজন:{deliveryInfo?.[0]?.season?.name}
                             </span>
                         </p>
 
@@ -242,7 +332,7 @@ const DeliveryHistoryPrint = ({
                                         <TableData
                                             cls="border border-gray-300 px-[6px] py-[7px] text-[11px]"
                                             td={
-                                                
+
                                                 customerInfo?.note ||
                                                 "-"
                                             }

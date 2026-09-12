@@ -43,16 +43,16 @@ const menuItems = [
     label: "পাসওয়ার্ড পরিবর্তন",
     icon: FiLock,
   },
-  {
-    id: 6,
-    label: "ইউজার পারমিশন",
-    icon: FiCheckSquare,
-  },
-  {
-    id: 7,
-    label: "প্রিন্টার সেটিং",
-    icon: FiPrinter,
-  },
+  // {
+  //   id: 6,
+  //   label: "ইউজার পারমিশন",
+  //   icon: FiCheckSquare,
+  // },
+  // {
+  //   id: 7,
+  //   label: "প্রিন্টার সেটিং",
+  //   icon: FiPrinter,
+  // },
   {
     id: 8,
     label: "এসএমএস সেটিং",

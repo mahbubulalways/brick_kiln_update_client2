@@ -53,7 +53,9 @@ export const baseApi = createApi({
     "NOTIFICATION",
     "FAQ", //both
     "ABOUT_US", //both
-    "SOFTWARE_PAYMENT", // both
+    "SOFTWARE_PAYMENT", // both\
+    "YOUTUBE_LINK",
+    "HELP_LINE",
     // ADMIN
     "ADMIN_VATA",
     "SMS_RATE",

@@ -58,15 +58,15 @@ const DashboardSettings = ({
                 return <PasswordChange />;
 
 
-            case 6:
-                return (
-                    <div className="rounded-lg border border-gray-200 bg-white p-5">
-                        ইউজার অ্যাক্সেস
-                    </div>
-                );
+            // case 6:
+            //     return (
+            //         <div className="rounded-lg border border-gray-200 bg-white p-5">
+            //             ইউজার অ্যাক্সেস
+            //         </div>
+            //     );
 
-            case 7:
-                return "HELLLLLLLLL";
+            // case 7:
+            //     return "HELLLLLLLLL";
 
             case 8: return <SmsSettings />
 

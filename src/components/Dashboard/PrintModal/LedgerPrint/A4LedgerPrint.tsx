@@ -4,6 +4,7 @@ import { TPaymentResponse } from "@/interface/payment";
 import { TVataInformation } from "@/interface/vata";
 import { useGetSinglePaymentReportQuery } from "@/redux/features/payment.features";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
+import { numberToBanglaWords } from "@/utils/numberToBanglaWord";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 
 
@@ -163,7 +164,13 @@ const A4LedgerPrint = ({
                             </div>
                         </div>
                     </div>
+                    <div className="pt-4">
+                        <div className="text-xs font-semibold text-[#8b3158]">
+                            কথায়: {numberToBanglaWords(ledger?.payment)} টাকা মাত্র
+                        </div>
 
+                        <div className="mt-1 border-b border-dotted border-gray-500" />
+                    </div>
                     <div className="mt-2 flex items-center justify-between gap-3">
                         <div className="flex-1 text-center">
                             <div className="mx-auto h-7 max-w-[180px] border-b border-dotted border-[#555] sm:h-10 sm:max-w-[250px]" />

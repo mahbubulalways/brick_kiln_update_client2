@@ -44,25 +44,112 @@ const RemainingDeliveryPrint = ({
             id="remaining-delivery-page-print"
             className="w-full bg-white px-10 text-black"
         >
-            <div className="text-center leading-tight">
-                <h1 className="text-[18px] font-bold">
-                    {vataInformation?.nameBangla}
-                </h1>
+            {/* Watermark */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
+            >
+                <span
+                    className="rotate-[-18deg] whitespace-nowrap font-extrabold text-black opacity-[0.04]"
+                    style={{
+                        fontSize: "170px",
+                    }}
+                >
+                    {vataInformation?.shortForm
+                        ?.split("")
+                        .join(".")}
+                </span>
+            </div>
 
-                <p className="mt-[2px] text-[9px] font-medium">
-                    {vataInformation?.address}
-                </p>
+            {/* Main Content */}
+            <div className="relative z-10 text-black">
+                <div className="flex items-center justify-between border-b-2 border-black pb-2">
+                    {/* Short Form */}
+                    <div className="flex h-11 w-[85px] items-center justify-center rounded border-2 border-black bg-white text-[22px] font-extrabold leading-none tracking-wide">
+                        {vataInformation?.shortForm
+                            ?.split("")
+                            .join(".")}
+                    </div>
 
-                <p className="mt-[2px] text-[8px]">
-                    মোবাইলঃ{" "}
-                    {toBanglaNumber(
-                        vataInformation?.challanManagerPhoneNumber || "",
+                    {/* Owner Information */}
+                    <div className="min-w-[150px] text-right leading-tight">
+                        {vataInformation?.ownerName && (
+                            <p className="text-[13px] font-bold">
+                                প্রোঃ {vataInformation.ownerName}
+                            </p>
+                        )}
+
+                        {vataInformation?.ownerPhoneNumber && (
+                            <p className="mt-0.5 text-[14px] font-bold">
+                                {vataInformation.ownerPhoneNumber}
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                {/* Vata Name */}
+                <div className="mt-3 text-center">
+                    <h1 className="text-[32px] font-extrabold leading-tight tracking-tight">
+                        {vataInformation?.nameBangla}
+                    </h1>
+
+                    {vataInformation?.shortDescription && (
+                        <p className="mt-1 text-[12px] font-semibold">
+                            {vataInformation.shortDescription}
+                        </p>
                     )}
-                </p>
+                </div>
 
-                <p className="text-[8px]">
-                    প্রোপ্রাইটরঃ {vataInformation?.ownerName}
-                </p>
+                {/* Address */}
+                {(vataInformation?.additionalAddress ||
+                    vataInformation?.address) && (
+                        <div className="mt-2 border-y border-black py-1.5 text-center text-[12px] font-semibold leading-tight">
+                            {vataInformation?.additionalAddress}
+
+                            {vataInformation?.additionalAddress &&
+                                vataInformation?.address
+                                ? " • "
+                                : ""}
+
+                            {vataInformation?.address}
+                        </div>
+                    )}
+
+                {/* Contact Information */}
+                {(vataInformation?.challanPersonOneName ||
+                    vataInformation?.challanPersonTwoName ||
+                    vataInformation?.challanManagerPhoneNumber) && (
+                        <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center text-[11px] font-semibold">
+                            {vataInformation?.challanPersonOneName && (
+                                <span>
+                                    <span className="font-bold">
+                                        {vataInformation.challanPersonOneName}
+                                    </span>
+                                    :{" "}
+                                    {vataInformation.challanPersonOnePhoneNumber}
+                                </span>
+                            )}
+
+                            {vataInformation?.challanPersonTwoName && (
+                                <span>
+                                    <span className="font-bold">
+                                        {vataInformation.challanPersonTwoName}
+                                    </span>
+                                    :{" "}
+                                    {vataInformation.challanPersonTwoPhoneNumber}
+                                </span>
+                            )}
+
+                            {vataInformation?.challanManagerPhoneNumber && (
+                                <span>
+                                    <span className="font-bold">
+                                        ম্যানেজার
+                                    </span>
+                                    : {vataInformation.challanManagerPhoneNumber}
+                                </span>
+                            )}
+                        </div>
+                    )}
             </div>
 
             <div className="relative mt-3 flex min-h-[25px] items-center justify-between">
