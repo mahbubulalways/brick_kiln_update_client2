@@ -20,7 +20,7 @@ const Seasons = () => {
         সিজনঃ{" "}
         {isLoading
           ? "লোড হচ্ছে..."
-          : toBanglaNumber(activeSeason?.name)  || "সিজন পাওয়া যায়নি"}
+          : activeSeason?.name ? toBanglaNumber(activeSeason?.name) : "পাওয়া যায়নি"}
       </button>
 
       {isOpen && (

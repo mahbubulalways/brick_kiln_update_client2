@@ -2,19 +2,18 @@
 
 import React from "react";
 import { RiMenuFold4Line } from "react-icons/ri";
-import Seasons from "../NavbarOptions/Seasons";
-import NavbarIcon from "../NavbarOptions/NavbarIcon";
-import { MdHistory } from "react-icons/md";
-import {
-    IoCallOutline,
-    IoDocumentTextOutline,
-    IoSettingsOutline,
-} from "react-icons/io5";
+import { IoCallOutline, IoDocumentTextOutline, IoSettingsOutline } from "react-icons/io5";
 import { CiYoutube } from "react-icons/ci";
 import { SiFampay } from "react-icons/si";
-import { ProfileMenu } from "../NavbarOptions/Profile";
-import { useTitleStore } from "@/zustand/store/titleStore";
+import { GrNotification } from "react-icons/gr";
 import Link from "next/link";
+
+import Seasons from "../NavbarOptions/Seasons";
+import NavbarIcon from "../NavbarOptions/NavbarIcon";
+import { ProfileMenu } from "../NavbarOptions/Profile";
+
+import { useTitleStore } from "@/zustand/store/titleStore";
+import { useGetUnreadNotificationsNumberQuery } from "@/redux/features/notification.features";
 
 interface DashboardNavbarProps {
     onToggleDrawer?: () => void;
@@ -26,7 +25,13 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
     isDrawerOpen,
 }) => {
     const { title } = useTitleStore();
+
     const [mounted, setMounted] = React.useState(false);
+
+    const { data: unreadNotificationResponse } =
+        useGetUnreadNotificationsNumberQuery(undefined);
+
+    const unreadCount = Number(unreadNotificationResponse?.data || 0);
 
     React.useEffect(() => {
         setMounted(true);
@@ -35,18 +40,15 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
     if (!mounted) return null;
 
     return (
-        <header className="sticky top-0 isolate z-50 bg-white w-full">
+        <header className="sticky top-0 isolate z-50 w-full bg-white">
             <div className="relative flex w-full items-center justify-between bg-white px-5 py-2 shadow-sm">
-
                 {/* Left */}
                 <div className="flex items-center gap-3">
-
                     <button
                         type="button"
                         onClick={onToggleDrawer}
-                        className={`ml-2 hidden cursor-pointer rounded bg-gray-100 p-2 duration-300 lg:block ${
-                            isDrawerOpen ? "rotate-180" : ""
-                        }`}
+                        className={`ml-2 hidden cursor-pointer rounded bg-gray-100 p-2 duration-300 lg:block ${isDrawerOpen ? "rotate-180" : ""
+                            }`}
                     >
                         <RiMenuFold4Line className="h-5 w-5 text-gray-700" />
                     </button>
@@ -64,12 +66,20 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
 
                     <div className="hidden lg:block">
                         <div className="flex items-center gap-2">
+                            {/* Notification */}
+                            <div className="relative">
+                                <NavbarIcon
+                                    Icon={GrNotification}
+                                    path="/dashboard/notifications"
+                                    title="নোটিফিকেশন"
+                                />
 
-                            <NavbarIcon
-                                Icon={MdHistory}
-                                path="/dashboard/history"
-                                title="আপডেট হিস্ট্রি"
-                            />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
+                                        {unreadCount > 99 ? "99+" : unreadCount}
+                                    </span>
+                                )}
+                            </div>
 
                             <NavbarIcon
                                 Icon={IoDocumentTextOutline}
@@ -102,7 +112,6 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                             />
 
                             <ProfileMenu />
-
                         </div>
                     </div>
                 </div>

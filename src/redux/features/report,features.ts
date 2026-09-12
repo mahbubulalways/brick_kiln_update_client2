@@ -17,6 +17,7 @@ const reportAPi = baseApi.injectEndpoints({
       query: (query: TQuery) => ({
         url: `report/dashboard?date=${query.date}`,
       }),
+      providesTags: ["SEASON"],
     }),
 
     // LOAD UNLOAD

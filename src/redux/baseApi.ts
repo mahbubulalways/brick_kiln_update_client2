@@ -50,6 +50,9 @@ export const baseApi = createApi({
     "SMS",
     "VATA_SMS_SITTINGS",
     "NOTE",
+    "NOTIFICATION",
+    "FAQ", //both
+    "ABOUT_US", //both
     "SOFTWARE_PAYMENT", // both
     // ADMIN
     "ADMIN_VATA",

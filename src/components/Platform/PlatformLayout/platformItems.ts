@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
+import { FaQ } from "react-icons/fa6";
 
 type TNavigationItem = {
   label: string;
@@ -117,6 +118,16 @@ export const navigationItems: TNavigationItem[] = [
     label: "নোট",
     icon: CreditCard,
     href: "/system/note",
+  },
+  {
+    label: "FAQ",
+    icon: FaQ,
+    href: "/system/faq",
+  },
+  {
+    label: "About",
+    icon: FaQ,
+    href: "/system/about",
   },
 
   // {
