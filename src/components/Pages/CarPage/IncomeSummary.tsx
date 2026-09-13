@@ -45,24 +45,24 @@ const IncomeSummary = ({
       bg: "bg-gradient-to-br from-purple-700 to-purple-500",
       icon: Banknote,
     },
-    {
-      title: "মজুদ নেওয়া",
-      value: currentGiven,
-      bg: "bg-gradient-to-br from-green-700 to-green-500",
-      icon: ArrowDown,
-    },
-    {
-      title: "মজুদ দেওয়া",
-      value: currentDue,
-      bg: "bg-gradient-to-br from-pink-600 to-pink-500",
-      icon: ArrowUp,
-    },
-    {
-      title: "ক্যাশ জের",
-      value: cashBalance,
-      bg: "bg-gradient-to-br from-indigo-700 to-indigo-500",
-      icon: Wallet,
-    },
+    // {
+    //   title: "মজুদ নেওয়া",
+    //   value: currentGiven,
+    //   bg: "bg-gradient-to-br from-green-700 to-green-500",
+    //   icon: ArrowDown,
+    // },
+    // {
+    //   title: "মজুদ দেওয়া",
+    //   value: currentDue,
+    //   bg: "bg-gradient-to-br from-pink-600 to-pink-500",
+    //   icon: ArrowUp,
+    // },
+    // {
+    //   title: "ক্যাশ জের",
+    //   value: cashBalance,
+    //   bg: "bg-gradient-to-br from-indigo-700 to-indigo-500",
+    //   icon: Wallet,
+    // },
   ];
 
   const toBanglaNumber = (value: number) =>

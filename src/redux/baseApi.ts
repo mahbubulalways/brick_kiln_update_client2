@@ -49,6 +49,7 @@ export const baseApi = createApi({
     "CAR",
     "SMS",
     "VATA_SMS_SITTINGS",
+    "SEND_SMS",
     "NOTE",
     "NOTIFICATION",
     "FAQ", //both
@@ -59,6 +60,8 @@ export const baseApi = createApi({
     // ADMIN
     "ADMIN_VATA",
     "SMS_RATE",
+    "DATABASE_BACKUP",
+    "DATABASE_BACKUP_PERMISSION",
   ],
   endpoints: () => ({}),
 });

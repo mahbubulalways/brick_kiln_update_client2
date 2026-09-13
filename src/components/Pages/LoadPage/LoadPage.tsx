@@ -40,6 +40,7 @@ import { getMovementTypeBangla } from "@/utils/getLoadTypeBangla";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import LoadInfoReportModal from "@/components/Dashboard/Modals/ReportModal/LoadReportModal";
 
 const LoadPage = ({ limit, page }: TQuery) => {
   const [date, setDate] = useState<Date | undefined>();
@@ -47,6 +48,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
   const [selected, setSelected] = useState("");
   const [openUpdateModal, setUpdateOpenModal] = useState<boolean>(false);
   const [loadId, setLoadId] = useState<string | undefined>(undefined)
+  const [loadInfoReportOpen, setLoadInfoReportOpen] = useState(false);
   const printRef = useRef<TCommonPrintRef>(null);
   const [filterDate, setDateFiter] = useState<{
     startDate: Date | null,
@@ -163,7 +165,10 @@ const LoadPage = ({ limit, page }: TQuery) => {
                 onClick={() => printRef.current?.print()}
               />
 
-              <CustomReportButton className="w-full lg:w-auto" />
+              <CustomReportButton
+                className="w-full lg:w-auto"
+                onClick={() => setLoadInfoReportOpen(true)}
+              />
             </div>
           </div>
         </div>
@@ -230,7 +235,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
 
                     <TableData td={toBanglaNumber(row.quantity)} />
 
-                    <td className="border p-2">
+                    <td className="border p-2 text-center">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button className="p-1.5 rounded hover:bg-gray-100 transition">
@@ -306,6 +311,14 @@ const LoadPage = ({ limit, page }: TQuery) => {
           onClose={() => setUpdateOpenModal(false)}
         />
       }
+
+      {loadInfoReportOpen && (
+        <LoadInfoReportModal
+          isOpen={loadInfoReportOpen}
+          onClose={() => setLoadInfoReportOpen(false)}
+          date={formatDate}
+        />
+      )}
     </div>
   );
 };

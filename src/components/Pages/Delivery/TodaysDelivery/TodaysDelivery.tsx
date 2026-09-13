@@ -85,14 +85,17 @@ const TodaysDeliveryPage = ({ limit, page, }: TQuery) => {
       <div className="flex justify-between items-center p-2  gap-5">
         <CustomNewButton title="নতুন ডেলিভারি" onClick={() => setIsOpen(!isOpen)} />
         <div className="flex items-center gap-2 ">
-          <div className="flex-1">
+
+          <div className="min-w-0 flex-1 lg:w-auto lg:flex-none">
             <CustomDateFilter
               value={filterDate}
               onChange={setDateFiter}
               placeholder="তারিখ ফিল্টার করুন"
-              className=""
+              className="w-full lg:w-auto"
             />
           </div>
+
+
           <CustomPrintButton
             onClick={() => printRef.current?.print()}
           />

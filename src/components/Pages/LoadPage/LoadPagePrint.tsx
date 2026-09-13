@@ -1,6 +1,7 @@
 import { TLoadResponse } from "@/interface/load";
 import { TVataInformation } from "@/interface/vata";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
+import { getMovementTypeBangla } from "@/utils/getLoadTypeBangla";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 
 type TLoadPagePrintProps = {
@@ -212,7 +213,7 @@ const LoadPagePrint = ({
 
                 {/* Load Type */}
                 <td className="border border-gray-300 py-1 px-2">
-                  {row.loadType || "-"}
+                  {getMovementTypeBangla(row.loadType) || "-"}
                 </td>
 
                 {/* Quantity */}

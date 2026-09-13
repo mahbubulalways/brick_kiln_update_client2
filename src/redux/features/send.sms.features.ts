@@ -11,9 +11,18 @@ const sendSmsAPi = baseApi.injectEndpoints({
         url: `/vata/send-sms/all`,
         method: "GET",
       }),
-      providesTags: ["VATA_SMS_SITTINGS"],
+      providesTags: ["VATA_SMS_SITTINGS", "SEND_SMS"],
+    }),
+
+    sendSms: builder.mutation({
+      query: (payload) => ({
+        url: `/vata/send-sms/send`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["SEND_SMS"],
     }),
   }),
 });
 
-export const { useGetAllSendSmsQuery } = sendSmsAPi;
+export const { useGetAllSendSmsQuery, useSendSmsMutation } = sendSmsAPi;

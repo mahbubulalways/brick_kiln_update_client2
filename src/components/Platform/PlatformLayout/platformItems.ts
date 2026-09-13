@@ -3,14 +3,19 @@ import {
   BarChart3,
   Building2,
   CreditCard,
+  DatabaseBackup,
+  FileText,
+  HelpCircle,
   LayoutDashboard,
   LifeBuoy,
   MessageSquare,
+  PlayCircle,
   Settings,
   ShieldCheck,
   Users,
+  WalletCards,
+  Info,
 } from "lucide-react";
-import { FaQ } from "react-icons/fa6";
 
 type TNavigationItem = {
   label: string;
@@ -21,6 +26,7 @@ type TNavigationItem = {
     href: string;
   }[];
 };
+
 export const navigationItems: TNavigationItem[] = [
   {
     label: "ড্যাশবোর্ড",
@@ -29,7 +35,7 @@ export const navigationItems: TNavigationItem[] = [
   },
 
   {
-    label: "ভাটা ম্যানেজমেন্ট",
+    label: "ভাটা ব্যবস্থাপনা",
     icon: Building2,
     children: [
       {
@@ -48,7 +54,7 @@ export const navigationItems: TNavigationItem[] = [
   },
 
   {
-    label: "অ্যাডমিন ম্যানেজমেন্ট",
+    label: "অ্যাডমিন ব্যবস্থাপনা",
     icon: ShieldCheck,
     children: [
       {
@@ -63,7 +69,7 @@ export const navigationItems: TNavigationItem[] = [
   },
 
   {
-    label: "সাবস্ক্রিপশন",
+    label: "সাবস্ক্রিপশন ব্যবস্থাপনা",
     icon: CreditCard,
     children: [
       {
@@ -78,66 +84,73 @@ export const navigationItems: TNavigationItem[] = [
   },
 
   {
-    label: "পেমেন্ট",
-    icon: CreditCard,
+    label: "পেমেন্ট ব্যবস্থাপনা",
+    icon: WalletCards,
     children: [
       {
         label: "নতুন পেমেন্ট",
         href: "/system/payments",
       },
       {
-        label: "পেমেন্ট হিস্টোরি",
+        label: "পেমেন্টের ইতিহাস",
         href: "/system/payments/history",
       },
-      // {
-      //     label: "পেন্ডিং পেমেন্ট",
-      //     href: "/system/payments/pending",
-      // },
     ],
   },
 
   {
-    label: "SMS ম্যানেজমেন্ট",
+    label: "এসএমএস ব্যবস্থাপনা",
     icon: MessageSquare,
     children: [
       {
-        label: "SMS রেট",
+        label: "এসএমএস রেট",
         href: "/system/sms",
       },
       {
-        label: "SMS ক্রয় রিকোয়েস্ট",
+        label: "এসএমএস ক্রয় অনুরোধ",
         href: "/system/sms/request",
       },
       {
-        label: "SMS হিস্টোরি",
+        label: "এসএমএসের ইতিহাস",
         href: "/system/sms/history",
       },
     ],
   },
+
   {
     label: "নোট",
-    icon: CreditCard,
+    icon: FileText,
     href: "/system/note",
   },
+
   {
-    label: "FAQ",
-    icon: FaQ,
+    label: "প্রায়শই জিজ্ঞাসিত প্রশ্ন",
+    icon: HelpCircle,
     href: "/system/faq",
   },
+
   {
-    label: "About",
-    icon: FaQ,
+    label: "আমাদের সম্পর্কে",
+    icon: Info,
     href: "/system/about",
   },
+
   {
-    label: "Help",
-    icon: FaQ,
+    label: "সহায়তা",
+    icon: LifeBuoy,
     href: "/system/helpline",
   },
+
   {
-    label: "Video Link",
-    icon: FaQ,
+    label: "ভিডিও লিংক",
+    icon: PlayCircle,
     href: "/system/video",
+  },
+
+  {
+    label: "ডেটাবেজ ব্যাকআপ",
+    icon: DatabaseBackup,
+    href: "/system/backup",
   },
 
   // {
@@ -145,49 +158,49 @@ export const navigationItems: TNavigationItem[] = [
   //     icon: BarChart3,
   //     children: [
   //         {
-  //             label: "ব্যবহার রিপোর্ট",
+  //             label: "ব্যবহার প্রতিবেদন",
   //             href: "/system/reports/usage",
   //         },
   //         {
-  //             label: "রেভিনিউ রিপোর্ট",
+  //             label: "রাজস্ব প্রতিবেদন",
   //             href: "/system/reports/revenue",
   //         },
   //         {
-  //             label: "ভাটা রিপোর্ট",
+  //             label: "ভাটা প্রতিবেদন",
   //             href: "/system/reports/vata",
   //         },
   //         {
-  //             label: "ইউজার রিপোর্ট",
+  //             label: "ইউজার প্রতিবেদন",
   //             href: "/system/reports/users",
   //         },
   //     ],
   // },
 
   // {
-  //     label: "সিস্টেম মনিটরিং",
+  //     label: "সিস্টেম পর্যবেক্ষণ",
   //     icon: Activity,
   //     children: [
   //         {
-  //             label: "সিস্টেম স্ট্যাটাস",
+  //             label: "সিস্টেমের অবস্থা",
   //             href: "/system/monitoring",
   //         },
   //         {
-  //             label: "অ্যাক্টিভিটি লগ",
+  //             label: "কার্যক্রমের লগ",
   //             href: "/system/activity-logs",
   //         },
   //         {
-  //             label: "এরর লগ",
+  //             label: "ত্রুটির লগ",
   //             href: "/system/error-logs",
   //         },
   //     ],
   // },
 
   // {
-  //     label: "সাপোর্ট",
+  //     label: "সহায়তা কেন্দ্র",
   //     icon: LifeBuoy,
   //     children: [
   //         {
-  //             label: "সাপোর্ট টিকিট",
+  //             label: "সহায়তা টিকিট",
   //             href: "/system/support",
   //         },
   //         {
@@ -210,7 +223,7 @@ export const navigationItems: TNavigationItem[] = [
   //             href: "/system/settings/notifications",
   //         },
   //         {
-  //             label: "সিকিউরিটি",
+  //             label: "নিরাপত্তা",
   //             href: "/system/settings/security",
   //         },
   //     ],

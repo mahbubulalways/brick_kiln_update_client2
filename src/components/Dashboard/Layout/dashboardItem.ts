@@ -16,6 +16,18 @@ import { PiTrolleyFill, PiTruckBold, PiUserListFill } from "react-icons/pi";
 import { RiStockFill } from "react-icons/ri";
 import { TiWeatherCloudy } from "react-icons/ti";
 
+import {
+  MdReceiptLong,
+  MdLocalShipping,
+  MdAccountBalanceWallet,
+  MdMenuBook,
+  MdPeople,
+  MdAssessment,
+  MdInventory2,
+  MdFolder,
+  MdWarehouse,
+} from "react-icons/md";
+
 export const dashboardItems1: TDashboardItem[] = [
   {
     id: "1",
@@ -28,7 +40,7 @@ export const dashboardItems1: TDashboardItem[] = [
   {
     id: "2",
     title: "চালান",
-    icon: GrDashboard,
+    icon: MdReceiptLong,
     feature: "INVOICE",
     children: [
       {
@@ -58,7 +70,7 @@ export const dashboardItems1: TDashboardItem[] = [
   {
     id: "3",
     title: "পেমেন্ট খাতা",
-    icon: MdPayment,
+    icon: MdAccountBalanceWallet,
     path: "/dashboard/payment",
     feature: "PAYMENT",
   },
@@ -66,7 +78,7 @@ export const dashboardItems1: TDashboardItem[] = [
   {
     id: "4",
     title: "ডেলিভারি",
-    icon: MdPayment,
+    icon: MdLocalShipping,
     feature: "DELIVERY",
     children: [
       {
@@ -96,7 +108,7 @@ export const dashboardItems1: TDashboardItem[] = [
   {
     id: "5",
     title: "বাকি খাতা",
-    icon: MdPayment,
+    icon: MdMenuBook,
     feature: "DUE",
     children: [
       {
@@ -159,7 +171,7 @@ export const dashboardItems1: TDashboardItem[] = [
     id: "10",
     title: "খতিয়ান",
     path: "/dashboard/ledger",
-    icon: MdCameraRoll,
+    icon: MdMenuBook,
     feature: "LEDGER",
   },
 
@@ -167,7 +179,7 @@ export const dashboardItems1: TDashboardItem[] = [
     id: "11",
     title: "কাস্টমার",
     path: "/dashboard/customer",
-    icon: PiUserListFill,
+    icon: MdPeople,
     feature: "CUSTOMER",
   },
 
@@ -175,7 +187,7 @@ export const dashboardItems1: TDashboardItem[] = [
     id: "12",
     title: "বিক্রি রিপোর্ট",
     path: "/dashboard/sell-report",
-    icon: HiDocumentReport,
+    icon: MdAssessment,
     feature: "SELL_REPORT",
   },
 
@@ -183,14 +195,14 @@ export const dashboardItems1: TDashboardItem[] = [
     id: "20",
     title: "ডকুমেন্টস",
     path: "/dashboard/documents",
-    icon: HiDocumentReport,
+    icon: MdFolder,
     feature: "DOCUMENTS",
   },
 
   {
     id: "21",
     title: "মালামাল স্টক",
-    icon: HiDocumentReport,
+    icon: MdWarehouse,
     feature: "ASSETS",
     children: [
       {
@@ -235,6 +247,7 @@ export const dashboardItems2: TDashboardItem[] = [
     icon: MdOutlineEmojiTransportation,
     feature: "CAR_RENTAL",
   },
+
   {
     id: "115",
     title: "ড্রাইভার",

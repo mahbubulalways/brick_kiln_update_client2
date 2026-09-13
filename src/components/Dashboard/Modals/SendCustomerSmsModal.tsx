@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdOutlineError, MdSms } from "react-icons/md";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import CustomModal from "@/components/Reusable/CustomModal";
 import CustomTextArea from "@/components/Reusable/CustomTextArea";
 import { showToast } from "@/components/Toast/CustomToast";
+import { useSendSmsMutation } from "@/redux/features/send.sms.features";
 
 type TSmsModalProps = {
   isOpen: boolean;
@@ -57,7 +57,7 @@ const SendCustomerSmsModal = ({
   onClose,
   customerId,
 }: TSmsModalProps) => {
-  const [isSending, setIsSending] = useState(false);
+  const [sendSms, { isLoading: isSending }] = useSendSmsMutation();
 
   const {
     register,
@@ -82,6 +82,8 @@ const SendCustomerSmsModal = ({
   };
 
   const handleClose = () => {
+    if (isSending) return;
+
     reset();
     onClose();
   };
@@ -98,7 +100,20 @@ const SendCustomerSmsModal = ({
       });
     }
 
-    if (data.message.trim().length > 160) {
+    const smsMessage = data.message.trim();
+
+    if (!smsMessage) {
+      return showToast({
+        title: "এসএমএস মেসেজ লিখুন",
+        type: "error",
+        options: {
+          duration: 4000,
+          icon: <MdOutlineError className="h-5 w-5" />,
+        },
+      });
+    }
+
+    if (smsMessage.length > 160) {
       return showToast({
         title: "এসএমএস ১৬০ অক্ষরের মধ্যে রাখুন",
         type: "error",
@@ -110,14 +125,11 @@ const SendCustomerSmsModal = ({
     }
 
     try {
-      setIsSending(true);
-
-      const payload = {
+      const res = await sendSms({
         customerId,
-        message: data.message.trim(),
-      };
+        message: smsMessage,
+      }).unwrap();
 
-      console.log(payload);
 
       showToast({
         title: "এসএমএস সফলভাবে পাঠানো হয়েছে",
@@ -127,21 +139,17 @@ const SendCustomerSmsModal = ({
           icon: <FaCircleCheck className="h-5 w-5" />,
         },
       });
-
-      handleClose();
-    } catch (error) {
-      console.log(error);
-
+      reset();
+      onClose();
+    } catch (error: any) {
       showToast({
-        title: "এসএমএস পাঠানো যায়নি",
+        title:
+          error?.data?.message ||
+          error?.message ||
+          "এসএমএস পাঠানো যায়নি",
         type: "error",
-        options: {
-          duration: 4000,
-          icon: <MdOutlineError className="h-5 w-5" />,
-        },
+
       });
-    } finally {
-      setIsSending(false);
     }
   };
 
@@ -176,12 +184,14 @@ const SendCustomerSmsModal = ({
                 <button
                   key={template.label}
                   type="button"
-                  onClick={() => handleTemplateClick(template.message)}
-                  className={`rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
-                    message === template.message
-                      ? "border-[#039A63] bg-[#039A63] text-white"
-                      : "border-gray-200 bg-white text-gray-600 hover:border-[#039A63] hover:bg-green-50 hover:text-[#039A63]"
-                  }`}
+                  onClick={() =>
+                    handleTemplateClick(template.message)
+                  }
+                  disabled={isSending}
+                  className={`rounded-lg border px-3 py-2 text-xs font-medium transition-all ${message === template.message
+                    ? "border-[#039A63] bg-[#039A63] text-white"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-[#039A63] hover:bg-green-50 hover:text-[#039A63]"
+                    } disabled:cursor-not-allowed disabled:opacity-50`}
                 >
                   {template.label}
                 </button>
@@ -211,9 +221,10 @@ const SendCustomerSmsModal = ({
             </span>
 
             <span
-              className={`text-xs font-medium ${
-                message.length > 160 ? "text-red-500" : "text-gray-500"
-              }`}
+              className={`text-xs font-medium ${message.length > 160
+                ? "text-red-500"
+                : "text-gray-500"
+                }`}
             >
               {message.length}/160
             </span>
@@ -223,18 +234,26 @@ const SendCustomerSmsModal = ({
             <button
               type="button"
               onClick={() => reset()}
-              className="w-full rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-600 transition hover:border-[#039A63] hover:text-[#039A63]"
+              disabled={isSending}
+              className="w-full rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-600 transition hover:border-[#039A63] hover:text-[#039A63] disabled:cursor-not-allowed disabled:opacity-50"
             >
               ক্লিয়ার
             </button>
 
             <button
               type="submit"
-              disabled={isSending || !message.trim()}
+              disabled={
+                isSending ||
+                !message.trim() ||
+                message.trim().length > 160
+              }
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#039A63] px-5 py-2 text-sm font-medium text-white transition hover:bg-[#028a58] disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               <MdSms size={18} />
-              {isSending ? "পাঠানো হচ্ছে..." : "এসএমএস পাঠান"}
+
+              {isSending
+                ? "পাঠানো হচ্ছে..."
+                : "এসএমএস পাঠান"}
             </button>
           </div>
         </div>
