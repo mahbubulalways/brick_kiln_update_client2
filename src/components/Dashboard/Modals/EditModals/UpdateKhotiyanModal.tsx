@@ -65,13 +65,7 @@ const UpdateKhotiyanModal = ({
     reset,
     formState: { errors },
   } = useForm<TUpdateKhotiyan>({
-    defaultValues: {
-      serial: "",
-      name: "",
-      parentId: 0,
-      rate: 0,
-      quantity: 0,
-    },
+
   });
 
   // =========================
@@ -95,7 +89,7 @@ const UpdateKhotiyanModal = ({
       reset({
         serial: String(ledger.serial ?? ""),
         name: ledger.name ?? "",
-        parentId: ledger.parentId,
+        parentId: ledger.parentId || null,
         rate: Number(ledger.rate ?? 0),
         quantity: Number(ledger.quantity ?? 0),
         startDate: ledger.startDate,
@@ -113,7 +107,7 @@ const UpdateKhotiyanModal = ({
 
     const payload = {
       ...formData,
-      parentId: Number(formData.parentId),
+      parentId: Number(formData.parentId) || null,
       rate: Number(formData.rate || 0),
       quantity: Number(formData.quantity || 0),
     };
