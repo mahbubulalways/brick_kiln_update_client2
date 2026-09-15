@@ -3,201 +3,230 @@
 import { ReactNode, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
-interface B5PrintProps {
-    children: ReactNode;
-    documentTitle?: string;
+interface A4PrintProps {
+  children: ReactNode;
+  documentTitle?: string;
+  copyType?: "single" | "double";
 }
 
-const B5_PADDING = {
-    top: 10,
-    bottom: 10,
-    left: 10,
-    right: 10,
-};
+const PAGE_MARGIN_MM = 6;
 
-export default function B5Print({
-    children,
-    documentTitle = "document",
-}: B5PrintProps) {
-    const printRef = useRef<HTMLDivElement>(null);
-    const [isPrinting, setIsPrinting] = useState(false);
+const PRINT_CONFIG = {
+  single: {
+    pageSize: "A4 portrait",
+    width: 210,
+    height: 297,
+    contentScale: 0.96,
+  },
+  double: {
+    pageSize: "B5 portrait",
+    width: 176,
+    height: 250,
+    contentScale: 1,
+  },
+} as const;
 
-    const handlePrint = useReactToPrint({
-        contentRef: printRef,
+export default function A4Print({
+  children,
+  documentTitle = "document",
+  copyType = "single",
+}: A4PrintProps) {
+  const printRef = useRef<HTMLDivElement>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
 
-        documentTitle: `${documentTitle}-${Date.now()}`,
+  const config = PRINT_CONFIG[copyType];
 
-        onBeforePrint: async () => {
-            setIsPrinting(true);
-        },
+  const contentWidth = config.width - PAGE_MARGIN_MM * 2;
 
-        onAfterPrint: () => {
-            setIsPrinting(false);
-        },
+  const PREVIEW_SCALE = 0.8;
 
-        onPrintError: () => {
-            setIsPrinting(false);
-        },
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
 
-        pageStyle: `
+    documentTitle: `${documentTitle}-${Date.now()}`,
+
+    onBeforePrint: async () => {
+      setIsPrinting(true);
+    },
+
+    onAfterPrint: () => {
+      setIsPrinting(false);
+    },
+
+    onPrintError: () => {
+      setIsPrinting(false);
+    },
+
+    pageStyle: `
+      @page {
+        size: ${config.width}mm ${config.height}mm;
+        margin: 0 !important;
+      }
+
       @font-face {
-        font-family: "Hind Siliguri";
+        font-family: "HindSiliguri";
         src: url("/fonts/HindSiliguri-Regular.woff2") format("woff2");
         font-weight: 400;
         font-style: normal;
-        font-display: block;
       }
 
       @font-face {
-        font-family: "Hind Siliguri";
+        font-family: "HindSiliguri";
+        src: url("/fonts/HindSiliguri-SemiBold.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "HindSiliguri";
         src: url("/fonts/HindSiliguri-Bold.woff2") format("woff2");
         font-weight: 700;
         font-style: normal;
-        font-display: block;
-      }
-
-      @page {
-        size: B5 portrait;
-        margin: 0;
       }
 
       html,
       body {
         margin: 0 !important;
         padding: 0 !important;
-        width: 176mm !important;
-        min-width: 176mm !important;
-        max-width: 176mm !important;
-        background: #ffffff !important;
-        font-family: "Hind Siliguri", sans-serif !important;
-      }
-
-      body {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+        width: ${config.width}mm !important;
+        height: ${config.height}mm !important;
+        overflow: hidden !important;
+        font-family: "HindSiliguri", sans-serif !important;
       }
 
       *,
       *::before,
       *::after {
         box-sizing: border-box !important;
-        font-family: "Hind Siliguri", sans-serif !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
       }
 
-      .b5-print-wrapper {
-        width: 176mm !important;
-        min-width: 176mm !important;
-        max-width: 176mm !important;
-
-        margin: 0 !important;
-
-        padding-top: ${B5_PADDING.top}mm !important;
-        padding-bottom: ${B5_PADDING.bottom}mm !important;
-        padding-left: ${B5_PADDING.left}mm !important;
-        padding-right: ${B5_PADDING.right}mm !important;
-
-        background: #ffffff !important;
-        overflow: visible !important;
-      }
-
-      .b5-print-container {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
-
+      .print-wrapper {
+        position: relative !important;
+        width: ${config.width}mm !important;
+        height: ${config.height}mm !important;
         margin: 0 !important;
         padding: 0 !important;
-
-        background: #ffffff !important;
+        overflow: hidden !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+        break-before: avoid !important;
+        break-after: avoid !important;
       }
 
-      .b5-invoice {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: 100% !important;
+      .print-content {
+        position: absolute !important;
 
-        min-height: auto !important;
-        height: auto !important;
+        top: ${PAGE_MARGIN_MM}mm !important;
+
+        left: 50% !important;
+
+        width: ${contentWidth}mm !important;
+        max-width: ${contentWidth}mm !important;
+
+        transform:
+          translateX(-50%)
+          scale(${config.contentScale}) !important;
+
+        transform-origin: top center !important;
 
         margin: 0 !important;
-        padding: 0 !important;
 
-        background: #ffffff !important;
-        overflow: visible !important;
+        page-break-before: avoid !important;
+        page-break-after: avoid !important;
+        break-before: avoid !important;
+        break-after: avoid !important;
       }
 
-      .b5-invoice-preview,
-      .b5-invoice,
-      .b5-combined-print {
-        font-family: "Hind Siliguri", sans-serif !important;
-      }
-
-      .b5-invoice-preview *,
-      .b5-invoice *,
-      .b5-combined-print * {
-        font-family: "Hind Siliguri", sans-serif !important;
+      .print-button {
+        display: none !important;
       }
 
       .print-page-break {
         display: none !important;
       }
-
-      .b5-print-button {
-        display: none !important;
-      }
-
-      @media print {
-        html,
-        body {
-          width: 176mm !important;
-          min-width: 176mm !important;
-          max-width: 176mm !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          overflow: visible !important;
-        }
-
-        .b5-print-wrapper,
-        .b5-print-container {
-          overflow: visible !important;
-        }
-      }
     `,
-    });
+  });
 
-    const handlePrintClick = () => {
-        if (isPrinting) return;
+  const handlePrintClick = () => {
+    if (isPrinting) return;
 
-        setIsPrinting(true);
-        handlePrint();
-    };
+    handlePrint();
+  };
 
-    return (
-        <div className="flex w-full min-w-0 flex-col items-center">
-            <div className="w-full min-w-0 overflow-x-auto overflow-y-visible">
-                <div
-                    ref={printRef}
-                    className="b5-print-wrapper mx-auto w-full max-w-[667px] min-w-0 bg-white"
-                >
-                    <div className="b5-print-container w-full bg-white">
-                        {children}
-                    </div>
-                </div>
+  return (
+    <div className="flex w-full flex-col items-center">
+      {/* Preview */}
+      <div className="flex w-full justify-center overflow-auto">
+        <div
+          style={{
+            width: `${config.width * PREVIEW_SCALE}mm`,
+            height: `${config.height * PREVIEW_SCALE}mm`,
+            flex: "0 0 auto",
+          }}
+        >
+          <div
+            ref={printRef}
+            className="print-wrapper bg-white"
+            style={{
+              position: "relative",
+              width: `${config.width}mm`,
+              height: `${config.height}mm`,
+
+              transform: `scale(${PREVIEW_SCALE})`,
+              transformOrigin: "top left",
+
+              margin: 0,
+              padding: 0,
+
+              boxSizing: "border-box",
+              overflow: "hidden",
+
+              WebkitPrintColorAdjust: "exact",
+              printColorAdjust: "exact",
+            }}
+          >
+            <div
+              className="print-content"
+              style={{
+                position: "absolute",
+
+                top: `${PAGE_MARGIN_MM}mm`,
+
+                left: "50%",
+
+                width: `${contentWidth}mm`,
+                maxWidth: `${contentWidth}mm`,
+
+                transform: `
+                  translateX(-50%)
+                  scale(${config.contentScale})
+                `,
+
+                transformOrigin: "top center",
+
+                margin: 0,
+              }}
+            >
+              {children}
             </div>
-
-            <div className="b5-print-button mt-3 flex w-full justify-end">
-                <button
-                    type="button"
-                    onClick={handlePrintClick}
-                    disabled={isPrinting}
-                    className={`rounded-md px-4 py-2 text-xs font-semibold text-white transition ${isPrinting
-                        ? "cursor-not-allowed bg-gray-400"
-                        : "bg-pink-800 hover:bg-pink-900"
-                        }`}
-                >
-                    {isPrinting ? "প্রিন্ট হচ্ছে..." : "প্রিন্ট করুন"}
-                </button>
-            </div>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Print Button */}
+      <div className="print-button mt-3 flex w-full justify-end">
+        <button
+          type="button"
+          onClick={handlePrintClick}
+          disabled={isPrinting}
+          className="rounded-md bg-[#039A63] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#027d50] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isPrinting ? "প্রিন্ট হচ্ছে..." : "প্রিন্ট করুন"}
+        </button>
+      </div>
+    </div>
+  );
 }

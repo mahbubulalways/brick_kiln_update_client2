@@ -171,7 +171,7 @@ const DeliveryPrintModal = ({
   ];
 
   const isA4 = selectedFormat.startsWith("a4");
-
+  const copyType = selectedFormat === "a4-customer" ? "single" : "double";
   return (
     <CustomPrintModal
       isOpen={isOpen}
@@ -238,7 +238,7 @@ const DeliveryPrintModal = ({
 
             <div>
               {isA4 ? (
-                <A4Print documentTitle="delivery">
+                <A4Print documentTitle="delivery" copyType={copyType}>
                   {renderSelectedDesign()}
                 </A4Print>
               ) : (

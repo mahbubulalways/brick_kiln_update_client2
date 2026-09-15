@@ -85,7 +85,7 @@ const UpdateChalanModal = ({
         note: "",
         serial: 0,
         discount: 0,
-        carRent: 0,
+        // carRent: 0,
         due: 0,
         cash: 0,
         chalanType: "",
@@ -121,7 +121,7 @@ const UpdateChalanModal = ({
   const chalanType = watch("invoice.chalanType");
   const watchItems = watch("invoiceItems.items") || [];
 
-  const carRent = Number(watch("invoice.carRent")) || 0;
+  // const carRent = Number(watch("invoice.carRent")) || 0;
   const discount = Number(watch("invoice.discount")) || 0;
   const cash = Number(watch("invoice.cash")) || 0;
   const due = Number(watch("invoice.due")) || 0;
@@ -156,7 +156,7 @@ const UpdateChalanModal = ({
         serial: Number(data.serial) || 0,
 
         discount: Number(data.discount) || 0,
-        carRent: Number(data.carRent) || 0,
+        // carRent: Number(data.carRent) || 0,
         due: Number(data.due) || 0,
         cash: Number(data.cash) || 0,
 
@@ -286,7 +286,7 @@ const UpdateChalanModal = ({
   );
 
   const totalPrice = Math.max(
-    totalProductPrice + carRent - discount,
+    totalProductPrice - discount, //+ carRent
     0,
   );
 
@@ -398,8 +398,8 @@ const UpdateChalanModal = ({
       productPrice:
         Number(data.invoice.productPrice) || 0,
 
-      carRent:
-        Number(data.invoice.carRent) || 0,
+      // carRent:
+      //   Number(data.invoice.carRent) || 0,
 
       cash:
         Number(data.invoice.cash) || 0,
@@ -988,7 +988,7 @@ const UpdateChalanModal = ({
                     }}
                   />
 
-                  <CustomInput
+                  {/* <CustomInput
                     name="invoice.carRent"
                     label="গাড়ি ভাড়া"
                     placeholder="৳ 0"
@@ -998,7 +998,7 @@ const UpdateChalanModal = ({
                     rules={{
                       required: "গাড়ি ভাড়া আবশ্যক",
                     }}
-                  />
+                  /> */}
 
                   <CustomInput
                     name="invoice.totalPrice"

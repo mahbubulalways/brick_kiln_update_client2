@@ -95,7 +95,7 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                 <TableHead th={"মূল্য"} cls="hidden lg:table-cell" />
                                 <TableHead th={"মোট মূল্য"} cls="hidden lg:table-cell" />
                                 <TableHead th={"ছাড়"} cls="hidden lg:table-cell" />
-                                <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" />
+                                {/* <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" /> */}
                                 <TableHead th={"সর্বমোট"} />
                                 <TableHead th={"নগদ"} cls="hidden lg:table-cell" />
                                 <TableHead th={"বাকি"} cls="hidden lg:table-cell" />
@@ -185,11 +185,11 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                         />
 
                                                         {/* Car Rent */}
-                                                        <TableData
+                                                        {/* <TableData
                                                             td={`৳ ${toBanglaNumber(row?.carRent)}`}
                                                             cls="text-blue-600 hidden lg:table-cell"
                                                             rowSpan={row?.items?.length}
-                                                        />
+                                                        /> */}
 
                                                         {/* Total Price */}
                                                         <TableData
@@ -350,12 +350,12 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                 cls="text-orange-500 hidden lg:table-cell"
                                             />
 
-                                            <TableData
+                                            {/* <TableData
                                                 td={`৳ ${toBanglaNumber(
                                                     row?.carRent?.toLocaleString()
                                                 )}`}
                                                 cls="text-blue-600 hidden lg:table-cell"
-                                            />
+                                            /> */}
 
                                             <TableData
                                                 td={`৳ ${toBanglaNumber(

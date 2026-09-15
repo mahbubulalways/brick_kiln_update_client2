@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Search } from "lucide-react";
 
 import ReceivableAndPayableModal from "@/components/Dashboard/Modals/ReceivableAndPayableModal";
@@ -10,25 +10,47 @@ import GivenDueList from "./GivenDueList";
 import TakenDueList from "./TakenDueList";
 import CustomLoader from "@/components/Reusable/CustomLoader";
 import CustomStatus from "@/components/Reusable/CustomStatus";
+import CommonPrint, {
+    TCommonPrintRef,
+} from "@/components/Reusable/CommonPrint";
+import DueMatePrint from "./DueMatePrint";
+import { useGetVataInfoQuery } from "@/redux/features/vata.features";
 
 export default function ReceivableAndPayablePage() {
     const [modalOpen, setModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [printId, setPrintId] = useState<string | null>(null);
 
-    const { data, isError, isLoading } = useGetAllDueMateQuery({});
+    const printRef = useRef<TCommonPrintRef>(null);
 
-    // Loading
+    const { data: vata } = useGetVataInfoQuery(undefined);
+
+    const {
+        data,
+        isError,
+        isLoading,
+    } = useGetAllDueMateQuery({});
+
+    const handlePrint = (id: string) => {
+        setPrintId(id);
+    };
+
+    const handlePrintReady = () => {
+        setTimeout(() => {
+            printRef.current?.print();
+        }, 100);
+    };
+
     if (isLoading) {
         return (
-            <div className=" bg-white">
+            <div className="bg-white">
                 <CustomLoader cls="h-[30vh]" />
             </div>
         );
     }
 
-    // Error
     if (isError) {
-        return <CustomStatus type="error" />
+        return <CustomStatus type="error" />;
     }
 
     const allDues =
@@ -47,34 +69,31 @@ export default function ReceivableAndPayablePage() {
     });
 
     const givenDues = filteredDues.filter(
-        (item) => item.transactionType === "GIVEN"
+        (item) => item.transactionType === "GIVEN",
     );
 
     const takenDues = filteredDues.filter(
-        (item) => item.transactionType === "TAKEN"
+        (item) => item.transactionType === "TAKEN",
     );
 
     return (
-        <div className="bg-white min-h-screen p-2 rounded-xl">
-            {/* Top Section */}
+        <div className="min-h-screen rounded-xl bg-white p-2">
             <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                {/* দেনা-পাওনা */}
                 <button
                     type="button"
                     onClick={() => setModalOpen(true)}
                     className="
-      w-full cursor-pointer
-      rounded-md bg-[#039a63]
-      px-5 py-2
-      text-sm font-medium text-white
-      transition hover:bg-[#028756]
-      sm:w-auto
-    "
+            w-full cursor-pointer
+            rounded-md bg-[#039a63]
+            px-5 py-2
+            text-sm font-medium text-white
+            transition hover:bg-[#028756]
+            sm:w-auto
+          "
                 >
                     দেনা-পাওনা
                 </button>
 
-                {/* Search */}
                 <div className="relative w-full sm:max-w-sm">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 
@@ -84,32 +103,50 @@ export default function ReceivableAndPayablePage() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="নাম, ফোন বা ঠিকানা দিয়ে খুঁজুন..."
                         className="
-        h-10 w-full
-        rounded-md border border-gray-300
-        bg-white
-        pl-9 pr-4
-        text-sm
-        outline-none
-        transition
-        focus:border-[#039a63]
-        focus:ring-1 focus:ring-[#039a63]
-      "
+              h-10 w-full
+              rounded-md border border-gray-300
+              bg-white
+              pl-9 pr-4
+              text-sm
+              outline-none
+              transition
+              focus:border-[#039a63]
+              focus:ring-1 focus:ring-[#039a63]
+            "
                     />
                 </div>
             </div>
 
-            {/* Modal */}
             <ReceivableAndPayableModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
             />
 
-            {/* Lists */}
-            <div className="grid grid-cols-1 gap-10 md:gap-5 pt-8 xl:grid-cols-2">
-                <GivenDueList dues={givenDues} />
+            <div className="grid grid-cols-1 gap-10 pt-8 md:gap-5 xl:grid-cols-2">
+                <GivenDueList
+                    dues={givenDues}
+                    onPrint={handlePrint}
+                />
 
-                <TakenDueList dues={takenDues} />
+                <TakenDueList
+                    dues={takenDues}
+                    onPrint={handlePrint}
+                />
             </div>
+
+            {printId && (
+                <CommonPrint
+                    ref={printRef}
+                    title="দেনা-পাওনা হিসাব"
+                >
+                    <DueMatePrint
+                        key={printId}
+                        id={printId}
+                        vataInformation={vata?.data}
+                        onReady={handlePrintReady}
+                    />
+                </CommonPrint>
+            )}
         </div>
     );
 }

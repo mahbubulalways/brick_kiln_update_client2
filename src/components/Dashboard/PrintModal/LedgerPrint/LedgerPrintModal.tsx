@@ -54,7 +54,7 @@ export default function LedgerPrintModal({
     const isA4 =
         selectedFormat === "a4-customer" ||
         selectedFormat === "a4-customer-office";
-
+    const copyType = selectedFormat === "a4-customer" ? "single" : "double";
     const isLoading = ledgerLoading || vataLoading;
 
     useEffect(() => {
@@ -239,7 +239,7 @@ export default function LedgerPrintModal({
                 ) : ledger ? (
                     <div>
                         {isA4 ? (
-                            <A4Print documentTitle="ledger">
+                            <A4Print documentTitle="ledger" copyType={copyType}>
                                 {renderSelectedDesign()}
                             </A4Print>
                         ) : (

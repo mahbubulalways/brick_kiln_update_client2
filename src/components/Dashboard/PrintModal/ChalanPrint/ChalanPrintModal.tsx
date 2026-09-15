@@ -9,11 +9,11 @@ import { TCustomInvoiceModal } from "@/types/types";
 import { TVataInformation } from "@/interface/vata";
 
 import { useGetSingleInvoiceQuery } from "@/redux/features/invoice.features";
+import { useGetAllClassAndRateOptionsQuery } from "@/redux/features/classAndRate.features";
 
 import A4Print from "@/components/Printer/PrintManager/A4Print";
 import POSPrint from "@/components/Printer/PrintManager/PosPrint";
 import CustomPrintModal from "@/components/Reusable/CustomPrintModal";
-import { useGetAllClassAndRateOptionsQuery } from "@/redux/features/classAndRate.features";
 
 type PrintFormat =
   | "a4-customer"
@@ -33,11 +33,18 @@ const ChalanPrintModal = ({
   const [selectedFormat, setSelectedFormat] =
     useState<PrintFormat>("a4-customer");
 
-  const { data: invoiceData, isLoading } =
-    useGetSingleInvoiceQuery(invoiceId, {
+  const { data: invoiceData, isLoading } = useGetSingleInvoiceQuery(
+    invoiceId,
+    {
       skip: !invoiceId,
-    });
-  const { isLoading: classLoading, isError: classError, data: classes } = useGetAllClassAndRateOptionsQuery(undefined)
+    },
+  );
+
+  const {
+    isLoading: classLoading,
+    isError: classError,
+    data: classes,
+  } = useGetAllClassAndRateOptionsQuery(undefined);
 
   useEffect(() => {
     if (isOpen) {
@@ -111,7 +118,6 @@ const ChalanPrintModal = ({
             <POS80CustomerPrint
               invoice={invoiceData.data}
               vataInformation={vataInformation}
-
             />
           </div>
         );
@@ -122,6 +128,8 @@ const ChalanPrintModal = ({
   };
 
   const isA4 = selectedFormat.startsWith("a4");
+
+  const copyType = selectedFormat === "a4-customer" ? "single" : "double";
 
   const printOptions = [
     {
@@ -157,33 +165,28 @@ const ChalanPrintModal = ({
         <div className="mb-3 rounded-lg border border-slate-200 bg-white">
           <div className="grid grid-cols-2 gap-1.5 lg:grid-cols-4">
             {printOptions.map((option) => {
-              const selected =
-                selectedFormat === option.key;
-
-              const isA4Option =
-                option.type === "a4";
+              const selected = selectedFormat === option.key;
+              const isA4Option = option.type === "a4";
 
               return (
                 <button
                   key={option.key}
                   type="button"
-                  onClick={() =>
-                    setSelectedFormat(option.key)
-                  }
+                  onClick={() => setSelectedFormat(option.key)}
                   className={`
-                                        h-7
-                                        rounded
-                                        border
-                                        px-2
-                                        text-center
-                                        text-[10px]
-                                        font-semibold
-                                        transition-all
-                                        duration-150
-                                        sm:h-8
-                                        sm:px-2.5
-                                        sm:text-[11px]
-                                        ${selected
+                    h-7
+                    rounded
+                    border
+                    px-2
+                    text-center
+                    text-[10px]
+                    font-semibold
+                    transition-all
+                    duration-150
+                    sm:h-8
+                    sm:px-2.5
+                    sm:text-[11px]
+                    ${selected
                       ? isA4Option
                         ? "border-sky-600 bg-sky-600 text-white"
                         : "border-purple-600 bg-purple-600 text-white"
@@ -191,7 +194,7 @@ const ChalanPrintModal = ({
                         ? "border-sky-200 bg-sky-50 text-sky-700 hover:border-sky-300 hover:bg-sky-100"
                         : "border-purple-200 bg-purple-50 text-purple-700 hover:border-purple-300 hover:bg-purple-100"
                     }
-                                    `}
+                  `}
                 >
                   {option.label}
                 </button>
@@ -211,20 +214,20 @@ const ChalanPrintModal = ({
             </div>
           </div>
         ) : invoiceData?.data ? (
-          <>
-
-            <div className="mt-2 w-full min-w-0">
-              {isA4 ? (
-                <A4Print documentTitle="chalan">
-                  {renderSelectedDesign()}
-                </A4Print>
-              ) : (
-                <POSPrint documentTitle="chalan">
-                  {renderSelectedDesign()}
-                </POSPrint>
-              )}
-            </div>
-          </>
+          <div className="mt-2 w-full min-w-0">
+            {isA4 ? (
+              <A4Print
+                documentTitle="chalan"
+                copyType={copyType}
+              >
+                {renderSelectedDesign()}
+              </A4Print>
+            ) : (
+              <POSPrint documentTitle="chalan">
+                {renderSelectedDesign()}
+              </POSPrint>
+            )}
+          </div>
         ) : (
           <div className="flex min-h-[450px] items-center justify-center rounded-md bg-white">
             <p className="text-xs text-slate-500">

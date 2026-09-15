@@ -18,6 +18,7 @@ import {
 } from "@/redux/features/ledger.features";
 
 import formatLabelValuePair from "@/utils/formatLabelValuePair";
+import CustomDatePicker from "@/components/Reusable/CustomDatePicker";
 
 type TUpdateKhotiyanModal = {
   isOpen: boolean;
@@ -31,6 +32,8 @@ type TUpdateKhotiyan = {
   parentId: number;
   rate: number;
   quantity: number;
+  phoneNumber: string,
+  startDate: string
 };
 
 const UpdateKhotiyanModal = ({
@@ -88,13 +91,15 @@ const UpdateKhotiyanModal = ({
   useEffect(() => {
     if (singleData?.data) {
       const ledger = singleData.data;
-
+      console.log(ledger)
       reset({
         serial: String(ledger.serial ?? ""),
         name: ledger.name ?? "",
-        parentId: Number(ledger.parentId ?? 0),
+        parentId: ledger.parentId,
         rate: Number(ledger.rate ?? 0),
         quantity: Number(ledger.quantity ?? 0),
+        startDate: ledger.startDate,
+        phoneNumber: ledger.phoneNumber,
       });
     }
   }, [singleData, reset]);
@@ -165,7 +170,7 @@ const UpdateKhotiyanModal = ({
       isOpen={isOpen}
       onClose={handleClose}
       title="খতিয়ান আপডেট করুন"
-      width="sm"
+      width="xl"
     >
       {isLoading ? (
         <CustomStatus
@@ -179,7 +184,7 @@ const UpdateKhotiyanModal = ({
         />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-4">
 
             {/* Serial */}
             <CustomInput
@@ -203,6 +208,21 @@ const UpdateKhotiyanModal = ({
               rules={{
                 required: "এই ফিল্ডটি আবশ্যক",
               }}
+            />
+
+            <CustomInput
+              name="phoneNumber"
+              label="ফোন নম্বর"
+              placeholder="ফোন নম্বর"
+              register={register}
+              type="number"
+            />
+            <CustomDatePicker
+              control={control}
+              name="startDate"
+              label="শুরুর তারিখ"
+              disablePastDates
+              placeholder="শুরুর তারিখ"
             />
 
             {/* Group */}

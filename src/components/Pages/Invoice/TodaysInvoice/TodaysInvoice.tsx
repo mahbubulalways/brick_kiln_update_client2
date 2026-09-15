@@ -218,7 +218,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
 
 
       <div >
-        <div className="overflow-x-auto mt-2  ">
+        <div className="overflow-x-auto mt-2 ">
           <table className="min-w-full border-collapse ">
             <thead>
               <tr className="bg-[#039A63] text-white text-center">
@@ -231,7 +231,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                 <TableHead th={"মূল্য"} cls="hidden lg:table-cell" />
                 <TableHead th={"মোট মূল্য"} cls="hidden lg:table-cell" />
                 <TableHead th={"ছাড়"} cls="hidden lg:table-cell" />
-                <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" />
+                {/* <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" /> */}
                 <TableHead th={"সর্বমোট"} />
                 <TableHead th={"নগদ"} cls="hidden lg:table-cell" />
                 <TableHead th={"বাকি"} cls="hidden lg:table-cell" />
@@ -300,11 +300,11 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                               cls="text-orange-500 hidden lg:table-cell"
                               rowSpan={row?.items?.length}
                             />
-                            <TableData
+                            {/* <TableData
                               td={`৳ ${toBanglaNumber(row?.carRent)}`}
                               cls="text-blue-600 hidden lg:table-cell"
                               rowSpan={row?.items?.length}
-                            />
+                            /> */}
                             <TableData
                               td={`৳ ${toBanglaNumber(row?.totalPrice)}`}
                               rowSpan={row?.items?.length}
@@ -485,10 +485,10 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                         cls="text-orange-500 hidden lg:table-cell"
                       />
 
-                      <TableData
+                      {/* <TableData
                         td={`৳ ${toBanglaNumber(row?.carRent)}`}
                         cls="text-blue-600 hidden lg:table-cell"
-                      />
+                      /> */}
 
                       <TableData
                         td={`৳ ${toBanglaNumber(row?.totalPrice)}`}

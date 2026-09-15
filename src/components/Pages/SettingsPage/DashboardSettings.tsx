@@ -95,7 +95,6 @@ const DashboardSettings = ({
                         className="
                             min-w-0
                             flex-1
-                            overflow-hidden
                             rounded-md
                             bg-white
                         "

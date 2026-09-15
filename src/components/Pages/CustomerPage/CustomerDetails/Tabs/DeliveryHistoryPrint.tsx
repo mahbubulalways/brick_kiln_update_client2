@@ -286,14 +286,14 @@ const DeliveryHistoryPrint = ({
                                         <TableData
                                             cls="border border-gray-300 px-[6px] py-[7px] text-[11px]"
                                             td={toBanglaNumber(
-                                                row?.id ?? "-"
+                                                row?.deliveryNo ?? "-"
                                             )}
                                         />
 
                                         <TableData
                                             cls="border border-gray-300 px-[6px] py-[7px] text-[11px]"
                                             td={toBanglaNumber(
-                                                row?.invoiceId ??
+                                                row?.invoice.serial ??
                                                 index + 1
                                             )}
                                         />
@@ -324,7 +324,7 @@ const DeliveryHistoryPrint = ({
                                         <TableData
                                             cls="border border-gray-300 px-[6px] py-[7px] text-[11px]"
                                             td={
-                                                row?.driverName ||
+                                                row?.driver?.name ||
                                                 "-"
                                             }
                                         />

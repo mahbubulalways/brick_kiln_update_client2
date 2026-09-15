@@ -22,11 +22,11 @@ const A4LedgerPrint = ({
     compact = false,
 }: A4LedgerPrintProps) => {
     return (
-        <div className="">
+        <div className="delivery-print-wrapper  w-full bg-[#FFFDF9] text-[#241209]">
             <div
-                className={`ledger-paper relative mx-auto w-full max-w-[1100px] overflow-hidden
-                      bg-[#fffef8] 
-                    text-[#252525] shadow-md ${compact ? "p-3 sm:p-4" : "p-4 sm:p-6"
+                className={`delivery-paper relative mx-auto w-full overflow-hidden   ${compact
+                    ? "px-3 py-2"
+                    : "px-5 py-4 sm:px-7 sm:py-5"
                     }`}
             >
                 <div className="pointer-events-none absolute inset-[6px] border border-[#d9a7bd]" />
@@ -223,36 +223,6 @@ const A4LedgerPrint = ({
 
           .ledger-paper h1 {
             font-size: 19px;
-          }
-        }
-
-        @media print {
-          @page {
-            size: A4 landscape;
-            margin: 8mm;
-          }
-
-          html,
-          body {
-            margin: 0 !important;
-            padding: 0 !important;
-            background: white !important;
-          }
-
-          .ledger-print-wrapper {
-            width: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            background: white !important;
-          }
-
-          .ledger-paper {
-            width: 100% !important;
-            max-width: none !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
           }
         }
       `}</style>

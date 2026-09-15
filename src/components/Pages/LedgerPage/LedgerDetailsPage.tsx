@@ -14,30 +14,39 @@ import Link from "next/link";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
-import CustomDateRangePicker from "@/components/Reusable/CustomDateRangePicker";
 import { TQuery } from "@/interface/query";
 import { TMetaConfig } from "@/interface/meta";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { useRouter } from "next/navigation";
 import renderImage from "@/utils/renderImage";
+import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import { formatDateRange } from "@/utils/formatDateRange";
 
 const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
-    const [dateRange, setDateRange] = useState("");
+    const [filterDate, setDateFiter] = useState<{
+        startDate: Date | null,
+        endDate: Date | null,
+    }>({
+        startDate: new Date(),
+        endDate: null,
+    });
+
     const router = useRouter()
+    const formatDate = formatDateRange({
+        start: filterDate.startDate,
+        end: filterDate.endDate
+    })
     const {
         data,
         isLoading,
         isFetching,
         isError,
         error
-    } = useGetAllLedgerDetailsQuery({ id, params, date: dateRange }, { refetchOnMountOrArgChange: true });
+    } = useGetAllLedgerDetailsQuery({ id, params, date: formatDate }, { refetchOnMountOrArgChange: true });
     const payments = data?.data?.data?.data as TPaymentResponse[] ?? [];
 
     const meta = data?.data?.meta as TMetaConfig;
-    console.log(meta);
-    // ========================================
-    // SUMMARY
-    // ========================================
+
     const totalAdvance = useMemo(() => {
         return payments.reduce((sum, row) => {
             if (row?.paymentType === "অগ্রিম পেমেন্ট") {
@@ -232,9 +241,11 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
 
                     {/* Date Range */}
                     <div className="w-full md:w-[280px] md:shrink-0">
-                        <CustomDateRangePicker
-                            value={dateRange}
-                            onChange={setDateRange}
+                        <CustomDateFilter
+                            value={filterDate}
+                            onChange={setDateFiter}
+                            placeholder="তারিখ ফিল্টার করুন"
+                            className="w-full lg:w-auto"
                         />
                     </div>
                 </div>

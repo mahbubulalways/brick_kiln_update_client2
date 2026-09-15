@@ -62,4 +62,5 @@ export type TDeliveryWithCustomer = {
   createdAt: string;
   invoice: IChallanForDataShow;
   season: TSeason;
+  driver: TDriver;
 };

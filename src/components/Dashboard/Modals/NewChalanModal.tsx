@@ -71,7 +71,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
       },
       invoice: {
         discount: 0,
-        carRent: 0
+        // carRent: 0
       }
     },
   });
@@ -82,7 +82,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const watchItems = watch("invoiceItems.items");
-  const carRent = watch("invoice.carRent");
+  // const carRent = watch("invoice.carRent");
   const discount = watch("invoice.discount");
   const cash = watch("invoice.cash");
   const chalanType = watch("invoice.chalanType");
@@ -113,7 +113,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
     0,
   );
   const totalPrice =
-    totalProductPrice + Number(carRent || 0) - Number(discount || 0);
+    totalProductPrice - Number(discount || 0); //+ Number(carRent || 0)
 
   const due = totalPrice - Number(cash || 0);
 
@@ -153,7 +153,6 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
     data.invoice.challanDate = challanDate as Date;
     data.invoice.duePaymentDate = duePayDate as Date;
     data.invoice.serial = Number(data.invoice.serial);
-    data.invoice.carRent = Number(data.invoice.carRent);
     data.invoice.cash = Number(data.invoice.cash);
     data.invoice.discount = Number(data.invoice.discount);
     data.invoice.totalPrice = Number(data.invoice.totalPrice);
@@ -662,7 +661,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                       rules={{ required: "ছাড় আবশ্যক" }}
                     />
 
-                    <CustomInput
+                    {/* <CustomInput
                       name="invoice.carRent"
                       label="গাড়ি ভাড়া"
                       placeholder="৳ 0"
@@ -670,7 +669,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                       type="number"
                       error={errors.invoice?.carRent}
                       rules={{ required: "গাড়ি ভাড়া আবশ্যক" }}
-                    />
+                    /> */}
 
                     <CustomInput
                       name="invoice.totalPrice"

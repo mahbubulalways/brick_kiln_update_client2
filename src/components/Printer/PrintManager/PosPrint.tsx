@@ -14,12 +14,10 @@ export default function POSPrint({
 }: POSPrintProps) {
     const printRef = useRef<HTMLDivElement>(null);
     const printingLock = useRef(false);
-
     const [isPrinting, setIsPrinting] = useState(false);
 
     const handlePrint = useReactToPrint({
         contentRef: printRef,
-
         documentTitle: `${documentTitle}-${Date.now()}`,
 
         onBeforePrint: async () => {
@@ -38,106 +36,160 @@ export default function POSPrint({
         },
 
         pageStyle: `
-            @font-face {
-                font-family: "Hind Siliguri";
-                src: url("/fonts/HindSiliguri-Regular.woff2") format("woff2");
-                font-weight: 400;
-                font-style: normal;
-                font-display: block;
-            }
+      @font-face {
+        font-family: "HindSiliguri";
+        src: url("/fonts/HindSiliguri-Regular.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+      }
 
-            @font-face {
-                font-family: "Hind Siliguri";
-                src: url("/fonts/HindSiliguri-Bold.woff2") format("woff2");
-                font-weight: 700;
-                font-style: normal;
-                font-display: block;
-            }
+      @font-face {
+        font-family: "HindSiliguri";
+        src: url("/fonts/HindSiliguri-SemiBold.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+      }
 
-            @page {
-                size: 80mm auto;
-                margin: 0;
-            }
+      @font-face {
+        font-family: "HindSiliguri";
+        src: url("/fonts/HindSiliguri-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+      }
 
-            html,
-            body {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 80mm !important;
-                min-width: 80mm !important;
-                max-width: 80mm !important;
-                font-family: "Hind Siliguri", sans-serif !important;
-            }
+      @page {
+        size: 80mm auto;
+        margin: 0 !important;
+      }
 
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
 
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box !important;
-                font-family: "Hind Siliguri", sans-serif !important;
-            }
+        width: 80mm !important;
+        min-width: 80mm !important;
+        max-width: 80mm !important;
 
-            .pos-print-wrapper {
-                width: 80mm !important;
-                min-width: 80mm !important;
-                max-width: 80mm !important;
-                margin: 0 !important;
-                padding: 4mm !important;
-                font-family: "Hind Siliguri", sans-serif !important;
-            }
+        background: white !important;
+        color: #000 !important;
 
-            .pos-print-container {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                font-family: "Hind Siliguri", sans-serif !important;
-            }
+        font-family: "HindSiliguri", sans-serif;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
 
-            .pos-print-button {
-                display: none !important;
-            }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box !important;
+      }
 
-            .print-page-break {
-                page-break-before: always !important;
-                break-before: page !important;
-            }
+      .pos-print-wrapper {
+        width: 80mm !important;
+        min-width: 80mm !important;
+        max-width: 80mm !important;
 
-            @media print {
-                html,
-                body {
-                    width: 80mm !important;
-                    min-width: 80mm !important;
-                    max-width: 80mm !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    overflow: visible !important;
-                }
+        margin: 0 !important;
+        padding: 4mm !important;
 
-                .pos-print-wrapper {
-                    width: 80mm !important;
-                    min-width: 80mm !important;
-                    max-width: 80mm !important;
-                    margin: 0 !important;
-                    padding: 4mm !important;
-                    overflow: visible !important;
-                }
+        background: white !important;
+        color: #000 !important;
 
-                .pos-print-container {
-                    width: 100% !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    overflow: visible !important;
-                }
-            }
-        `,
+        font-family: "HindSiliguri", sans-serif !important;
+
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+
+      .pos-print-container {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: white !important;
+        color: #000 !important;
+
+        font-family: "HindSiliguri", sans-serif !important;
+
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+
+      .pos-print-container * {
+        font-family: "HindSiliguri", sans-serif !important;
+      }
+
+      .pos-print-container svg {
+        font-family: inherit !important;
+      }
+
+      .pos-print-button {
+        display: none !important;
+      }
+
+      .print-page-break {
+        page-break-before: always !important;
+        break-before: page !important;
+      }
+
+      @media print {
+        html,
+        body {
+          width: 80mm !important;
+          min-width: 80mm !important;
+          max-width: 80mm !important;
+
+          margin: 0 !important;
+          padding: 0 !important;
+
+          overflow: visible !important;
+
+          background: white !important;
+          color: #000 !important;
+        }
+
+        .pos-print-wrapper {
+          width: 80mm !important;
+          min-width: 80mm !important;
+          max-width: 80mm !important;
+
+          margin: 0 !important;
+          padding: 4mm !important;
+
+          overflow: visible !important;
+
+          background: white !important;
+          color: #000 !important;
+        }
+
+        .pos-print-container {
+          width: 100% !important;
+          min-width: 0 !important;
+          max-width: 100% !important;
+
+          margin: 0 !important;
+          padding: 0 !important;
+
+          overflow: visible !important;
+
+          background: white !important;
+          color: #000 !important;
+        }
+
+        .pos-print-container * {
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+
+        .pos-print-button {
+          display: none !important;
+        }
+      }
+    `,
     });
 
     const handlePrintClick = () => {

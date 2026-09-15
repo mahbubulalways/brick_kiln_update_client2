@@ -10,7 +10,6 @@ const deliveryApi = baseApi.injectEndpoints({
         url: `/delivery/next-delivery-no`,
         method: "GET",
       }),
-      keepUnusedDataFor: 0,
       providesTags: ["Delivery"],
     }),
 
@@ -31,7 +30,6 @@ const deliveryApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Delivery", "InvoiceItem", "SEASON"],
-      keepUnusedDataFor: 0,
     }),
 
     // GET ALL DELIVERY
@@ -40,7 +38,6 @@ const deliveryApi = baseApi.injectEndpoints({
         url: `/delivery/delivery-list?page=${query.page}&limit=${query.limit}&date=${query.date}&search=${query.search}`,
         method: "GET",
       }),
-      keepUnusedDataFor: 0,
       providesTags: ["Delivery", "InvoiceItem", "SEASON"],
     }),
 
@@ -50,8 +47,7 @@ const deliveryApi = baseApi.injectEndpoints({
         url: `/delivery/today-have-delivery?limit=${query.limit}&page=${query.page}&search=${query.search}&date=${query.date}`,
         method: "GET",
       }),
-      keepUnusedDataFor: 0,
-      providesTags: ["InvoiceItem", "SEASON"],
+      providesTags: ["InvoiceItem", "SEASON", "Delivery"],
     }),
 
     // GET SINGLE
@@ -60,9 +56,7 @@ const deliveryApi = baseApi.injectEndpoints({
         url: `/delivery/single-delivery/${id}`,
         method: "GET",
       }),
-      keepUnusedDataFor: 0,
     }),
-
   }),
 });
 

@@ -1,4 +1,5 @@
 "use client";
+import CustomDatePicker from "@/components/Reusable/CustomDatePicker";
 import CustomInput from "@/components/Reusable/CustomInput";
 import CustomModal from "@/components/Reusable/CustomModal";
 import CustomSelect from "@/components/Reusable/CustomSelect";
@@ -23,9 +24,11 @@ type TCustomModal = {
 type TKhatiyan = {
   serial: string;
   name: string;
+  phoneNumber: string;
   parentId: number;
   rate: number;
   quantity: number
+  startDate: string
 };
 const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
   const { isError, isLoading, data } = useGetLedgerCountQuery(undefined);
@@ -61,7 +64,7 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
   }, [count, reset]);
 
   const onSubmit: SubmitHandler<TKhatiyan> = async (data) => {
-    
+
     try {
       const result = await mutateAsync(data).unwrap();
       if (result?.success) {
@@ -94,8 +97,8 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
     <CustomModal
       isOpen={isOpen}
       onClose={handleClose}
-      title="খতিয়ান অ্যাড/আপডেট"
-      width="sm"
+      title="খতিয়ান অ্যাড"
+      width="xl"
     >
       {isLoading || optionLoading ? (
         <CustomStatus type="loading" fullScreen={false} />
@@ -103,7 +106,7 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
         <CustomStatus type="error" fullScreen={false} />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <CustomInput
               name="serial"
               label="সিরিয়াল"
@@ -123,6 +126,21 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
               error={errors.name}
               rules={{ required: "এই ফিল্ডটি আবশ্যক" }}
             />
+
+            <CustomInput
+              name="phoneNumber"
+              label="ফোন নম্বর"
+              placeholder="ফোন নম্বর"
+              register={register}
+              type="number"
+            />
+            <CustomDatePicker
+              control={control}
+              name="startDate"
+              label="শুরুর তারিখ"
+              disablePastDates
+              placeholder="শুরুর তারিখ"
+            />
             <CustomSelect
               name="parentId"
               label="খতিয়ানের গ্রুপ"
@@ -130,32 +148,29 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
               control={control}
               options={labelValuePairArray}
             />
-
-            {
-              showRateQuantity && <div className="grid grid-cols-2 gap-2">
-                <CustomInput
-                  name="rate"
-                  label="খতিয়ানের রেট"
-                  placeholder="খতিয়ানের রেট"
-                  register={register}
-                  type="number"
-
-                />
-
-                <CustomInput
-                  name="quantity"
-                  label="পরিমাণ ভাজক (যদি থাকে)"
-                  placeholder="পরিমাণ ভাজক"
-                  register={register}
-                  type="number"
-
-                />
-              </div>
-            }
-
-
-
           </div>
+          {
+            showRateQuantity && <div className="grid grid-cols-2 gap-2 pt-3">
+              <CustomInput
+                name="rate"
+                label="খতিয়ানের রেট"
+                placeholder="খতিয়ানের রেট"
+                register={register}
+                type="number"
+
+              />
+
+              <CustomInput
+                name="quantity"
+                label="পরিমাণ ভাজক (যদি থাকে)"
+                placeholder="পরিমাণ ভাজক"
+                register={register}
+                type="number"
+
+              />
+            </div>
+          }
+
 
           <div className="flex items-center justify-between pt-5">
             <div

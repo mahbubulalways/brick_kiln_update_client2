@@ -1,6 +1,7 @@
 import ComputerLayout from "./ComputerLayout";
 import { TChildren } from "@/types/project";
 import MobileLayout from "./MobileLayout";
+import SubscriptionGuard from "./SubscriptionGuard";
 
 const DashboardLayout = ({ children }: TChildren) => {
   return (
@@ -11,6 +12,8 @@ const DashboardLayout = ({ children }: TChildren) => {
       <div className="hidden lg:block">
         <ComputerLayout>{children}</ComputerLayout>
       </div>
+
+      <SubscriptionGuard />
     </div>
   );
 };
