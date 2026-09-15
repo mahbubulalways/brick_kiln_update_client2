@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import ButtonGroup from "./ButtonGroup";
 import CalculationsCard from "./CalculationsCard";
@@ -12,6 +12,7 @@ import ClassWiseSellChart from "./SellsGraph";
 import ClassWiseDeliveryChart from "./ClassWiseDelivery";
 import DashboardStockPieChart from "./DashboardStockPieChart";
 import NoticeMarquee from "./NoticeMarquee";
+import SummaryReport from "./SummaryReport";
 
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 
@@ -19,9 +20,16 @@ import { useDashboardReportQuery } from "@/redux/features/report,features";
 import { useGetNoteQuery } from "@/redux/system.features/system.note.features";
 
 import { TDashboardReport } from "@/interface/dashboard";
+import { TVataInformation } from "@/interface/vata";
+
 import { formatDateRange } from "@/utils/formatDateRange";
 
+import { Printer } from "lucide-react";
+import { useGetVataInfoQuery } from "@/redux/features/vata.features";
+import CommonPrint, { TCommonPrintRef } from "@/components/Reusable/CommonPrint";
+
 const DashboardPage = () => {
+  const printRef = useRef<TCommonPrintRef>(null);
   const [filterDate, setDateFiter] = useState<{
     startDate: Date | null;
     endDate: Date | null;
@@ -39,18 +47,21 @@ const DashboardPage = () => {
     isError,
     isLoading,
     data,
-  } = useDashboardReportQuery({ date: formatDate }, {
-    refetchOnMountOrArgChange: true
-  });
+  } = useDashboardReportQuery(
+    { date: formatDate },
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const {
     data: noteData,
     isLoading: isNoteLoading,
   } = useGetNoteQuery(undefined);
-
+  const { data: vata } = useGetVataInfoQuery(undefined)
   const reports = data?.data as TDashboardReport;
 
-  const totalSell = reports?.challan?.summary?.totalSaleWithRent;
+  const totalSell = reports?.challan?.summary?.totalSale;
   const cashSell = reports?.challan?.summary?.cash;
   const dueSell = reports?.challan?.summary?.due;
   const payment = reports?.payment?.total;
@@ -58,7 +69,6 @@ const DashboardPage = () => {
   const cash = reports?.cash;
   const challanItems = reports?.challan?.items;
 
-  /* ---------------- Loading ---------------- */
 
   if (isLoading || isNoteLoading) {
     return (
@@ -92,14 +102,14 @@ const DashboardPage = () => {
     );
   }
 
-  /* ---------------- Error ---------------- */
-
   if (isError || !reports) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <div className="w-full max-w-md rounded-2xl border border-red-100 bg-white p-6 text-center shadow-sm">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
-            <span className="text-lg text-red-500">!</span>
+            <span className="text-lg text-red-500">
+              !
+            </span>
           </div>
 
           <h2 className="mt-4 text-base font-bold text-slate-800">
@@ -121,19 +131,25 @@ const DashboardPage = () => {
         <NoticeMarquee message={noteData.data.message} />
       ) : null}
 
-      {/* Date Filter */}
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-between">
+        <button
+          type="button"
+          onClick={() => printRef.current?.print()}
+          className="inline-flex items-center gap-2 rounded-lg bg-[#039A63] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#028653] hover:shadow-md active:scale-[0.98]"
+        >
+          <Printer size={18} strokeWidth={2} />
+          হিসাবের সারাংশ প্রিন্ট
+        </button>
+
         <div className="w-fit">
           <CustomDateFilter
             value={filterDate}
             onChange={setDateFiter}
             placeholder="তারিখ ফিল্টার করুন"
-
           />
         </div>
       </div>
 
-      {/* Calculations */}
       <section>
         <CalculationsCard
           cashSell={cashSell}
@@ -145,7 +161,6 @@ const DashboardPage = () => {
         />
       </section>
 
-      {/* Summary Cards */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="min-w-0 lg:col-span-4">
           <Chalan
@@ -167,14 +182,12 @@ const DashboardPage = () => {
         </div>
       </section>
 
-      {/* Stock Distribution */}
       <section className="w-full">
         <DashboardStockPieChart
           report={reports?.stockSummary}
         />
       </section>
 
-      {/* Class Wise Graphs */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="min-w-0">
           <ClassWiseSellChart
@@ -188,6 +201,19 @@ const DashboardPage = () => {
           />
         </div>
       </section>
+
+      <CommonPrint
+        ref={printRef}
+        title="daily_info"
+      >
+        <SummaryReport
+          report={reports}
+          vataInformation={vata?.data as TVataInformation}
+          startDate={filterDate.startDate}
+          endDate={filterDate.endDate}
+        />
+      </CommonPrint>
+
     </div>
   );
 };

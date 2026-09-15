@@ -194,7 +194,8 @@ export default function A4Print({
                 position: "absolute",
 
                 top: `${PAGE_MARGIN_MM}mm`,
-
+                display: "flex",
+                justifyContent: "center",
                 left: "50%",
 
                 width: `${contentWidth}mm`,
