@@ -62,7 +62,7 @@ const ReceivableAndPayableModal = ({
             reset();
             onClose();
         } catch (error) {
-            console.log(error);
+            ;
 
             showToast({
                 title: "দুঃখিত! সার্ভারে ত্রুটি হয়েছে, পরে চেষ্টা করুন",

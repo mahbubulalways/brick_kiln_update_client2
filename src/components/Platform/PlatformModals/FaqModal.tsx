@@ -71,7 +71,7 @@ const FaqModal = ({ isOpen, onClose }: TFaqModal) => {
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             showToast({
                 title:

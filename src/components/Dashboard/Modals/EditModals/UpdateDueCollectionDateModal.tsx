@@ -27,7 +27,7 @@ const UpdateDueCollectionDateModal = ({ isOpen, onClose, id, setId }: TCustomMod
             refetchOnMountOrArgChange: true,
             skip: !id
         })
-    const [mutateAsync, { isLoading }] =   useUpdateDueCollectionDateMutation();
+    const [mutateAsync, { isLoading }] = useUpdateDueCollectionDateMutation();
     const { handleSubmit, control, reset, formState: { errors }, register } = useForm<TForm>({
 
     });
@@ -39,38 +39,38 @@ const UpdateDueCollectionDateModal = ({ isOpen, onClose, id, setId }: TCustomMod
     }, [data, reset]);
 
 
-    console.log(error)
+
 
     const onSubmit: SubmitHandler<TForm> = async (data) => {
-        const payload={
+        const payload = {
             id, data
         }
         try {
-          const result = await mutateAsync(payload).unwrap();
-          if (result?.success) {
-            onClose();
-            return showToast({
-              title: result?.message,
-              type: "success",
-              options: {
-                duration: 4000,
-                icon: <FaCircleCheck className="h-5 w-5" />,
-              },
-            });
-          }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const result = await mutateAsync(payload).unwrap();
+            if (result?.success) {
+                onClose();
+                return showToast({
+                    title: result?.message,
+                    type: "success",
+                    options: {
+                        duration: 4000,
+                        icon: <FaCircleCheck className="h-5 w-5" />,
+                    },
+                });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-          console.log(error);
-          return showToast({
-            title:
-              error?.data?.message ||
-              "দুঃখিত! সার্ভারে ত্রুটি হয়েছে, পরে চেষ্টা করুন",
-            type: "error",
-            options: {
-              duration: 4000,
-              icon: <MdOutlineError className="h-5 w-5" />,
-            },
-          });
+            ;
+            return showToast({
+                title:
+                    error?.data?.message ||
+                    "দুঃখিত! সার্ভারে ত্রুটি হয়েছে, পরে চেষ্টা করুন",
+                type: "error",
+                options: {
+                    duration: 4000,
+                    icon: <MdOutlineError className="h-5 w-5" />,
+                },
+            });
         }
     };
 
@@ -104,15 +104,15 @@ const UpdateDueCollectionDateModal = ({ isOpen, onClose, id, setId }: TCustomMod
                             />
 
 
-                           <div className="pt-4">
-                             <CustomInput
-                                name="note"
-                                label="নোট"
-                                placeholder="নোট"
-                                register={register}
-                                type="text"
-                            />
-                           </div>
+                            <div className="pt-4">
+                                <CustomInput
+                                    name="note"
+                                    label="নোট"
+                                    placeholder="নোট"
+                                    register={register}
+                                    type="text"
+                                />
+                            </div>
                             <div className="pt-5">
                                 <button
                                     type="submit"

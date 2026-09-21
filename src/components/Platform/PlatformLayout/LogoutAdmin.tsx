@@ -36,7 +36,7 @@ export default function LogoutAdminButton() {
                 router.push("/login");
             }
         } catch (error: any) {
-            console.log(error)
+
             setLogoutLoading(false);
 
             showToast({

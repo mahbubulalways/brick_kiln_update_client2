@@ -44,7 +44,7 @@ const NewPaymentModal = ({ isOpen, onClose }: TCustomModal) => {
     setValue,
     formState: { errors },
   } = useForm<TKhatiyan>({
-    defaultValues: {},
+    defaultValues: { cutting: 0 },
   });
 
   useEffect(() => {

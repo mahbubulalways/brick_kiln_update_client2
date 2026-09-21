@@ -46,7 +46,6 @@ const CreateDriverModal = ({ isOpen, onClose }: TCustomModal) => {
             reset();
             onClose();
         } catch (error: any) {
-            console.log(error)
             showToast({
                 title:
                     error?.data?.message || "ড্রাইভার তৈরি করতে সমস্যা হয়েছে",

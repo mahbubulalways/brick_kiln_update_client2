@@ -64,8 +64,8 @@ const CreateNewUpdateStockModal = ({
     const onSubmit: SubmitHandler<TUpdateStock> = async (
         data,
     ) => {
-        data.stockIn=Number(data.stockIn)
-        data.stockOut=Number(data.stockOut)
+        data.stockIn = Number(data.stockIn)
+        data.stockOut = Number(data.stockOut)
         try {
             const result = await mutateAsync(data as any).unwrap();
             if (result?.success) {
@@ -77,7 +77,7 @@ const CreateNewUpdateStockModal = ({
                 onClose();
             }
         } catch (error: any) {
-            console.log(error)
+
             showToast({
                 title:
                     error?.data?.message ||

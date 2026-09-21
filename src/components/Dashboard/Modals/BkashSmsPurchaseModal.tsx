@@ -28,10 +28,10 @@ const BkashSmsPurchaseModal = ({
     const totalPrice = smsQuantity * smsPrice;
 
     const onSubmit = (data: TFormData) => {
-        console.log({
-            smsQuantity: data.smsQuantity,
-            totalPrice: data.smsQuantity * smsPrice,
-        });
+        //    console.log ({
+        //         smsQuantity: data.smsQuantity,
+        //         totalPrice: data.smsQuantity * smsPrice,
+        //     });
     };
 
     if (!isOpen) return null;

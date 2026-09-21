@@ -89,13 +89,12 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
 
   // DELETE FUNCTION
   const handleDeletePayment = async (id: number) => {
-    console.log("Deleting payment with ID:", id);
     Swal.fire({
       title: "আপনি কি নিশ্চিত?",
       text: "একবার মুছে ফেলা হলে এটি আর ফিরিয়ে আনা যাবে না।",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#039A63",
       cancelButtonColor: "#d33",
       confirmButtonText: "হ্যাঁ, মুছে ফেলুন!",
       cancelButtonText: "বাতিল করুন",

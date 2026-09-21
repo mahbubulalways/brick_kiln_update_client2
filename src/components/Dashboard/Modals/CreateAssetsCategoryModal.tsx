@@ -38,48 +38,46 @@ const CreateNewAssetsCategoryModal = ({
   });
 
   const onSubmit: SubmitHandler<TAssetCategory> = async (data) => {
-  try {
-    const result = await createAssetCategory(data).unwrap();
+    try {
+      const result = await createAssetCategory(data).unwrap();
 
-    if (result?.success) {
-      reset();
-      onClose();
+      if (result?.success) {
+        reset();
+        onClose();
+
+        return showToast({
+          title:
+            result?.message ||
+            "মালামালের ক্যাটাগরি সফলভাবে যোগ করা হয়েছে",
+          type: "success",
+          options: {
+            duration: 4000,
+            icon: <FaCircleCheck className="h-5 w-5" />,
+          },
+        });
+      }
 
       return showToast({
-        title:
-          result?.message ||
-          "মালামালের ক্যাটাগরি সফলভাবে যোগ করা হয়েছে",
-        type: "success",
+        title: "মালামালের ক্যাটাগরি যোগ করা যায়নি",
+        type: "error",
         options: {
           duration: 4000,
-          icon: <FaCircleCheck className="h-5 w-5" />,
+          icon: <MdOutlineError className="h-5 w-5" />,
+        },
+      });
+    } catch (error: any) {
+      return showToast({
+        title:
+          error?.data?.message ||
+          "দুঃখিত! মালামালের ক্যাটাগরি যোগ করতে সার্ভারে ত্রুটি হয়েছে",
+        type: "error",
+        options: {
+          duration: 4000,
+          icon: <MdOutlineError className="h-5 w-5" />,
         },
       });
     }
-
-    return showToast({
-      title: "মালামালের ক্যাটাগরি যোগ করা যায়নি",
-      type: "error",
-      options: {
-        duration: 4000,
-        icon: <MdOutlineError className="h-5 w-5" />,
-      },
-    });
-  } catch (error: any) {
-    console.log(error);
-
-    return showToast({
-      title:
-        error?.data?.message ||
-        "দুঃখিত! মালামালের ক্যাটাগরি যোগ করতে সার্ভারে ত্রুটি হয়েছে",
-      type: "error",
-      options: {
-        duration: 4000,
-        icon: <MdOutlineError className="h-5 w-5" />,
-      },
-    });
-  }
-};
+  };
 
   return (
     <CustomModal
@@ -89,18 +87,18 @@ const CreateNewAssetsCategoryModal = ({
       width="sm"
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-       <CustomInput
-            name="name"
-            label="নাম"
-            placeholder="নাম লিখুন"
-            register={register}
-            type="text"
-            rules={{
-              required: "নাম প্রদান করুন",
-            }}
-            error={errors.name}
-          />
-      
+        <CustomInput
+          name="name"
+          label="নাম"
+          placeholder="নাম লিখুন"
+          register={register}
+          type="text"
+          rules={{
+            required: "নাম প্রদান করুন",
+          }}
+          error={errors.name}
+        />
+
 
         {/* Buttons */}
         <div className="flex items-center justify-between pt-5">

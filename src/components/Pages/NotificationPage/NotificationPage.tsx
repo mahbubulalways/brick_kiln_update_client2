@@ -43,7 +43,7 @@ export default function NotificationPage({ limit, page }: TQuery) {
         try {
             await updateNotification(id).unwrap();
         } catch (error) {
-            console.error(error);
+
         }
     };
 

@@ -68,7 +68,7 @@ const VideoLinkModal = ({
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             showToast({
                 title:

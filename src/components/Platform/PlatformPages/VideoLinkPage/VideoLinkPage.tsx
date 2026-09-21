@@ -78,7 +78,7 @@ export default function VideoLinkPage() {
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             showToast({
                 title:

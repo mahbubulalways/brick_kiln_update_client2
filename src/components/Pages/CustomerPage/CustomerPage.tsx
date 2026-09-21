@@ -19,6 +19,7 @@ import { TablePagination } from "@/components/Reusable/TablePagination";
 
 import UpdateCustomerModal from "@/components/Dashboard/Modals/EditModals/UpdateCustomerModal";
 import UpdateDuePayDateModal from "@/components/Dashboard/Modals/EditModals/UpdateDuePayDateModal";
+import SendCustomerSmsModal from "@/components/Dashboard/Modals/SendCustomerSmsModal";
 
 // =========================================================
 // Format Date
@@ -52,7 +53,7 @@ const formatAmount = (amount: number) => {
 
 const CustomerPage = ({ limit, page, search }: TQuery) => {
     const [searchItems, setSearchItem] = useState("");
-
+    const [openSmsModal, setOpenSmsModal] = useState<boolean>(false);
     const [openUpdateCustomer, setOpenUpdateCustomer] =
         useState<boolean>(false);
 
@@ -113,10 +114,8 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                 ================================================= */}
 
                 <div className="flex flex-col gap-3 border-b border-gray-200 p-4 md:flex-row md:items-center md:justify-between">
-
                     {/* Customer Count */}
-
-                    <div className="flex-1">
+                    <div className="shrink-0">
                         <div className="flex w-fit items-center gap-2 rounded-lg border border-[#079B67] bg-white px-2 py-1.5 md:px-5">
                             <span className="text-[13px] font-medium text-[#079B67] md:text-[15px]">
                                 কাস্টমারঃ
@@ -129,13 +128,10 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                     </div>
 
                     {/* Search */}
-
-                    <div className="w-full flex-1 md:max-w-md">
+                    <div className="w-full min-w-0 md:max-w-md md:flex-1">
                         <SearchBar
                             value={searchItems}
-                            onChange={(e) =>
-                                setSearchItem(e.target.value)
-                            }
+                            onChange={(e) => setSearchItem(e.target.value)}
                             onClear={() => setSearchItem("")}
                         />
                     </div>
@@ -306,7 +302,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
 
                                                 <InfoRow
                                                     label="আগের মৌসুমের বাকি"
-                                                    value={"৳ "+ formatAmount(
+                                                    value={"৳ " + formatAmount(
                                                         customer.previousDue
                                                     )}
                                                     labelClassName="text-[#8B5CF6]"
@@ -331,7 +327,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
 
                                                 <InfoRow
                                                     label="মোট মূল্য"
-                                                    value={"৳ "+formatAmount(
+                                                    value={"৳ " + formatAmount(
                                                         customer.totalAmount
                                                     )}
                                                     valueClassName="font-semibold text-[#8B5CF6]"
@@ -339,7 +335,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
 
                                                 <InfoRow
                                                     label="পরিশোধ"
-                                                    value={"৳ "+formatAmount(
+                                                    value={"৳ " + formatAmount(
                                                         customer.totalPaid
                                                     )}
                                                     valueClassName="font-semibold text-[#8B5CF6]"
@@ -347,7 +343,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
 
                                                 <InfoRow
                                                     label="চলতি মৌসুমের বাকি"
-                                                    value={"৳ "+formatAmount(
+                                                    value={"৳ " + formatAmount(
                                                         customer.currentSeasonDue
                                                     )}
                                                     labelClassName="text-[#F59E0B]"
@@ -356,7 +352,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
 
                                                 <InfoRow
                                                     label="সর্বমোট বাকি"
-                                                    value={"৳ "+formatAmount(
+                                                    value={"৳ " + formatAmount(
                                                         customer.totalDue
                                                     )}
                                                     labelClassName="bg-[#FCE4DE] text-[#FF4B12]"
@@ -428,6 +424,24 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                                                         আপডেট তারিখ
                                                     </button>
                                                 </div>
+
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+
+                                                        setOpenSmsModal(
+                                                            true
+                                                        );
+
+                                                        setCustomerId(
+                                                            customer.customerCode
+                                                        );
+                                                    }}
+                                                    type="button"
+                                                    className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-all hover:border-[#079B67] hover:bg-[#079B67] hover:text-white"
+                                                >
+                                                    মেসেজ দিন
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -478,6 +492,14 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                     }
                 />
             )}
+
+            {openSmsModal &&
+                <SendCustomerSmsModal
+                    onClose={() => setOpenSmsModal(false)}
+                    isOpen={openSmsModal}
+                    customerId={customerId}
+                />
+            }
         </div>
     );
 };

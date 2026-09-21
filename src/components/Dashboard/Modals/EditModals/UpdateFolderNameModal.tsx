@@ -32,9 +32,9 @@ export default function UpdateFolderNameModal({
         refetchOnMountOrArgChange: true,
     });
 
-    const [updateFolder, { isLoading ,error}] =
+    const [updateFolder, { isLoading, error }] =
         useUpdateFolderNameMutation();
-console.log(error);
+    ;
     const {
         register,
         handleSubmit,

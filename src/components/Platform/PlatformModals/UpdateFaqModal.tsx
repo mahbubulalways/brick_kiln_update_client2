@@ -90,7 +90,7 @@ const UpdateFaqModal = ({
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             showToast({
                 title:

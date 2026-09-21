@@ -160,7 +160,7 @@ const CreateGoodIssueRefundModal = ({
 
         if (totalRefund !== issuedQuantity) {
             showToast({
-               title: `মোট পরিমাণ ${issuedQuantity} হতে হবে। বর্তমানে ${totalRefund} টি।`,
+                title: `মোট পরিমাণ ${issuedQuantity} হতে হবে। বর্তমানে ${totalRefund} টি।`,
                 type: "info"
             })
 
@@ -185,7 +185,7 @@ const CreateGoodIssueRefundModal = ({
 
             const result = await mutateAsync(modifyData);
 
-            console.log(result);
+
 
             reset();
             removeImage();
@@ -200,7 +200,7 @@ const CreateGoodIssueRefundModal = ({
                 },
             });
         } catch (error: any) {
-            console.log(error);
+            ;
 
             showToast({
                 title:

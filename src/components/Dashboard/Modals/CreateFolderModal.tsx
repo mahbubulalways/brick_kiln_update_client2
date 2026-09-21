@@ -36,7 +36,7 @@ export default function CreateFolderModal({ isOpen, onClose }: TCustomModal) {
                 })
             }
         } catch (error: any) {
-            console.log(error);
+            ;
             showToast({
                 title: error?.data?.message,
                 type: "success",

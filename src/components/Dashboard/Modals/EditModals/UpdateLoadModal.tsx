@@ -50,7 +50,7 @@ const UpdateLoadModal = ({
     } = useGetSingleLoadInfoQuery(id, {
         skip: !id || !isOpen,
     });
-    console.log(error)
+
     const [updateLoadInfo, { isLoading: updateLoading }] =
         useUpdateLoadInfoMutation();
 

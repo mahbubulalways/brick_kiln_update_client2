@@ -88,7 +88,7 @@ const NoteModal = ({ isOpen, onClose }: TCustomModal) => {
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             showToast({
                 title:

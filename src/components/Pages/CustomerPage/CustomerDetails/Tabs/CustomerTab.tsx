@@ -84,11 +84,11 @@ const CustomerTabs = ({
     const handleTabChange = (tab: CustomerTab) => {
         setActiveTab(tab);
 
-        // Reset date
-        setDateFiter({
-            endDate: null,
-            startDate: null
-        })
+        // // Reset date
+        // setDateFiter({
+        //     endDate: null,
+        //     startDate: null
+        // })
         // Existing search params copy
         const params = new URLSearchParams(
             searchParams.toString()

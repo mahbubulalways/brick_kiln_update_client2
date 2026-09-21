@@ -150,7 +150,7 @@ const CreateNewIGoodsIssueModal = ({
                 });
             }
         } catch (error: any) {
-            console.log(error)
+
             showToast({
                 title:
                     error?.data?.message ||
@@ -264,7 +264,7 @@ const CreateNewIGoodsIssueModal = ({
                             {selectedGoodId &&
                                 enteredQuantity > currentQuantity && (
                                     <p className="mt-1 text-xs font-medium text-red-500">
-                                     ইস্যু করার পরিমাণ বর্তমান মজুদের চেয়ে বেশি।
+                                        ইস্যু করার পরিমাণ বর্তমান মজুদের চেয়ে বেশি।
                                     </p>
                                 )}
                         </div>

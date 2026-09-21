@@ -69,7 +69,7 @@ const WeatherModal = ({ isOpen, onClose }: TCustomModal) => {
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             return showToast({
                 title:

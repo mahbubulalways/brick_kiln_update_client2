@@ -85,7 +85,8 @@ const AllChallan = ({
         },
         {
             refetchOnMountOrArgChange: true,
-        }
+            skip: !customerId
+        },
     );
 
     const invoices: IChallanForDataShow[] = useMemo(
@@ -132,11 +133,6 @@ const AllChallan = ({
 
                             <TableHead
                                 th="ছাড়"
-                                cls="hidden lg:table-cell"
-                            />
-
-                            <TableHead
-                                th="ভাড়া"
                                 cls="hidden lg:table-cell"
                             />
 
@@ -271,16 +267,6 @@ const AllChallan = ({
                                                             }
                                                         />
 
-                                                        {/* Car Rent */}
-                                                        <TableData
-                                                            td={`৳ ${toBanglaNumber(
-                                                                row?.carRent
-                                                            )}`}
-                                                            cls="hidden lg:table-cell text-blue-600"
-                                                            rowSpan={
-                                                                items.length
-                                                            }
-                                                        />
 
                                                         {/* Total Price */}
                                                         <TableData

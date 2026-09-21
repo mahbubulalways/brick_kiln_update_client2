@@ -28,7 +28,7 @@ export default function SmsRatePage() {
     }
 
     if (isError) {
-        console.log(error);
+        ;
         return <CustomStatus type="error" />;
     }
 
@@ -186,11 +186,11 @@ export default function SmsRatePage() {
                     className="group flex w-full cursor-pointer items-center
                      justify-center gap-2 rounded-xl bg-[#039A63] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#028755] hover:shadow-md"
                 >
-                 
-                        <Settings2 size={19} />
 
-                        <span>সেটিংস পরিবর্তন করুন</span>
-              
+                    <Settings2 size={19} />
+
+                    <span>সেটিংস পরিবর্তন করুন</span>
+
 
                     <ArrowRight
                         size={19}

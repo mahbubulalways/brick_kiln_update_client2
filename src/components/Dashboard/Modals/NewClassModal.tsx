@@ -17,7 +17,7 @@ type TCustomModal = {
 
 const NewClassModal = ({ isOpen, onClose }: TCustomModal) => {
   const [mutateAsync, { isLoading }] = useCreateClassAndRateMutation();
-  const { register, handleSubmit, control, reset,formState:{errors} } = useForm<TClassAndRate>({
+  const { register, handleSubmit, control, reset, formState: { errors } } = useForm<TClassAndRate>({
     defaultValues: {},
   });
 
@@ -38,7 +38,7 @@ const NewClassModal = ({ isOpen, onClose }: TCustomModal) => {
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
+      ;
       return showToast({
         title:
           error?.data?.message ||
@@ -66,7 +66,7 @@ const NewClassModal = ({ isOpen, onClose }: TCustomModal) => {
             label="শ্রেণির ধরণ"
             placeholder="শ্রেণির ধরণ"
             control={control}
-              error={errors.classType}
+            error={errors.classType}
             rules={{
               required: "শ্রেণির ধরণ নির্বাচন করুন",
             }}

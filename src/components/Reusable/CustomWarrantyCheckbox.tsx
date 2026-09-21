@@ -18,16 +18,15 @@ const CustomWarrantyCheckbox = ({
 
         onChange(checked);
 
-        console.log("Warranty:", checked);
+
     };
 
     return (
         <label
-            className={`flex w-full items-center gap-3 rounded-xl border border-[#d8e5f5] bg-[#f1f6fe] px-4 py-3 ${
-                disabled
+            className={`flex w-full items-center gap-3 rounded-xl border border-[#d8e5f5] bg-[#f1f6fe] px-4 py-3 ${disabled
                     ? "cursor-not-allowed opacity-60"
                     : "cursor-pointer"
-            }`}
+                }`}
         >
             <input
                 type="checkbox"

@@ -26,7 +26,7 @@ const NewLoadSection = () => {
   });
 
   const onSubmit: SubmitHandler<TPaymentRecord> = async (data) => {
-    console.log(data);
+    // console.log(data);
   };
 
   return (

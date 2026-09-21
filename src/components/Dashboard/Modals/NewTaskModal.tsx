@@ -72,7 +72,7 @@ const NewTaskModal = ({
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
 
             return showToast({
                 title:

@@ -19,7 +19,7 @@ export default function SeasonCreate() {
                 });
             }
         } catch (error: any) {
-            console.log(error)
+
             showToast({
                 title: error?.data?.message || "সিজন তৈরি করা যায়নি",
                 type: "error",

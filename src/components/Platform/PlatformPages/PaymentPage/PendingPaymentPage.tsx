@@ -94,7 +94,7 @@ export default function PendingPaymentPage() {
                 confirmButtonText: "ঠিক আছে",
             });
         } catch (error: any) {
-            console.log(error)
+
             await Swal.fire({
                 title: "ব্যর্থ!",
                 text:
@@ -169,7 +169,7 @@ export default function PendingPaymentPage() {
                         </thead>
 
                         <tbody className="divide-y divide-gray-100">
-                            {isLoading  ? (
+                            {isLoading ? (
                                 Array.from({ length: 6 }).map((_, index) => (
                                     <tr key={index}>
                                         {Array.from({ length: 10 }).map(

@@ -42,7 +42,7 @@ const UpdateDuePayDateModal = ({ isOpen, onClose, id, setId }: TCustomModal) => 
                 });
             }
         } catch (error: any) {
-            console.log(error);
+            ;
             return showToast({
                 title:
                     error?.data?.message ||

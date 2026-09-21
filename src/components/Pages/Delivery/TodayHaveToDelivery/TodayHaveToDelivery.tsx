@@ -177,7 +177,7 @@ const TodaysHaveToDelivery = ({ limit, page, search }: TQuery) => {
 
                           {/* Actions column only once */}
                           {index === 0 && (
-                            <td className="border p-2" rowSpan={row.items.length}>
+                            <td className="border p-2 text-center align-middle" rowSpan={row.items.length}>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <button className="p-1.5 rounded hover:bg-gray-100 transition">

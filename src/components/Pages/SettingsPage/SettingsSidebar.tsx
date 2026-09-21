@@ -62,11 +62,12 @@ const menuItems = [
     id: 9,
     label: "অ্যাপ ইনস্টল করুন",
     icon: FiDownload,
-  }, {
-    id: 10,
-    label: "সিজন ম্যানেজমেন্ট",
-    icon: FiCalendar,
   },
+  //  {
+  //   id: 10,
+  //   label: "সিজন ম্যানেজমেন্ট",
+  //   icon: FiCalendar,
+  // },
 ];
 
 type TSidebarMenu = {
