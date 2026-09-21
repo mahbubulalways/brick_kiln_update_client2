@@ -32,6 +32,7 @@ import { formatDateRange } from "@/utils/formatDateRange";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import SendCustomerSmsModal from "@/components/Dashboard/Modals/SendCustomerSmsModal";
 
 export interface IGetAllDueList {
   id: string;
@@ -55,6 +56,7 @@ export interface IGetAllDueList {
 
 const AllDueListPage = ({ limit, page, search }: TQuery) => {
   const [searchItem, setSearchItem] = useState("");
+  const [openSmsModal, setOpenSmsModal] = useState<boolean>(false);
   const [dateRange, setDateRange] = useState("");
   const [customerId, setCustomerId] = useState<string | undefined>(undefined)
   const [openDueModal, setOpenDueModal] = useState<boolean>(false);
@@ -83,6 +85,10 @@ const AllDueListPage = ({ limit, page, search }: TQuery) => {
     0,
   );
 
+  const handleSendSms = (id: string) => {
+    setCustomerId(id)
+    setOpenSmsModal(true)
+  }
 
   return (
     <div className="bg-white rounded-md shadow border ">
@@ -228,7 +234,7 @@ const AllDueListPage = ({ limit, page, search }: TQuery) => {
                                 />
                               </DropdownMenuItem>
                               <DropdownMenuItem
-
+                                onClick={() => handleSendSms(row?.customerCode)}
                               >
                                 <CustomDropDownMenuItem
                                   Icon={MessageSquare}
@@ -289,6 +295,15 @@ const AllDueListPage = ({ limit, page, search }: TQuery) => {
           dues={dues}
         />
       } */}
+
+
+      {openSmsModal &&
+        <SendCustomerSmsModal
+          onClose={() => setOpenSmsModal(false)}
+          isOpen={openSmsModal}
+          customerId={customerId}
+        />
+      }
     </div>
   );
 };

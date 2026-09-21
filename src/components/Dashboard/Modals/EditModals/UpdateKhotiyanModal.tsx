@@ -107,7 +107,7 @@ const UpdateKhotiyanModal = ({
 
     const payload = {
       ...formData,
-      parentId: Number(formData.parentId) || null,
+      parentId: formData.parentId || null,
       rate: Number(formData.rate || 0),
       quantity: Number(formData.quantity || 0),
     };
