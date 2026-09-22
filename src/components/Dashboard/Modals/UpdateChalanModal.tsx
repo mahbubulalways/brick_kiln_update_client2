@@ -179,7 +179,7 @@ const UpdateChalanModal = ({
         // If API says advance challan, keep deliverySeason.
         // =====================================================
         deliverySeason:
-          data.chalanType === "অগ্রিম চালান"
+          data.chalanType === "অগ্রীম চালান সিজন"
             ? data.deliverySeason || null
             : null,
 
@@ -234,7 +234,7 @@ const UpdateChalanModal = ({
 
     // If user changes from Advance -> Regular,
     // then delivery season should be removed.
-    if (chalanType !== "অগ্রিম চালান") {
+    if (chalanType === "রেগুলার চালান") {
       setValue("invoice.deliverySeason", null, {
         shouldDirty: true,
         shouldValidate: false,
@@ -327,7 +327,7 @@ const UpdateChalanModal = ({
 
   const deliverySeason = watch("invoice.deliverySeason");
 
-  const isAdvanceChalan = chalanType === "অগ্রিম চালান";
+  const isAdvanceChalan = chalanType !== "রেগুলার চালান";
 
   const { minDate, maxDate } = generateDeliveryDateRange(
     deliverySeason!,
@@ -370,7 +370,7 @@ const UpdateChalanModal = ({
     }
 
     if (
-      data.invoice.chalanType === "অগ্রিম চালান" &&
+      data.invoice.chalanType === "অগ্রীম চালান সিজন" &&
       !data.invoice.deliverySeason
     ) {
       showToast({
@@ -430,7 +430,7 @@ const UpdateChalanModal = ({
           : null,
 
       deliverySeason:
-        selectedChalanType === "অগ্রিম চালান"
+        selectedChalanType !== "রেগুলার চালান"
           ? data.invoice.deliverySeason || null
           : null,
     };
@@ -624,13 +624,17 @@ const UpdateChalanModal = ({
                       value: "রেগুলার চালান",
                     },
                     {
-                      label: "অগ্রিম চালান",
-                      value: "অগ্রিম চালান",
+                      label: "অগ্রীম চালান সিজন",
+                      value: "অগ্রীম চালান সিজন",
+                    },
+                    {
+                      label: "অগ্রীম চালান আনসিজন",
+                      value: "অগ্রীম চালান আনসিজন",
                     },
                   ]}
                 />
 
-                {chalanType === "অগ্রিম চালান" && (
+                {chalanType === "অগ্রীম চালান সিজন" && (
                   <CustomSelect
                     name="invoice.deliverySeason"
                     label="ডেলিভারি সিজন"

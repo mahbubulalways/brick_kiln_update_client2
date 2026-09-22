@@ -29,6 +29,23 @@ const A4LedgerPrint = ({
                     : "px-5 py-4 sm:px-7 sm:py-5"
                     }`}
             >
+
+                <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 flex items-center justify-center select-none"
+                >
+                    <span
+                        className="rotate-[-18deg] whitespace-nowrap font-bold text-[#6E1D14] opacity-[0.04]"
+                        style={{
+                            fontSize: compact ? "110px" : "170px",
+                        }}
+                    >
+                        {vataInformation?.shortForm
+                            ?.split("")
+                            .join(".")}
+                    </span>
+                </div>
+
                 <div className="pointer-events-none absolute inset-[6px] border border-[#d9a7bd]" />
 
                 <div className="relative z-10">
@@ -69,20 +86,36 @@ const A4LedgerPrint = ({
                         {vataInformation?.additionalAddress}, {vataInformation?.address}
                     </div>
 
-                    <div className="mt-1.5 flex flex-wrap items-center text-[17px] justify-center gap-x-2 gap-y-0.5 text-center  font-semibold text-[#8b3158] ">
-                        <span>
-                            {vataInformation?.challanPersonOneName}:{" "}
-                            {vataInformation?.challanManagerPhoneNumber}
-                        </span>
+                    <div
+                        className={`flex flex-wrap items-center justify-center text-center font-semibold text-[#8B3158] ${compact
+                            ? "mt-1 gap-x-4 gap-y-0.5 text-[8px]"
+                            : "mt-1.5 gap-x-5 gap-y-1 text-[9px] sm:text-[12px]"
+                            }`}
+                    >
+                        {vataInformation?.challanPersonOneName && (
+                            <span>
+                                {vataInformation.challanPersonOneName}:{" "}
+                                {
+                                    vataInformation?.challanPersonOnePhoneNumber
+                                }
+                            </span>
+                        )}
 
-                        <span>
-                            {vataInformation?.challanPersonTwoName}:{" "}
-                            {vataInformation?.challanPersonTwoPhoneNumber}
-                        </span>
+                        {vataInformation?.challanPersonTwoName && (
+                            <span>
+                                {vataInformation.challanPersonTwoName}:{" "}
+                                {
+                                    vataInformation?.challanPersonTwoPhoneNumber
+                                }
+                            </span>
+                        )}
 
-                        <span>
-                            ম্যানেজারঃ {vataInformation?.challanManagerPhoneNumber}
-                        </span>
+                        {vataInformation?.challanManagerPhoneNumber && (
+                            <span>
+                                ম্যানেজারঃ{" "}
+                                {vataInformation.challanManagerPhoneNumber}
+                            </span>
+                        )}
                     </div>
 
                     <div className="mt-1 flex items-center justify-end text-[8px] sm:text-[12px]">

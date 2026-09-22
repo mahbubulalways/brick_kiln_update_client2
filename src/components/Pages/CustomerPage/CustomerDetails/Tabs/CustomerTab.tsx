@@ -232,7 +232,7 @@ const CustomerTabs = ({
                         formatDate={formatDate}
                         query={query}
                         setInvoiceInfo={setInvoiceInfo}
-                        vataInformation={vata}
+                        vataInformation={vata?.data}
                     />
                 )}
 

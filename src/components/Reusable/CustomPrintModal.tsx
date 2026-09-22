@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { HiXMark } from "react-icons/hi2";
 
-type TModalWidth = "sm" | "md" | "lg" | "xl" | "xxl" | "full";
+type TModalWidth = "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl" | "full";
 
 export type TCustomPrintModal = {
     isOpen: boolean;
@@ -19,6 +19,7 @@ const widthClasses: Record<TModalWidth, string> = {
     lg: "max-w-lg",
     xl: "max-w-xl",
     xxl: "max-w-3xl",
+    xxxl: "max-w-5xl",
     full: "max-w-[95vw]",
 };
 

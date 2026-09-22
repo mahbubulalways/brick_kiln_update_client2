@@ -125,8 +125,8 @@ const CustomSelect = ({
 
         const filteredOptions = searchable
           ? options.filter((item) =>
-              item.label.toLowerCase().includes(search.toLowerCase()),
-            )
+            item.label.toLowerCase().includes(search.toLowerCase()),
+          )
           : options;
 
         const selectOption = (option: TSelectOption) => {
@@ -160,11 +160,10 @@ const CustomSelect = ({
                     setOpen((prev) => !prev);
                   }
                 }}
-                className={`flex h-9 w-full cursor-pointer items-center gap-2 rounded-lg border px-3 py-3 bg-white ${
-                  error
+                className={`flex h-9 w-full cursor-pointer items-center gap-2 rounded-lg border px-3 py-3 bg-white ${error
                     ? "border-2 border-red-500"
                     : "border-gray-300 focus-within:ring-2 focus-within:ring-[#00664A]"
-                }`}
+                  }`}
               >
                 {searchable ? (
                   <input
@@ -183,9 +182,8 @@ const CustomSelect = ({
                   />
                 ) : (
                   <span
-                    className={`flex-1 truncate ${
-                      selectedOption ? "text-gray-900" : "text-gray-400 text-[14px]"
-                    }`}
+                    className={`flex-1 truncate ${selectedOption ? "text-gray-900" : "text-gray-400 text-[14px]"
+                      }`}
                   >
                     {selectedOption?.label ?? placeholder}
                   </span>
@@ -203,9 +201,8 @@ const CustomSelect = ({
                 {border ? (
                   <ChevronDown
                     size={18}
-                    className={`text-gray-500 transition-transform ${
-                      open ? "rotate-180" : ""
-                    }`}
+                    className={`text-gray-500 transition-transform ${open ? "rotate-180" : ""
+                      }`}
                   />
                 ) : (
                   ""
@@ -235,23 +232,22 @@ const CustomSelect = ({
                         <FaSpinner className="h-7 w-7 animate-spin" />
                       </div>
                     ) : filteredOptions.length ? (
-                      filteredOptions.map((item,idx) => (
+                      filteredOptions.map((item, idx) => (
                         <button
                           key={`${idx}-${item.label}`}
                           type="button"
                           onClick={() => selectOption(item)}
-                          className={`block w-full px-4 py-2 text-[14px] cursor-pointer text-left transition-colors hover:bg-gray-100 ${
-                            item.value === selectedValue
+                          className={`block w-full px-4 py-2 text-[14px] cursor-pointer text-left transition-colors hover:bg-gray-100 ${item.value === selectedValue
                               ? "bg-[#00664A]/10 text-[#00664A]"
                               : ""
-                          }`}
+                            }`}
                         >
                           {item.label}
                         </button>
                       ))
                     ) : (
                       <div className="px-4 py-3 text-sm text-gray-500">
-                        No options found
+                        কোনো তথ্য পাওয়া যায়নি
                       </div>
                     )}
                   </div>,

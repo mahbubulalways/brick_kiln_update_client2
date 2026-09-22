@@ -154,10 +154,10 @@ const ChalanDetailsModal = ({
                     <span className="">ছাড়</span>
                     <span>৳ {invoice?.discount}</span>
                   </div>
-                  {/* <div className="border rounded-md p-3 flex justify-between">
+                  <div className="border rounded-md p-3 flex justify-between">
                     <span className="">গাড়ি ভাড়া</span>
                     <span>৳ {invoice?.carRent}</span>
-                  </div> */}
+                  </div>
                   <div className="border rounded-md p-3 flex justify-between">
                     <span className="">সর্বমোট</span>
                     <span>৳ {invoice?.totalPrice}</span>

@@ -71,7 +71,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
       },
       invoice: {
         discount: 0,
-        // carRent: 0
+        carRent: 0
       }
     },
   });
@@ -82,7 +82,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const watchItems = watch("invoiceItems.items");
-  // const carRent = watch("invoice.carRent");
+  const carRent = watch("invoice.carRent");
   const discount = watch("invoice.discount");
   const cash = watch("invoice.cash");
   const chalanType = watch("invoice.chalanType");
@@ -113,21 +113,21 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
     0,
   );
   const totalPrice =
-    totalProductPrice - Number(discount || 0); //+ Number(carRent || 0)
+    totalProductPrice + Number(carRent || 0) - Number(discount || 0);
 
   const due = totalPrice - Number(cash || 0);
 
   // HANDLE CALCULATIONS
   useEffect(() => {
-    setValue("invoice.productPrice", totalProductPrice);
-    setValue("invoice.totalPrice", totalPrice);
-    setValue("invoice.due", due);
+    setValue("invoice.productPrice", Number(totalProductPrice.toFixed(2)));
+    setValue("invoice.totalPrice", Number(totalPrice.toFixed(2)));
+    setValue("invoice.due", Number(due.toFixed(2)));
   }, [due, setValue, totalPrice, totalProductPrice]);
 
   // MIN MAX DATE OF CHALLANS
   const deliverySeason = watch("invoice.deliverySeason");
 
-  const isAdvanceChalan = chalanType === "অগ্রিম চালান";
+  const isAdvanceChalan = chalanType !== "রেগুলার চালান";
 
   const { minDate, maxDate } = generateDeliveryDateRange(
     deliverySeason!,
@@ -157,6 +157,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
     data.invoice.discount = Number(data.invoice.discount);
     data.invoice.totalPrice = Number(data.invoice.totalPrice);
     data.invoice.due = Number(data.invoice.due);
+    data.invoice.carRent = Number(data.invoice.carRent);
 
 
     if (data.invoice.due < 0) {
@@ -310,8 +311,14 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                     label="ফোন নম্বর"
                     placeholder="ফোন নম্বর"
                     register={register}
-                    type="text"
-                    rules={{ required: "ফোন নম্বর লিখুন" }}
+                    type="number"
+                    rules={{
+                      required: "ফোন নম্বর লিখুন",
+                      pattern: {
+                        value: /^01[3-9]\d{8}$/,
+                        message: "সঠিক ১১ সংখ্যার মোবাইল নম্বর লিখুন",
+                      },
+                    }}
                     error={errors.customer?.phoneNumber}
                   />
 
@@ -348,13 +355,17 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                         value: "রেগুলার চালান",
                       },
                       {
-                        label: "অগ্রিম চালান",
-                        value: "অগ্রিম চালান",
+                        label: "অগ্রীম চালান সিজন",
+                        value: "অগ্রীম চালান সিজন",
+                      },
+                      {
+                        label: "অগ্রীম চালান আনসিজন",
+                        value: "অগ্রীম চালান আনসিজন",
                       },
                     ]}
                   />
 
-                  {chalanType === "অগ্রিম চালান" && (
+                  {chalanType === "অগ্রীম চালান সিজন" && (
                     <CustomSelect
                       name="invoice.deliverySeason"
                       label="ডেলিভারি সিজন"
@@ -450,8 +461,9 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                             name={`invoiceItems.items.${index}.rate`}
                             label="রেট"
                             placeholder="0"
+                            readonly
                             register={register}
-                            type="text"
+                            type="number"
                             error={errors.invoiceItems?.items?.[index]?.rate}
                             rules={{
                               required: "রেট আবশ্যক",
@@ -661,7 +673,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                       rules={{ required: "ছাড় আবশ্যক" }}
                     />
 
-                    {/* <CustomInput
+                    <CustomInput
                       name="invoice.carRent"
                       label="গাড়ি ভাড়া"
                       placeholder="৳ 0"
@@ -669,7 +681,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                       type="number"
                       error={errors.invoice?.carRent}
                       rules={{ required: "গাড়ি ভাড়া আবশ্যক" }}
-                    /> */}
+                    />
 
                     <CustomInput
                       name="invoice.totalPrice"

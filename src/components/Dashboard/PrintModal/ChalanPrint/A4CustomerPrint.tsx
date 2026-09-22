@@ -484,7 +484,7 @@ const A4CustomerPrint = ({
                         </div>
                     </div>
                     <div className="pt-4">
-                        <div className="text-xs font-semibold text-[#8b3158]">
+                        <div className="text-[9px] font-semibold text-[#8b3158]">
                             কথায়: {numberToBanglaWords(invoice?.cash)} টাকা মাত্র
                         </div>
 
@@ -568,68 +568,83 @@ const A4CustomerPrint = ({
             </div>
 
             <style jsx global>{`
-                .challan-paper {
-                    font-family:
-                        "Anek Bangla",
-                        "Noto Sans Bengali",
-                        "Hind Siliguri",
-                        sans-serif;
-                }
+  .challan-paper {
+    font-family:
+      "Anek Bangla",
+      "Noto Sans Bengali",
+      "Hind Siliguri",
+      sans-serif;
+  }
 
-                .challan-compact {
-                    break-inside: avoid !important;
-                    page-break-inside: avoid !important;
-                }
+  .challan-compact {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
 
-                .a4-combined-print {
-                    break-inside: avoid !important;
-                    page-break-inside: avoid !important;
-                }
+  .a4-combined-print {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+    width: 100%;
+  }
 
-                @media print {
-                    @page {
-                        size: A4 portrait;
-                        margin: 4mm;
-                    }
+  /*
+    IMPORTANT:
+    Do NOT define @page here.
 
-                    html,
-                    body {
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        background: white !important;
-                    }
+    A4Print component controls:
+    - A4 portrait
+    - page size
+    - page margin
+  */
 
-                    .a4-combined-print {
-                        width: 100% !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        break-inside: avoid !important;
-                        page-break-inside: avoid !important;
-                    }
+  @media print {
+    html,
+    body {
+      background: white !important;
+    }
 
-                    .a4-combined-print .challan-print-wrapper {
-                        width: 100% !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                    }
+    .challan-print-wrapper {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
 
-                    .a4-combined-print .challan-paper {
-                        width: 100% !important;
-                        max-width: none !important;
-                        margin: 0 !important;
-                        box-shadow: none !important;
-                        break-inside: avoid !important;
-                        page-break-inside: avoid !important;
-                    }
+    .challan-paper {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      box-shadow: none !important;
 
-                    .a4-combined-print
-                        .challan-print-wrapper
-                        + .border-dashed {
-                        margin-top: 2mm !important;
-                        margin-bottom: 2mm !important;
-                    }
-                }
-            `}</style>
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    /*
+      Double copy only
+    */
+    .a4-combined-print {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 4mm !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .a4-combined-print > * {
+      width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+  }
+`}</style>
+
         </div>
     );
 };

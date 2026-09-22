@@ -186,9 +186,6 @@ export default function LedgerPrintModal({
         >
             <div
                 className="w-full min-w-0"
-                style={{
-                    fontFamily: '"Hind Siliguri", sans-serif',
-                }}
             >
                 <div className="mb-4 rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
                     <div className="grid grid-cols-2 gap-1.5 lg:grid-cols-4">

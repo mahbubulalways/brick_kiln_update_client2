@@ -180,7 +180,7 @@ const NewDueCollectionModal = ({
       return;
     }
 
-    if (collection <= 0) {
+    if (collection < 0) {
       showToast({
         title: "সঠিক জমার পরিমাণ লিখুন",
         type: "info",

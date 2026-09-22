@@ -135,7 +135,7 @@ const AllChallan = ({
                                 th="ছাড়"
                                 cls="hidden lg:table-cell"
                             />
-
+                            <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" />
                             <TableHead th="সর্বমোট" />
 
                             <TableHead
@@ -266,7 +266,11 @@ const AllChallan = ({
                                                                 items.length
                                                             }
                                                         />
-
+                                                        <TableData
+                                                            td={`৳ ${toBanglaNumber(row?.carRent)}`}
+                                                            cls="text-blue-600 hidden lg:table-cell"
+                                                            rowSpan={row?.items?.length}
+                                                        />
 
                                                         {/* Total Price */}
                                                         <TableData

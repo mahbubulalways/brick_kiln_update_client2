@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { TVataInformation } from "@/interface/vata";
+
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
+
 import { useGetSingleDueMateQuery } from "@/redux/features/due_mate.features";
 
 type TransactionType = "GIVEN" | "TAKEN" | "PAYMENT";
@@ -22,7 +24,7 @@ interface TTransaction {
 
 type TDueMatePrintProps = {
     id: string;
-    vataInformation: TVataInformation;
+    vataInformation?: TVataInformation;
     onReady?: () => void;
 };
 
@@ -39,20 +41,35 @@ const DueMatePrint = ({
     } = useGetSingleDueMateQuery(id, {
         skip: !id,
         refetchOnMountOrArgChange: true,
-        refetchOnFocus: true,
+        refetchOnFocus: false,
     });
 
     const due = data?.data;
 
-    useEffect(() => {
-        if (!isLoading && !isFetching && due) {
-            const timer = setTimeout(() => {
-                onReady?.();
-            }, 100);
+    const readyRef = useRef(false);
 
-            return () => clearTimeout(timer);
+    useEffect(() => {
+        readyRef.current = false;
+    }, [id]);
+
+    useEffect(() => {
+        if (
+            !isLoading &&
+            !isFetching &&
+            !isError &&
+            due &&
+            !readyRef.current
+        ) {
+            readyRef.current = true;
+            onReady?.();
         }
-    }, [due, isLoading, isFetching, onReady]);
+    }, [
+        due,
+        isLoading,
+        isFetching,
+        isError,
+        onReady,
+    ]);
 
     if (isLoading || isFetching) {
         return (
@@ -70,22 +87,26 @@ const DueMatePrint = ({
         );
     }
 
-    const transactions: TTransaction[] = due.transactions ?? [];
+    const transactions: TTransaction[] =
+        due.transactions ?? [];
 
     const totalAmount = Number(due.amount || 0);
 
-    const currentAmount = Number(due.currentAmount || 0);
+    const currentAmount = Number(
+        due.currentAmount || 0
+    );
 
     const paidAmount = Math.max(
         totalAmount - currentAmount,
-        0,
+        0
     );
 
-    const isGiven = due.transactionType === "GIVEN";
+    const isGiven =
+        due.transactionType === "GIVEN";
 
     const taka = (value: number) =>
         `৳ ${toBanglaNumber(
-            Number(value || 0).toLocaleString("en-US"),
+            Number(value || 0).toLocaleString("en-US")
         )}`;
 
     return (
@@ -116,7 +137,9 @@ const DueMatePrint = ({
 
                             {vataInformation?.ownerPhoneNumber && (
                                 <p className="mt-0.5 text-[13px] font-semibold">
-                                    {vataInformation.ownerPhoneNumber}
+                                    {
+                                        vataInformation.ownerPhoneNumber
+                                    }
                                 </p>
                             )}
                         </div>
@@ -129,7 +152,9 @@ const DueMatePrint = ({
 
                         {vataInformation?.shortDescription && (
                             <p className="mt-0.5 text-[11px] font-semibold">
-                                {vataInformation.shortDescription}
+                                {
+                                    vataInformation.shortDescription
+                                }
                             </p>
                         )}
                     </div>
@@ -137,7 +162,9 @@ const DueMatePrint = ({
                     {(vataInformation?.additionalAddress ||
                         vataInformation?.address) && (
                             <div className="mt-2 border-y border-black py-1.5 text-center text-[11px] font-semibold">
-                                {vataInformation?.additionalAddress}
+                                {
+                                    vataInformation?.additionalAddress
+                                }
 
                                 {vataInformation?.additionalAddress &&
                                     vataInformation?.address
@@ -154,19 +181,25 @@ const DueMatePrint = ({
                             <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[10px] font-semibold">
                                 {vataInformation?.challanPersonOneName && (
                                     <span>
-                                        {vataInformation.challanPersonOneName}
+                                        {
+                                            vataInformation.challanPersonOneName
+                                        }
                                     </span>
                                 )}
 
                                 {vataInformation?.challanPersonTwoName && (
                                     <span>
-                                        {vataInformation.challanPersonTwoName}
+                                        {
+                                            vataInformation.challanPersonTwoName
+                                        }
                                     </span>
                                 )}
 
                                 {vataInformation?.challanManagerPhoneNumber && (
                                     <span>
-                                        {vataInformation.challanManagerPhoneNumber}
+                                        {
+                                            vataInformation.challanManagerPhoneNumber
+                                        }
                                     </span>
                                 )}
                             </div>
@@ -199,23 +232,31 @@ const DueMatePrint = ({
                         </span>
 
                         <span className="text-[10px] font-semibold">
-                            {isGiven ? "পাওনা হিসাব" : "দেনা হিসাব"}
+                            {isGiven
+                                ? "পাওনা হিসাব"
+                                : "দেনা হিসাব"}
                         </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-x-8 gap-y-2 px-3 py-3 text-[11px]">
                         <div>
-                            <span className="font-bold">নাম:</span>{" "}
+                            <span className="font-bold">
+                                নাম:
+                            </span>{" "}
                             {due.name || "-"}
                         </div>
 
                         <div>
-                            <span className="font-bold">মোবাইল:</span>{" "}
+                            <span className="font-bold">
+                                মোবাইল:
+                            </span>{" "}
                             {due.phone || "-"}
                         </div>
 
                         <div>
-                            <span className="font-bold">ঠিকানা:</span>{" "}
+                            <span className="font-bold">
+                                ঠিকানা:
+                            </span>{" "}
                             {due.address || "-"}
                         </div>
 
@@ -224,7 +265,9 @@ const DueMatePrint = ({
                                 হিসাবের ধরন:
                             </span>{" "}
                             <span className="font-bold">
-                                {isGiven ? "পাওনা" : "দেনা"}
+                                {isGiven
+                                    ? "পাওনা"
+                                    : "দেনা"}
                             </span>
                         </div>
 
@@ -291,7 +334,9 @@ const DueMatePrint = ({
 
                         <div className="rounded border border-black px-2 py-1 text-[10px] font-bold">
                             মোট লেনদেন:{" "}
-                            {toBanglaNumber(transactions.length)}
+                            {toBanglaNumber(
+                                transactions.length
+                            )}
                         </div>
                     </div>
 
@@ -331,75 +376,91 @@ const DueMatePrint = ({
 
                             <tbody>
                                 {transactions.length > 0 ? (
-                                    transactions.map((transaction, index) => {
-                                        const isGiven =
-                                            transaction.type === "GIVEN";
+                                    transactions.map(
+                                        (
+                                            transaction,
+                                            index
+                                        ) => {
+                                            const isGiven =
+                                                transaction.type ===
+                                                "GIVEN";
 
-                                        const isTaken =
-                                            transaction.type === "TAKEN";
+                                            const isTaken =
+                                                transaction.type ===
+                                                "TAKEN";
 
-                                        const isPayment =
-                                            transaction.type === "PAYMENT";
+                                            const isPayment =
+                                                transaction.type ===
+                                                "PAYMENT";
 
-                                        return (
-                                            <tr
-                                                key={
-                                                    transaction.id || index
-                                                }
-                                                className="border-b border-black"
-                                            >
-                                                <td className="border border-black px-1.5 py-1.5 text-center">
-                                                    {toBanglaNumber(index + 1)}
-                                                </td>
+                                            return (
+                                                <tr
+                                                    key={
+                                                        transaction.id ||
+                                                        index
+                                                    }
+                                                    className="border-b border-black"
+                                                >
+                                                    <td className="border border-black px-1.5 py-1.5 text-center">
+                                                        {toBanglaNumber(
+                                                            index + 1
+                                                        )}
+                                                    </td>
 
-                                                <td className="whitespace-nowrap border border-black px-1.5 py-1.5">
-                                                    {transaction.transactionDate
-                                                        ? formatBanglaDate({
-                                                            date: transaction.transactionDate,
-                                                        })
-                                                        : "-"}
-                                                </td>
+                                                    <td className="whitespace-nowrap border border-black px-1.5 py-1.5">
+                                                        {transaction.transactionDate
+                                                            ? formatBanglaDate(
+                                                                {
+                                                                    date: transaction.transactionDate,
+                                                                }
+                                                            )
+                                                            : "-"}
+                                                    </td>
 
-                                                <td className="border border-black px-1.5 py-1.5 text-right font-semibold">
-                                                    {isGiven
-                                                        ? taka(
-                                                            Number(
-                                                                transaction.amount,
-                                                            ),
-                                                        )
-                                                        : "-"}
-                                                </td>
+                                                    <td className="border border-black px-1.5 py-1.5 text-right font-semibold">
+                                                        {isGiven
+                                                            ? taka(
+                                                                Number(
+                                                                    transaction.amount
+                                                                )
+                                                            )
+                                                            : "-"}
+                                                    </td>
 
-                                                <td className="border border-black px-1.5 py-1.5 text-right font-semibold">
-                                                    {isTaken
-                                                        ? taka(
-                                                            Number(
-                                                                transaction.amount,
-                                                            ),
-                                                        )
-                                                        : "-"}
-                                                </td>
+                                                    <td className="border border-black px-1.5 py-1.5 text-right font-semibold">
+                                                        {isTaken
+                                                            ? taka(
+                                                                Number(
+                                                                    transaction.amount
+                                                                )
+                                                            )
+                                                            : "-"}
+                                                    </td>
 
-                                                <td className="border border-black px-1.5 py-1.5 text-right font-semibold">
-                                                    {isPayment
-                                                        ? taka(
-                                                            Number(
-                                                                transaction.amount,
-                                                            ),
-                                                        )
-                                                        : "-"}
-                                                </td>
+                                                    <td className="border border-black px-1.5 py-1.5 text-right font-semibold">
+                                                        {isPayment
+                                                            ? taka(
+                                                                Number(
+                                                                    transaction.amount
+                                                                )
+                                                            )
+                                                            : "-"}
+                                                    </td>
 
-                                                <td className="border border-black px-1.5 py-1.5 text-right font-bold">
-                                                    {taka(transaction.remaining)}
-                                                </td>
+                                                    <td className="border border-black px-1.5 py-1.5 text-right font-bold">
+                                                        {taka(
+                                                            transaction.remaining
+                                                        )}
+                                                    </td>
 
-                                                <td className="border border-black px-1.5 py-1.5">
-                                                    {transaction.description || "-"}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+                                                    <td className="border border-black px-1.5 py-1.5">
+                                                        {transaction.description ||
+                                                            "-"}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    )
                                 ) : (
                                     <tr>
                                         <td
@@ -424,30 +485,40 @@ const DueMatePrint = ({
                                     <td className="border border-black px-1.5 py-2 text-right font-extrabold">
                                         {taka(
                                             transactions.reduce(
-                                                (sum, transaction) =>
-                                                    transaction.type === "GIVEN"
+                                                (
+                                                    sum,
+                                                    transaction
+                                                ) =>
+                                                    transaction.type ===
+                                                        "GIVEN"
                                                         ? sum +
                                                         Number(
-                                                            transaction.amount || 0,
+                                                            transaction.amount ||
+                                                            0
                                                         )
                                                         : sum,
-                                                0,
-                                            ),
+                                                0
+                                            )
                                         )}
                                     </td>
 
                                     <td className="border border-black px-1.5 py-2 text-right font-extrabold">
                                         {taka(
                                             transactions.reduce(
-                                                (sum, transaction) =>
-                                                    transaction.type === "TAKEN"
+                                                (
+                                                    sum,
+                                                    transaction
+                                                ) =>
+                                                    transaction.type ===
+                                                        "TAKEN"
                                                         ? sum +
                                                         Number(
-                                                            transaction.amount || 0,
+                                                            transaction.amount ||
+                                                            0
                                                         )
                                                         : sum,
-                                                0,
-                                            ),
+                                                0
+                                            )
                                         )}
                                     </td>
 
@@ -459,8 +530,9 @@ const DueMatePrint = ({
                                         {transactions.length > 0
                                             ? taka(
                                                 transactions[
-                                                    transactions.length - 1
-                                                ].remaining,
+                                                    transactions.length -
+                                                    1
+                                                ].remaining
                                             )
                                             : taka(0)}
                                     </td>
@@ -523,43 +595,45 @@ const DueMatePrint = ({
                     </div>
                 </div>
 
-                {(due.witnessOne || due.witnessTwo) && (
-                    <div className="mt-8 grid grid-cols-2 gap-16">
-                        <div className="text-center">
-                            {due.witnessOne && (
-                                <>
-                                    <p className="text-[10px] font-semibold text-gray-600">
-                                        সাক্ষী
-                                    </p>
+                {(due.witnessOne ||
+                    due.witnessTwo) && (
+                        <div className="mt-8 grid grid-cols-2 gap-16">
+                            <div className="text-center">
+                                {due.witnessOne && (
+                                    <>
+                                        <p className="text-[10px] font-semibold text-gray-600">
+                                            সাক্ষী
+                                        </p>
 
-                                    <p className="mt-1 text-[11px] font-bold">
-                                        {due.witnessOne}
-                                    </p>
-                                </>
-                            )}
+                                        <p className="mt-1 text-[11px] font-bold">
+                                            {due.witnessOne}
+                                        </p>
+                                    </>
+                                )}
+                            </div>
+
+                            <div className="text-center">
+                                {due.witnessTwo && (
+                                    <>
+                                        <p className="text-[10px] font-semibold text-gray-600">
+                                            সাক্ষী
+                                        </p>
+
+                                        <p className="mt-1 text-[11px] font-bold">
+                                            {due.witnessTwo}
+                                        </p>
+                                    </>
+                                )}
+                            </div>
                         </div>
-
-                        <div className="text-center">
-                            {due.witnessTwo && (
-                                <>
-                                    <p className="text-[10px] font-semibold text-gray-600">
-                                        সাক্ষী
-                                    </p>
-
-                                    <p className="mt-1 text-[11px] font-bold">
-                                        {due.witnessTwo}
-                                    </p>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                )}
+                    )}
 
                 <div className="mt-8 border-t border-black pt-2 text-center">
                     <p className="text-[9px] font-semibold">
                         এই হিসাবটি{" "}
-                        {vataInformation?.nameBangla || "ভাটা"} কর্তৃক
-                        সংরক্ষিত হিসাবের ভিত্তিতে প্রস্তুত করা হয়েছে।
+                        {vataInformation?.nameBangla ||
+                            "ভাটা"} কর্তৃক সংরক্ষিত
+                        হিসাবের ভিত্তিতে প্রস্তুত করা হয়েছে।
                     </p>
 
                     <p className="mt-0.5 text-[8px] text-gray-500">

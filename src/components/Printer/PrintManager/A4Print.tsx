@@ -9,20 +9,16 @@ interface A4PrintProps {
   copyType?: "single" | "double";
 }
 
-const PAGE_MARGIN_MM = 6;
-
 const PRINT_CONFIG = {
   single: {
-    pageSize: "A4 portrait",
     width: 210,
     height: 297,
-    contentScale: 0.96,
+    margin: 6,
   },
   double: {
-    pageSize: "B5 portrait",
-    width: 176,
-    height: 250,
-    contentScale: 1,
+    width: 250,
+    height: 176,
+    margin: 0,
   },
 } as const;
 
@@ -35,10 +31,6 @@ export default function A4Print({
   const [isPrinting, setIsPrinting] = useState(false);
 
   const config = PRINT_CONFIG[copyType];
-
-  const contentWidth = config.width - PAGE_MARGIN_MM * 2;
-
-  const PREVIEW_SCALE = 0.8;
 
   const handlePrint = useReactToPrint({
     contentRef: printRef,
@@ -59,7 +51,11 @@ export default function A4Print({
 
     pageStyle: `
       @page {
-        size: ${config.width}mm ${config.height}mm;
+        size: ${copyType === "single"
+        ? "A4 portrait"
+        : `${config.width}mm ${config.height}mm`
+      };
+
         margin: 0 !important;
       }
 
@@ -84,61 +80,228 @@ export default function A4Print({
         font-style: normal;
       }
 
-      html,
-      body {
-        margin: 0 !important;
-        padding: 0 !important;
-        width: ${config.width}mm !important;
-        height: ${config.height}mm !important;
-        overflow: hidden !important;
-        font-family: "HindSiliguri", sans-serif !important;
-      }
-
       *,
       *::before,
       *::after {
         box-sizing: border-box !important;
+
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
       }
 
-      .print-wrapper {
-        position: relative !important;
-        width: ${config.width}mm !important;
-        height: ${config.height}mm !important;
+      html,
+      body {
         margin: 0 !important;
         padding: 0 !important;
-        overflow: hidden !important;
-        page-break-before: avoid !important;
-        page-break-after: avoid !important;
-        break-before: avoid !important;
-        break-after: avoid !important;
+
+        font-family: "HindSiliguri", sans-serif !important;
+
+        ${copyType === "single"
+        ? `
+              width: 210mm !important;
+              min-width: 210mm !important;
+              max-width: 210mm !important;
+
+              height: 297mm !important;
+              min-height: 297mm !important;
+              max-height: 297mm !important;
+
+              overflow: hidden !important;
+            `
+        : `
+              width: ${config.width}mm !important;
+              height: ${config.height}mm !important;
+              overflow: hidden !important;
+            `
+      }
       }
 
-      .print-content {
-        position: absolute !important;
+      /* =========================
+         SINGLE A4
+      ========================== */
 
-        top: ${PAGE_MARGIN_MM}mm !important;
+      ${copyType === "single"
+        ? `
+            .print-wrapper {
+              position: relative !important;
 
-        left: 50% !important;
+              width: 210mm !important;
+              min-width: 210mm !important;
+              max-width: 210mm !important;
 
-        width: ${contentWidth}mm !important;
-        max-width: ${contentWidth}mm !important;
+              height: 297mm !important;
+              min-height: 297mm !important;
+              max-height: 297mm !important;
 
-        transform:
-          translateX(-50%)
-          scale(${config.contentScale}) !important;
+              margin: 0 !important;
+              padding: 0 !important;
 
-        transform-origin: top center !important;
+              overflow: hidden !important;
 
-        margin: 0 !important;
+              page-break-before: avoid !important;
+              page-break-after: avoid !important;
+              page-break-inside: avoid !important;
 
-        page-break-before: avoid !important;
-        page-break-after: avoid !important;
-        break-before: avoid !important;
-        break-after: avoid !important;
+              break-before: avoid !important;
+              break-after: avoid !important;
+              break-inside: avoid !important;
+            }
+
+            .print-content {
+              position: absolute !important;
+
+              top: 6mm !important;
+              left: 6mm !important;
+
+              width: 198mm !important;
+              max-width: 198mm !important;
+
+              height: 285mm !important;
+              max-height: 285mm !important;
+
+              margin: 0 !important;
+              padding: 0 !important;
+
+              transform: none !important;
+              transform-origin: unset !important;
+
+              overflow: hidden !important;
+
+              page-break-before: avoid !important;
+              page-break-after: avoid !important;
+              page-break-inside: avoid !important;
+
+              break-before: avoid !important;
+              break-after: avoid !important;
+              break-inside: avoid !important;
+            }
+
+            .print-content > * {
+              width: 100% !important;
+              max-width: 100% !important;
+
+              max-height: 285mm !important;
+
+              margin-left: auto !important;
+              margin-right: auto !important;
+
+              page-break-before: avoid !important;
+              page-break-after: avoid !important;
+              page-break-inside: avoid !important;
+
+              break-before: avoid !important;
+              break-after: avoid !important;
+              break-inside: avoid !important;
+            }
+          `
+        : ""
       }
+
+      /* =========================
+         DOUBLE
+      ========================== */
+
+      ${copyType === "double"
+        ? `
+            .print-wrapper {
+              position: relative !important;
+
+              width: 250mm !important;
+              max-width: 250mm !important;
+
+              height: 176mm !important;
+              max-height: 176mm !important;
+
+              margin: 0 !important;
+              padding: 0 !important;
+
+              overflow: hidden !important;
+
+              page-break-before: avoid !important;
+              page-break-after: avoid !important;
+              page-break-inside: avoid !important;
+
+              break-before: avoid !important;
+              break-after: avoid !important;
+              break-inside: avoid !important;
+            }
+
+            .print-content {
+              position: absolute !important;
+
+              top: 0 !important;
+              left: 0 !important;
+
+              width: 250mm !important;
+              max-width: 250mm !important;
+
+              height: 176mm !important;
+              max-height: 176mm !important;
+
+              margin: 0 !important;
+              padding: 0 !important;
+
+              transform: none !important;
+
+              overflow: hidden !important;
+
+              page-break-before: avoid !important;
+              page-break-after: avoid !important;
+              page-break-inside: avoid !important;
+
+              break-before: avoid !important;
+              break-after: avoid !important;
+              break-inside: avoid !important;
+            }
+
+            .a4-combined-print {
+              width: 250mm !important;
+              max-width: 250mm !important;
+
+              height: 176mm !important;
+              max-height: 176mm !important;
+
+              display: grid !important;
+
+              grid-template-columns: 125mm 125mm !important;
+
+              gap: 0 !important;
+
+              margin: 0 !important;
+              padding: 0 !important;
+
+              overflow: hidden !important;
+
+              page-break-before: avoid !important;
+              page-break-after: avoid !important;
+              page-break-inside: avoid !important;
+
+              break-before: avoid !important;
+              break-after: avoid !important;
+              break-inside: avoid !important;
+            }
+
+            .a4-combined-print > * {
+              width: 125mm !important;
+              min-width: 125mm !important;
+              max-width: 125mm !important;
+
+              height: 176mm !important;
+              max-height: 176mm !important;
+
+              margin: 0 !important;
+              padding: 0 !important;
+
+              overflow: hidden !important;
+
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+            }
+          `
+        : ""
+      }
+
+      /* Hide print button */
 
       .print-button {
         display: none !important;
@@ -146,6 +309,24 @@ export default function A4Print({
 
       .print-page-break {
         display: none !important;
+      }
+
+      /* Prevent common elements from creating extra pages */
+
+      table {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      tr,
+      td,
+      th {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      img {
+        max-width: 100% !important;
       }
     `,
   });
@@ -157,67 +338,14 @@ export default function A4Print({
   };
 
   return (
-    <div className="flex w-full flex-col items-center">
-      {/* Preview */}
-      <div className="flex w-full justify-center overflow-auto">
-        <div
-          style={{
-            width: `${config.width * PREVIEW_SCALE}mm`,
-            height: `${config.height * PREVIEW_SCALE}mm`,
-            flex: "0 0 auto",
-          }}
-        >
-          <div
-            ref={printRef}
-            className="print-wrapper bg-white"
-            style={{
-              position: "relative",
-              width: `${config.width}mm`,
-              height: `${config.height}mm`,
-
-              transform: `scale(${PREVIEW_SCALE})`,
-              transformOrigin: "top left",
-
-              margin: 0,
-              padding: 0,
-
-              boxSizing: "border-box",
-              overflow: "hidden",
-
-              WebkitPrintColorAdjust: "exact",
-              printColorAdjust: "exact",
-            }}
-          >
-            <div
-              className="print-content"
-              style={{
-                position: "absolute",
-
-                top: `${PAGE_MARGIN_MM}mm`,
-                display: "flex",
-                justifyContent: "center",
-                left: "50%",
-
-                width: `${contentWidth}mm`,
-                maxWidth: `${contentWidth}mm`,
-
-                transform: `
-                  translateX(-50%)
-                  scale(${config.contentScale})
-                `,
-
-                transformOrigin: "top center",
-
-                margin: 0,
-              }}
-            >
-              {children}
-            </div>
-          </div>
-        </div>
+    <div
+      ref={printRef}
+      className="print-wrapper w-full"
+    >
+      <div className="print-content">
+        {children}
       </div>
 
-      {/* Print Button */}
       <div className="print-button mt-3 flex w-full justify-end">
         <button
           type="button"

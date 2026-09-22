@@ -4,7 +4,7 @@ import { IReceivablePayable } from "@/interface/due_mate";
 import { Printer, UserRound } from "lucide-react";
 import Link from "next/link";
 
-const GivenDueList = ({
+const TakenDueList = ({
     dues,
     onPrint,
 }: {
@@ -28,7 +28,7 @@ const GivenDueList = ({
             {/* Header */}
             <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
                 <h2 className="shrink-0 text-[14px] font-medium text-[#039A63] sm:text-[18px]">
-                    টাকা দেওয়ার লিস্ট
+                    টাকা নেওয়ার লিস্ট
                     <span className="ml-1 text-[11px] text-gray-500 sm:ml-2 sm:text-sm">
                         ({totalCount})
                     </span>
@@ -36,7 +36,7 @@ const GivenDueList = ({
 
                 <div className="flex min-w-0 items-center justify-end gap-3 text-[11px] font-medium sm:gap-6 sm:text-[15px]">
                     <p className="whitespace-nowrap text-[#039A63]">
-                        মোট দেওয়া:{" "}
+                        মোট নেওয়া:{" "}
                         <span className="font-semibold">
                             ৳ {totalAmount.toLocaleString("bn-BD")}
                         </span>
@@ -60,7 +60,7 @@ const GivenDueList = ({
                     </div>
 
                     <div className="border-l border-white/20 px-2 py-3 text-right sm:px-4">
-                        টাকা দিয়েছি
+                        টাকা নিয়েছি
                     </div>
 
                     <div className="border-l border-white/20 px-2 py-3 text-right sm:px-4">
@@ -146,4 +146,4 @@ const GivenDueList = ({
     );
 };
 
-export default GivenDueList;
+export default TakenDueList;

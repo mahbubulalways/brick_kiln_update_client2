@@ -161,10 +161,10 @@ const CustomSelect2 = ({
   // Filter options
   const filteredOptions = searchable
     ? options.filter((item) =>
-        item.label
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      )
+      item.label
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
     : options;
 
   // Select option
@@ -229,11 +229,10 @@ const CustomSelect2 = ({
   bg-white
   transition
   ${disabled ? "cursor-not-allowed bg-gray-100 opacity-60" : ""}
-  ${
-    open
-      ? "border-gray-300 focus-within:ring-2 focus-within:ring-[#00664A]"
-      : ""
-  }
+  ${open
+              ? "border-gray-300 focus-within:ring-2 focus-within:ring-[#00664A]"
+              : ""
+            }
 `}
         >
           {/* Searchable */}
@@ -279,10 +278,9 @@ const CustomSelect2 = ({
               className={`
                 flex-1
                 truncate
-                ${
-                  selectedOption
-                    ? "text-gray-900"
-                    : "text-gray-400 text-[14px]"
+                ${selectedOption
+                  ? "text-gray-900"
+                  : "text-gray-400 text-[14px]"
                 }
               `}
             >
@@ -364,10 +362,9 @@ const CustomSelect2 = ({
                       text-left
                       transition-colors
                       hover:bg-gray-100
-                      ${
-                        item.value === selectedValue
-                          ? "bg-[#00664A]/10 text-[#00664A]"
-                          : ""
+                      ${item.value === selectedValue
+                        ? "bg-[#00664A]/10 text-[#00664A]"
+                        : ""
                       }
                     `}
                   >
@@ -376,7 +373,7 @@ const CustomSelect2 = ({
                 ))
               ) : (
                 <div className="px-4 py-3 text-sm text-gray-500">
-                  No options found
+                  কোনো তথ্য পাওয়া যায়নি
                 </div>
               )}
             </div>,

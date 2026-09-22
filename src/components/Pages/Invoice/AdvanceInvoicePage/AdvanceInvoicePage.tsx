@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TMetaConfig } from "@/interface/meta";
 import { TQuery } from "@/interface/query";
-import { useGetAllAdvanceInvoicesQuery, } from "@/redux/features/invoice.features";
+import { useGetAllAdvanceInvoicesQuery } from "@/redux/features/invoice.features";
 import { useGetVataInfoQuery } from "@/redux/features/vata.features";
 import { IChallanForDataShow, IChallanItem } from "@/types/types";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
@@ -63,6 +63,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
             <thead>
               <tr className="bg-[#039A63] text-white text-center">
                 <TableHead th={"#"} />
+                <TableHead th={"ধরন"} />
                 <TableHead th={"কাস্টমার"} />
                 <TableHead th={"ঠিকানা"} cls="hidden lg:table-cell" />
                 <TableHead th={"শ্রেণি"} />
@@ -71,7 +72,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                 <TableHead th={"মূল্য"} cls="hidden lg:table-cell" />
                 <TableHead th={"মোট মূল্য"} cls="hidden lg:table-cell" />
                 <TableHead th={"ছাড়"} cls="hidden lg:table-cell" />
-                {/* <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" /> */}
+                <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" />
                 <TableHead th={"সর্বমোট"} />
                 <TableHead th={"নগদ"} cls="hidden lg:table-cell" />
                 <TableHead th={"বাকি"} cls="hidden lg:table-cell" />
@@ -109,6 +110,9 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                               rowSpan={row?.items?.length}
                             />
                             <TableData
+                              td={row?.chalanType}
+                            />
+                            <TableData
                               td={row?.customer?.name}
                               rowSpan={row?.items?.length}
                             />
@@ -142,11 +146,11 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                               rowSpan={row?.items?.length}
                             />
 
-                            {/* <TableData
+                            <TableData
                               td={`৳ ${toBanglaNumber(row?.carRent)}`}
                               cls="text-blue-600 hidden lg:table-cell"
                               rowSpan={row?.items?.length}
-                            /> */}
+                            />
 
                             <TableData
                               td={`৳ ${toBanglaNumber(row?.totalPrice)}`}
@@ -245,6 +249,9 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                       className="hover:bg-gray-50 transition-colors"
                     >
                       <TableData td={idx + 1} />
+                      <TableData
+                        td={row?.chalanType}
+                      />
                       <TableData td={row?.customer?.name} />
 
                       <TableData
@@ -282,10 +289,10 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                         cls="text-orange-500 hidden lg:table-cell"
                       />
 
-                      {/* <TableData
+                      <TableData
                         td={`৳ ${toBanglaNumber(row?.carRent)}`}
                         cls="text-blue-600 hidden lg:table-cell"
-                      /> */}
+                      />
 
                       <TableData
                         td={`৳ ${toBanglaNumber(row?.totalPrice)}`}

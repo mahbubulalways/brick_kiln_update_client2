@@ -83,7 +83,7 @@ const NewDueCollectionModalId = ({ isOpen, onClose, id }: TCustomModal) => {
       due: Number(data.due),
       customerId: data.customerId
     }
-    if (newDue <= 0) {
+    if (newDue < 0) {
       return showToast({
         title: "বকেয়ার পরিমাণ ০ বা তার কম।",
         type: "error",

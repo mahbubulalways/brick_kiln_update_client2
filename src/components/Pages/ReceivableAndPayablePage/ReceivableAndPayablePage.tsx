@@ -1,18 +1,22 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 
 import ReceivableAndPayableModal from "@/components/Dashboard/Modals/ReceivableAndPayableModal";
 import { useGetAllDueMateQuery } from "@/redux/features/due_mate.features";
 import { IReceivablePayable } from "@/interface/due_mate";
+
 import GivenDueList from "./GivenDueList";
 import TakenDueList from "./TakenDueList";
+
 import CustomLoader from "@/components/Reusable/CustomLoader";
 import CustomStatus from "@/components/Reusable/CustomStatus";
+
 import CommonPrint, {
     TCommonPrintRef,
 } from "@/components/Reusable/CommonPrint";
+
 import DueMatePrint from "./DueMatePrint";
 import { useGetVataInfoQuery } from "@/redux/features/vata.features";
 
@@ -31,14 +35,11 @@ export default function ReceivableAndPayablePage() {
         isLoading,
     } = useGetAllDueMateQuery({});
 
+
+
     const handlePrint = (id: string) => {
         setPrintId(id);
-    };
-
-    const handlePrintReady = () => {
-        setTimeout(() => {
-            printRef.current?.print();
-        }, 100);
+        printRef.current?.print()
     };
 
     if (isLoading) {
@@ -69,11 +70,11 @@ export default function ReceivableAndPayablePage() {
     });
 
     const givenDues = filteredDues.filter(
-        (item) => item.transactionType === "GIVEN",
+        (item) => item.transactionType === "GIVEN"
     );
 
     const takenDues = filteredDues.filter(
-        (item) => item.transactionType === "TAKEN",
+        (item) => item.transactionType === "TAKEN"
     );
 
     return (
@@ -83,13 +84,13 @@ export default function ReceivableAndPayablePage() {
                     type="button"
                     onClick={() => setModalOpen(true)}
                     className="
-            w-full cursor-pointer
-            rounded-md bg-[#039a63]
-            px-5 py-2
-            text-sm font-medium text-white
-            transition hover:bg-[#028756]
-            sm:w-auto
-          "
+                        w-full cursor-pointer
+                        rounded-md bg-[#039a63]
+                        px-5 py-2
+                        text-sm font-medium text-white
+                        transition hover:bg-[#028756]
+                        sm:w-auto
+                    "
                 >
                     দেনা-পাওনা
                 </button>
@@ -103,16 +104,16 @@ export default function ReceivableAndPayablePage() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="নাম, ফোন বা ঠিকানা দিয়ে খুঁজুন..."
                         className="
-              h-10 w-full
-              rounded-md border border-gray-300
-              bg-white
-              pl-9 pr-4
-              text-sm
-              outline-none
-              transition
-              focus:border-[#039a63]
-              focus:ring-1 focus:ring-[#039a63]
-            "
+                            h-10 w-full
+                            rounded-md border border-gray-300
+                            bg-white
+                            pl-9 pr-4
+                            text-sm
+                            outline-none
+                            transition
+                            focus:border-[#039a63]
+                            focus:ring-1 focus:ring-[#039a63]
+                        "
                     />
                 </div>
             </div>
@@ -143,7 +144,6 @@ export default function ReceivableAndPayablePage() {
                         key={printId}
                         id={printId}
                         vataInformation={vata?.data}
-                        onReady={handlePrintReady}
                     />
                 </CommonPrint>
             )}

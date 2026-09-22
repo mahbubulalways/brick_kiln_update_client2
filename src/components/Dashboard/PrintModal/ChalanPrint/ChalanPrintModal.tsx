@@ -76,7 +76,7 @@ const ChalanPrintModal = ({
 
       case "a4-customer-office":
         return (
-          <div className="a4-combined-print w-full bg-white">
+          <div className=" w-full bg-white grid grid-cols-2 gap-4">
             <A4CustomerPrint
               invoice={invoiceData.data}
               vataInformation={vataInformation}
@@ -84,8 +84,6 @@ const ChalanPrintModal = ({
               compact
               classes={classes?.data}
             />
-
-            <div className="my-3 border-t-2 border-dashed border-slate-400" />
 
             <A4CustomerPrint
               invoice={invoiceData.data}
@@ -159,7 +157,7 @@ const ChalanPrintModal = ({
       isOpen={isOpen}
       onClose={handleClose}
       title="চালান প্রিন্ট"
-      width="xxl"
+      width="xxxl"
     >
       <div className="w-full min-w-0">
         <div className="mb-3 rounded-lg border border-slate-200 bg-white">

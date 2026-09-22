@@ -83,31 +83,21 @@ const DeliveryPrintModal = ({
 
       case "a4-customer-office":
         return (
-          <div className="aa4-delivery-combined-print w-full bg-white">
-            <div className="a4-delivery-copies">
-              <div className="a4-delivery-copy">
-                <A4DeliveryPrint
-                  delivery={delivery}
-                  vataInformation={vataInformation}
-                  copyType="office"
-                  compact
-                />
-              </div>
-            </div>
-
-
-            <div className="my-3 border-t-2 border-dashed border-slate-400" />
-            <div className="a4-delivery-copies">
-              <div className="a4-delivery-copy">
-                <A4DeliveryPrint
-                  delivery={delivery}
-                  vataInformation={vataInformation}
-                  copyType="office"
-                  compact
-                />
-              </div>
-            </div>
+          <div className=" w-full bg-white grid grid-cols-2 gap-4">
+            <A4DeliveryPrint
+              delivery={delivery}
+              vataInformation={vataInformation}
+              copyType="office"
+              compact
+            />
+            <A4DeliveryPrint
+              delivery={delivery}
+              vataInformation={vataInformation}
+              copyType="office"
+              compact
+            />
           </div>
+
         );
 
       case "pos80-customer":
@@ -176,7 +166,7 @@ const DeliveryPrintModal = ({
     <CustomPrintModal
       isOpen={isOpen}
       onClose={handleClose}
-      width="xxl"
+      width="xxxl"
       title="ডেলিভারি প্রিন্ট"
     >
       {isLoading || vataLoading ? (
