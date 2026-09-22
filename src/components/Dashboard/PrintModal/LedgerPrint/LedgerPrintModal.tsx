@@ -85,15 +85,12 @@ export default function LedgerPrintModal({
 
             case "a4-customer-office":
                 return (
-                    <div className="a4-combined-print w-full bg-white">
+                    <div className="grid w-full grid-cols-2 gap-4 bg-white">
                         <A4LedgerPrint
                             ledger={ledger}
                             vataInformation={vataInformation}
                             copyType="customer"
                         />
-
-                        <div className="my-3 border-t border-dashed border-slate-400" />
-
                         <A4LedgerPrint
                             ledger={ledger}
                             vataInformation={vataInformation}
@@ -121,10 +118,7 @@ export default function LedgerPrintModal({
 
             case "pos80-customer-office":
                 return (
-                    <div
-                        className="pos-combined-print w-full bg-white"
-
-                    >
+                    <div className=" w-full bg-white grid grid-cols-2 gap-4">
                         <div className="w-full">
                             <POS80LedgerPrint
                                 ledger={ledger}
@@ -132,9 +126,6 @@ export default function LedgerPrintModal({
                                 copyType="office"
                             />
                         </div>
-
-                        <div className="my-2 border-t border-dashed border-slate-400" />
-
                         <div className="w-full">
                             <POS80LedgerPrint
                                 ledger={ledger}
@@ -182,7 +173,7 @@ export default function LedgerPrintModal({
             isOpen={isOpen}
             onClose={handleClose}
             title="খতিয়ান প্রিন্ট"
-            width="xxl"
+            width="xxxl"
         >
             <div
                 className="w-full min-w-0"

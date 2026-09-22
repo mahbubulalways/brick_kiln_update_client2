@@ -198,7 +198,7 @@ const A4LedgerPrint = ({
                         </div>
                     </div>
                     <div className="pt-4">
-                        <div className="text-xs font-semibold text-[#8b3158]">
+                        <div className="text-[9px] font-semibold text-[#8b3158]">
                             কথায়: {numberToBanglaWords(ledger?.payment)} টাকা মাত্র
                         </div>
 

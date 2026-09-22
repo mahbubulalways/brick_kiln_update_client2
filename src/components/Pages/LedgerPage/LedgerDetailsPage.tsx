@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
     FileText,
 } from "lucide-react";
@@ -21,8 +21,14 @@ import { useRouter } from "next/navigation";
 import renderImage from "@/utils/renderImage";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 import { formatDateRange } from "@/utils/formatDateRange";
+import LedgerDetailsPrint from "@/components/PrintComponent/LedgerDetailsPrint";
+import { useGetVataInfoQuery } from "@/redux/features/vata.features";
+import CommonPrint, { TCommonPrintRef } from "@/components/Reusable/CommonPrint";
+import CustomPrintButton from "@/components/Reusable/CustomPrintButton";
 
 const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
+    const printRef = useRef<TCommonPrintRef>(null);
+    const { data: vata } = useGetVataInfoQuery(undefined)
     const [filterDate, setDateFiter] = useState<{
         startDate: Date | null,
         endDate: Date | null,
@@ -248,6 +254,10 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                             className="w-full lg:w-auto"
                         />
                     </div>
+
+                    <CustomPrintButton
+                        onClick={() => printRef.current?.print()}
+                    />
                 </div>
             </div>
             <div className="overflow-x-auto pt-2">
@@ -365,6 +375,20 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                 dataLength={payments?.length}
                 title="পেমেন্ট"
             />
+
+            <CommonPrint
+                ref={printRef}
+                title="ledgers"
+            >
+
+                <LedgerDetailsPrint
+                    payments={payments}
+                    ledger={data?.data?.data?.ledger}
+                    vataInformation={vata?.data}
+                    startDate={filterDate.startDate}
+                    endDate={filterDate.endDate}
+                />
+            </CommonPrint>
         </div>
     );
 };

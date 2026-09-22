@@ -38,66 +38,64 @@ const POS80CustomerPrint = ({
             return "০";
         }
 
-        return number.toLocaleString("bn-BD", {
-            maximumFractionDigits: 2,
-        });
+        return toBanglaNumber(
+            number.toLocaleString("en-IN", {
+                maximumFractionDigits: 2,
+            })
+        );
     };
 
+    const copyName =
+        copyType === "office" ? "অফিস কপি" : "কাস্টমার কপি";
+
     return (
-        <div className="w-[80mm] text-black">
+        <div className="w-[80mm] min-w-[80mm] max-w-[80mm] text-black">
             <div
-                className={`mx-auto w-full px-[2.5mm] ${compact ? "py-[1mm]" : "py-[2mm]"
+                className={`mx-auto w-full px-[2.5mm] ${compact ? "py-[1mm]" : "py-[1.5mm]"
                     }`}
             >
                 {/* Header */}
                 <div className="text-center">
-                    {/* Copy Type */}
                     <div
-                        className={`mx-auto inline-block border border-black px-2 py-0.5 font-bold ${compact ? "text-[7px]" : "text-[8px]"
+                        className={`mx-auto inline-block border border-black px-1.5 py-0.5 font-bold leading-none ${compact ? "text-[6px]" : "text-[7px]"
                             }`}
                     >
-                        {copyType === "office"
-                            ? "অফিস কপি"
-                            : "কাস্টমার কপি"}
+                        {copyName}
                     </div>
 
-                    {/* Challan Title */}
                     <div
                         className={`font-extrabold leading-none ${compact
-                                ? "mt-1 text-[15px]"
-                                : "mt-1.5 text-[18px]"
+                                ? "mt-0.5 text-[13px]"
+                                : "mt-1 text-[15px]"
                             }`}
                     >
                         চালান
                     </div>
 
-                    {/* Vata Name */}
                     <div
                         className={`font-extrabold leading-none ${compact
-                                ? "mt-1 text-[15px]"
-                                : "mt-1.5 text-[18px]"
+                                ? "mt-0.5 text-[13px]"
+                                : "mt-0.5 text-[15px]"
                             }`}
                     >
                         {vataInformation?.nameBangla || "-"}
                     </div>
 
-                    {/* Description */}
                     {vataInformation?.shortDescription && (
                         <div
                             className={`font-medium leading-none text-[#555] ${compact
-                                    ? "mt-0.5 text-[7px]"
-                                    : "mt-1 text-[8px]"
+                                    ? "mt-0.5 text-[6px]"
+                                    : "mt-0.5 text-[7px]"
                                 }`}
                         >
                             {vataInformation.shortDescription}
                         </div>
                     )}
 
-                    {/* Address */}
                     <div
                         className={`border-y border-black text-center font-semibold leading-tight ${compact
-                                ? "mt-1 px-1.5 py-1 text-[7px]"
-                                : "mt-1.5 px-2 py-1.5 text-[8px]"
+                                ? "mt-0.5 px-1 py-0.5 text-[6px]"
+                                : "mt-1 px-1.5 py-1 text-[7px]"
                             }`}
                     >
                         {vataInformation?.additionalAddress}
@@ -110,34 +108,29 @@ const POS80CustomerPrint = ({
                         {vataInformation?.address}
                     </div>
 
-                    {/* Contact */}
                     <div
                         className={`flex items-center justify-center whitespace-nowrap text-center font-semibold leading-none ${compact
-                                ? "mt-1 gap-x-1.5 text-[6.5px]"
-                                : "mt-1.5 gap-x-2 text-[8px]"
+                                ? "mt-0.5 gap-x-1 text-[5.5px]"
+                                : "mt-1 gap-x-1.5 text-[6.5px]"
                             }`}
                     >
                         {vataInformation?.challanPersonOneName && (
                             <span className="shrink-0">
                                 {vataInformation.challanPersonOneName}:{" "}
-                                {
-                                    vataInformation.challanPersonOnePhoneNumber
-                                }
+                                {vataInformation.challanPersonOnePhoneNumber}
                             </span>
                         )}
 
                         {vataInformation?.challanPersonTwoName && (
                             <span className="shrink-0">
                                 {vataInformation.challanPersonTwoName}:{" "}
-                                {
-                                    vataInformation.challanPersonTwoPhoneNumber
-                                }
+                                {vataInformation.challanPersonTwoPhoneNumber}
                             </span>
                         )}
 
                         {vataInformation?.challanManagerPhoneNumber && (
                             <span className="shrink-0">
-                                ম্যানেজারঃ{" "}
+                                ম্যানেজার:{" "}
                                 {vataInformation.challanManagerPhoneNumber}
                             </span>
                         )}
@@ -146,11 +139,11 @@ const POS80CustomerPrint = ({
 
                 {/* Challan Information */}
                 <div
-                    className={`border-y border-black ${compact ? "mt-1 py-1" : "mt-1.5 py-1.5"
+                    className={`border-y border-black ${compact ? "mt-0.5 py-0.5" : "mt-1 py-1"
                         }`}
                 >
                     <div
-                        className={`grid grid-cols-2 gap-x-2 gap-y-0.5 font-semibold leading-tight ${compact ? "text-[7px]" : "text-[8px]"
+                        className={`grid grid-cols-2 gap-x-1 gap-y-0 font-semibold leading-tight ${compact ? "text-[6px]" : "text-[7px]"
                             }`}
                     >
                         <div>
@@ -169,20 +162,18 @@ const POS80CustomerPrint = ({
                         </div>
 
                         <div className="col-span-2 text-center">
-                            {copyType === "office"
-                                ? "অফিস কপি"
-                                : "কাস্টমার কপি"}
+                            {copyName}
                         </div>
                     </div>
                 </div>
 
                 {/* Customer Information */}
                 <div
-                    className={`border-b border-black ${compact ? "py-1.5" : "py-2"
+                    className={`border-b border-black ${compact ? "py-1" : "py-1.5"
                         }`}
                 >
                     <div
-                        className={`grid grid-cols-[38px_6px_1fr] gap-y-0.5 font-semibold leading-tight ${compact ? "text-[7px]" : "text-[8px]"
+                        className={`grid grid-cols-[34px_5px_1fr] gap-y-0 font-semibold leading-tight ${compact ? "text-[6px]" : "text-[7px]"
                             }`}
                     >
                         <span>নাম</span>
@@ -211,24 +202,24 @@ const POS80CustomerPrint = ({
 
                 {/* Products */}
                 <table
-                    className={`mt-1 w-full border-collapse border border-black ${compact ? "text-[7px]" : "text-[8px]"
+                    className={`mt-0.5 w-full border-collapse border border-black ${compact ? "text-[6px]" : "text-[7px]"
                         }`}
                 >
                     <thead>
                         <tr className="font-bold">
-                            <th className="border border-black px-1 py-0.5 text-left">
+                            <th className="border border-black px-0.5 py-0.5 text-left">
                                 শ্রেণি
                             </th>
 
-                            <th className="border border-black px-1 py-0.5 text-center">
+                            <th className="border border-black px-0.5 py-0.5 text-center">
                                 পরিমাণ
                             </th>
 
-                            <th className="border border-black px-1 py-0.5 text-center">
+                            <th className="border border-black px-0.5 py-0.5 text-center">
                                 দর
                             </th>
 
-                            <th className="border border-black px-1 py-0.5 text-right">
+                            <th className="border border-black px-0.5 py-0.5 text-right">
                                 মূল্য
                             </th>
                         </tr>
@@ -238,19 +229,19 @@ const POS80CustomerPrint = ({
                         {challanItems.length > 0 ? (
                             challanItems.map((item, index: number) => (
                                 <tr key={item?.id || index}>
-                                    <td className="border border-black px-1 py-0.5 text-left align-top">
+                                    <td className="border border-black px-0.5 py-0.5 text-left align-top">
                                         {item?.class || "-"}
                                     </td>
 
-                                    <td className="border border-black px-1 py-0.5 text-center align-top">
+                                    <td className="border border-black px-0.5 py-0.5 text-center align-top">
                                         {formatNumber(item?.quantity)}
                                     </td>
 
-                                    <td className="border border-black px-1 py-0.5 text-center align-top">
+                                    <td className="border border-black px-0.5 py-0.5 text-center align-top">
                                         {formatNumber(item?.rate)}
                                     </td>
 
-                                    <td className="border border-black px-1 py-0.5 text-right align-top font-semibold">
+                                    <td className="border border-black px-0.5 py-0.5 text-right align-top font-semibold">
                                         {formatNumber(item?.price)}
                                     </td>
                                 </tr>
@@ -259,7 +250,7 @@ const POS80CustomerPrint = ({
                             <tr>
                                 <td
                                     colSpan={4}
-                                    className="border border-black px-1 py-1 text-center"
+                                    className="border border-black px-0.5 py-0.5 text-center"
                                 >
                                     কোনো পণ্য পাওয়া যায়নি
                                 </td>
@@ -270,11 +261,11 @@ const POS80CustomerPrint = ({
 
                 {/* Price Summary */}
                 <div
-                    className={`border-b border-black ${compact ? "py-1.5" : "py-2"
+                    className={`border-b border-black ${compact ? "py-1" : "py-1.5"
                         }`}
                 >
                     <div
-                        className={`space-y-0.5 ${compact ? "text-[7px]" : "text-[8px]"
+                        className={`space-y-0 ${compact ? "text-[6px]" : "text-[7px]"
                             }`}
                     >
                         <div className="flex items-center justify-between">
@@ -305,12 +296,12 @@ const POS80CustomerPrint = ({
 
                 {/* Payment Summary */}
                 <div
-                    className={`border-b border-black ${compact ? "py-1.5" : "py-2"
+                    className={`border-b border-black ${compact ? "py-1" : "py-1.5"
                         }`}
                 >
-                    <div className="space-y-0.5">
+                    <div className="space-y-0">
                         <div
-                            className={`flex items-center justify-between font-bold ${compact ? "text-[9px]" : "text-[11px]"
+                            className={`flex items-center justify-between font-bold ${compact ? "text-[8px]" : "text-[9px]"
                                 }`}
                         >
                             <span>সর্বমোট</span>
@@ -321,7 +312,7 @@ const POS80CustomerPrint = ({
                         </div>
 
                         <div
-                            className={`flex items-center justify-between ${compact ? "text-[7px]" : "text-[8px]"
+                            className={`flex items-center justify-between ${compact ? "text-[6px]" : "text-[7px]"
                                 }`}
                         >
                             <span>জমা</span>
@@ -332,7 +323,7 @@ const POS80CustomerPrint = ({
                         </div>
 
                         <div
-                            className={`flex items-center justify-between font-bold ${compact ? "text-[9px]" : "text-[11px]"
+                            className={`flex items-center justify-between font-bold ${compact ? "text-[8px]" : "text-[9px]"
                                 }`}
                         >
                             <span>বাকি</span>
@@ -346,17 +337,17 @@ const POS80CustomerPrint = ({
 
                 {/* Signatures */}
                 <div
-                    className={`grid grid-cols-2 gap-3 text-center ${compact ? "mt-5" : "mt-7"
+                    className={`grid grid-cols-2 gap-2 text-center ${compact ? "mt-4" : "mt-5"
                         }`}
                 >
                     <div>
                         <div
-                            className={`mx-auto mb-0.5 w-[60px] border-b border-black ${compact ? "h-3" : "h-4"
+                            className={`mx-auto mb-0.5 w-[55px] border-b border-black ${compact ? "h-2.5" : "h-3"
                                 }`}
                         />
 
                         <p
-                            className={`font-semibold ${compact ? "text-[6px]" : "text-[8px]"
+                            className={`font-semibold ${compact ? "text-[5px]" : "text-[6px]"
                                 }`}
                         >
                             গ্রাহকের স্বাক্ষর
@@ -365,12 +356,12 @@ const POS80CustomerPrint = ({
 
                     <div>
                         <div
-                            className={`mx-auto mb-0.5 w-[60px] border-b border-black ${compact ? "h-3" : "h-4"
+                            className={`mx-auto mb-0.5 w-[55px] border-b border-black ${compact ? "h-2.5" : "h-3"
                                 }`}
                         />
 
                         <p
-                            className={`font-semibold ${compact ? "text-[6px]" : "text-[8px]"
+                            className={`font-semibold ${compact ? "text-[5px]" : "text-[6px]"
                                 }`}
                         >
                             ম্যানেজারের স্বাক্ষর
@@ -380,11 +371,11 @@ const POS80CustomerPrint = ({
 
                 {/* Confirmation */}
                 <div
-                    className={`border-t border-black text-center ${compact ? "mt-1.5 pt-1" : "mt-2 pt-1"
+                    className={`border-t border-black text-center ${compact ? "mt-1 pt-0.5" : "mt-1 pt-0.5"
                         }`}
                 >
                     <p
-                        className={`font-medium leading-tight ${compact ? "text-[6px]" : "text-[8px]"
+                        className={`font-medium leading-tight ${compact ? "text-[5px]" : "text-[6px]"
                             }`}
                     >
                         উপরোক্ত চালান অনুযায়ী মালামাল বুঝিয়া পাইলাম
@@ -393,11 +384,11 @@ const POS80CustomerPrint = ({
 
                 {/* Footer */}
                 <div
-                    className={`border-t border-dashed border-black text-center ${compact ? "mt-1 pt-0.5" : "mt-1.5 pt-1"
+                    className={`border-t border-dashed border-black text-center ${compact ? "mt-0.5 pt-0.5" : "mt-1 pt-0.5"
                         }`}
                 >
                     <span
-                        className={`font-semibold ${compact ? "text-[6px]" : "text-[7px]"
+                        className={`font-semibold ${compact ? "text-[5px]" : "text-[6px]"
                             }`}
                     >
                         ধন্যবাদ

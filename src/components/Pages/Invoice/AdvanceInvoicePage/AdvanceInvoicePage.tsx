@@ -111,6 +111,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                             />
                             <TableData
                               td={row?.chalanType}
+                              rowSpan={row?.items?.length}
                             />
                             <TableData
                               td={row?.customer?.name}

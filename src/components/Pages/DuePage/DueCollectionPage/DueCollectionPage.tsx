@@ -12,7 +12,7 @@ import TableHead from "@/components/Reusable/TableHead";
 import NewDueCollectionModal from "@/components/Dashboard/Modals/NewDueCollectionModal";
 import TableData from "@/components/Reusable/TableData";
 import CustomDropDownMenuItem from "@/components/Reusable/CustomDropDownMenuItem";
-import PrintDueCollectionModal from "@/components/Dashboard/Modals/PrintDueCollectionModal";
+import PrintDueCollectionModal from "@/components/Dashboard/PrintModal/DeuCollectionPrint/PrintDueCollectionModal";
 import UpdateDueCollection from "@/components/Dashboard/Modals/UpdateDueCollectionModal";
 import ThermalDueCollectionPrintModal from "@/components/Dashboard/Modals/ThermalDueCollectionPrintModal";
 import CustomButtonFixed from "@/components/Reusable/CustomButtonFixed";
