@@ -33,7 +33,6 @@ export const showToast = ({ title, type, options = {} }: TToast) => {
       color: "white",
       padding: "14px 20px",
       borderRadius: "12px",
-      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       textAlign: "center",
       lineHeight: "1.4",
       fontSize: "14px",
