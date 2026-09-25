@@ -123,7 +123,7 @@ const A4CustomerPrint = ({
                                 : "px-5 py-1 text-sm sm:px-8 sm:text-lg"
                                 }`}
                         >
-                            চালান
+                            {invoice?.chalanType}
                         </div>
 
                         <div className="text-right leading-tight">
@@ -435,13 +435,50 @@ const A4CustomerPrint = ({
                                     }`}
                             >
                                 <div className="bg-[#f8e9ef] px-2 py-1 font-bold text-[#3a150e]">
-                                    মোট মূল্য
+                                    মূল্য
                                 </div>
 
                                 <div className="px-2 py-1 text-right font-bold text-[#8b3158]">
                                     ৳{" "}
                                     {toBanglaNumber(
-                                        invoice?.totalPrice || 0,
+                                        invoice?.productPrice || 0,
+                                    )}
+                                </div>
+                            </div>
+
+                            <div
+                                className={`grid grid-cols-[1fr_105px] border-b border-[#777] ${compact
+                                    ? "text-[8px]"
+                                    : "text-[9px] sm:grid-cols-[1fr_150px] sm:text-[12px]"
+                                    }`}
+                            >
+                                <div className="bg-[#f8e9ef] px-2 py-1 font-bold text-[#3a150e]">
+                                    গাড়ি ভাড়া
+                                </div>
+
+                                <div className="px-2 py-1 text-right font-bold text-[#8b3158]">
+                                    ৳{" "}
+                                    {toBanglaNumber(
+                                        invoice?.carRent || 0,
+                                    )}
+                                </div>
+                            </div>
+
+                            <div
+                                className={`grid grid-cols-[1fr_105px] border-b border-[#777] ${compact
+                                    ? "text-[8px]"
+                                    : "text-[9px] sm:grid-cols-[1fr_150px] sm:text-[12px]"
+                                    }`}
+                            >
+                                <div className="bg-[#f8e9ef] px-2 py-1 font-bold text-[#3a150e]">
+                                    মোট
+                                </div>
+
+                                <div className="px-2 py-1 text-right font-bold text-[#8b3158]">
+                                    ৳{" "}
+                                    {toBanglaNumber(
+                                        (invoice?.productPrice || 0) +
+                                        (invoice?.carRent || 0),
                                     )}
                                 </div>
                             </div>
@@ -483,24 +520,23 @@ const A4CustomerPrint = ({
                             </div>
                         </div>
                     </div>
-                    <div className="pt-4">
+                    <div className="pt-2">
                         <div className="text-[9px] font-semibold text-[#8b3158]">
                             কথায়: {numberToBanglaWords(invoice?.cash)} টাকা মাত্র
                         </div>
 
                         <div className="mt-1 border-b border-dotted border-gray-500" />
                     </div>
+
                     <div
-                        className={`grid grid-cols-3 text-center ${compact
-                            ? "mt-3 gap-3"
-                            : "mt-4 gap-3"
+                        className={`grid grid-cols-4 text-center ${compact ? "mt-3 gap-3" : "mt-2 gap-3"
                             }`}
                     >
                         <div>
                             <div
-                                className={`mx-auto max-w-[170px] border-b border-dotted border-[#555] ${compact
-                                    ? "h-6 max-w-[150px]"
-                                    : "h-8 sm:h-10 sm:max-w-[230px]"
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
                                     }`}
                             />
 
@@ -516,9 +552,9 @@ const A4CustomerPrint = ({
 
                         <div>
                             <div
-                                className={`mx-auto max-w-[170px] border-b border-dotted border-[#555] ${compact
-                                    ? "h-6 max-w-[150px]"
-                                    : "h-8 sm:h-10 sm:max-w-[230px]"
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
                                     }`}
                             />
 
@@ -534,9 +570,9 @@ const A4CustomerPrint = ({
 
                         <div>
                             <div
-                                className={`mx-auto max-w-[170px] border-b border-dotted border-[#555] ${compact
-                                    ? "h-6 max-w-[150px]"
-                                    : "h-8 sm:h-10 sm:max-w-[230px]"
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
                                     }`}
                             />
 
@@ -547,6 +583,24 @@ const A4CustomerPrint = ({
                                     }`}
                             >
                                 মালিক
+                            </p>
+                        </div>
+
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
+                                অপারেটর
                             </p>
                         </div>
                     </div>

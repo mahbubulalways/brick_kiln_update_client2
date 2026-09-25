@@ -3,7 +3,7 @@ import { IUser } from "./user";
 import { TCustomer } from "./customer";
 import { TDriver } from "./driver";
 import { TSeason } from "@/components/Dashboard/Modals/SeasonModal";
-
+export type TDeliveryStatus = "PENDING" | "PROCESSING" | "CANCEL" | "DELIVERED";
 export type TInvoiceCustomer = {
   id: number;
   name: string;
@@ -42,6 +42,7 @@ export type TDeliveryResponse = {
   createdAt: string;
   deliveryBy: IUser;
   lastDelivered: number;
+  status: TDeliveryStatus;
 };
 
 export type TDeliveryWithCustomer = {

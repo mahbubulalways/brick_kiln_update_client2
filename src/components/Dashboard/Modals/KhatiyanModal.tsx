@@ -18,7 +18,6 @@ import { toast } from "sonner";
 type TCustomModal = {
   isOpen: boolean;
   onClose: () => void;
-  showRateQuantity: boolean
 };
 
 type TKhatiyan = {
@@ -27,11 +26,17 @@ type TKhatiyan = {
   phoneNumber: string;
   parentId: number;
   rate: number;
-  quantity: number
-  startDate: string
+  quantity: number;
+  startDate: string;
+
+  // নতুন ফিল্ড
+  salary: number;
+  weeklyFood: number;
+  openingBalance: number;
+  openingBalanceType: string;
 };
-const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
-  const { isError, isLoading, data } = useGetLedgerCountQuery(undefined);
+const KhotiyanModal = ({ isOpen, onClose }: TCustomModal) => {
+  // const { isError, isLoading, data } = useGetLedgerCountQuery(undefined);
   const {
     isError: optionError,
     isLoading: optionLoading,
@@ -54,14 +59,14 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
     value: "id",
   });
 
-  const count = data?.data?.count;
-  useEffect(() => {
-    if (count) {
-      reset({
-        serial: count,
-      });
-    }
-  }, [count, reset]);
+  // const count = data?.data?.count;
+  // useEffect(() => {
+  //   if (count) {
+  //     reset({
+  //       serial: count,
+  //     });
+  //   }
+  // }, [count, reset]);
 
   const onSubmit: SubmitHandler<TKhatiyan> = async (data) => {
 
@@ -100,23 +105,23 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
       title="খতিয়ান অ্যাড"
       width="xl"
     >
-      {isLoading || optionLoading ? (
+      {optionLoading ? (
         <CustomStatus type="loading" fullScreen={false} />
-      ) : isError || optionError ? (
+      ) : optionError ? (
         <CustomStatus type="error" fullScreen={false} />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <CustomInput
               name="serial"
               label="সিরিয়াল"
               placeholder="সিরিয়াল"
               register={register}
-              readonly
-              type="text"
+              type="number"
               error={errors.serial}
               rules={{ required: "এই ফিল্ডটি আবশ্যক" }}
             />
+
             <CustomInput
               name="name"
               label="খতিয়ানের নাম"
@@ -127,20 +132,6 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
               rules={{ required: "এই ফিল্ডটি আবশ্যক" }}
             />
 
-            <CustomInput
-              name="phoneNumber"
-              label="ফোন নম্বর"
-              placeholder="ফোন নম্বর"
-              register={register}
-              type="number"
-            />
-            <CustomDatePicker
-              control={control}
-              name="startDate"
-              label="শুরুর তারিখ"
-              disablePastDates
-              placeholder="শুরুর তারিখ"
-            />
             <CustomSelect
               name="parentId"
               label="খতিয়ানের গ্রুপ"
@@ -148,46 +139,99 @@ const KhotiyanModal = ({ isOpen, onClose, showRateQuantity }: TCustomModal) => {
               control={control}
               options={labelValuePairArray}
             />
+
+            <CustomInput
+              name="phoneNumber"
+              label="ফোন নম্বর"
+              placeholder="ফোন নম্বর"
+              register={register}
+              type="number"
+            />
+
+            <CustomDatePicker
+              control={control}
+              name="startDate"
+              label="শুরুর তারিখ"
+              placeholder="শুরুর তারিখ"
+            />
+
+            <CustomInput
+              name="rate"
+              label="খতিয়ানের রেট"
+              placeholder="খতিয়ানের রেট"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="quantity"
+              label="পরিমাণ"
+              placeholder="পরিমাণ ভাজক"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="salary"
+              label="বেতন"
+              placeholder="বেতনের পরিমাণ"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="weeklyFood"
+              label="সাপ্তাহিক খোরাকি"
+              placeholder="সাপ্তাহিক খোরাকির পরিমাণ"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="openingBalance"
+              label="ওপেনিং ব্যালেন্স"
+              placeholder="ওপেনিং ব্যালেন্স লিখুন"
+              register={register}
+              type="number"
+            />
+
+            <CustomSelect
+              name="openingBalanceType"
+              label="ওপেনিং ব্যালেন্সের ধরন"
+              placeholder="ওপেনিং ব্যালেন্সের ধরন নির্বাচন করুন"
+              control={control}
+              options={[
+                {
+                  label: "পাওনা",
+                  value: "পাওনা",
+                },
+                {
+                  label: "দেনা",
+                  value: "দেনা",
+                },
+              ]}
+            />
           </div>
-          {
-            showRateQuantity && <div className="grid grid-cols-2 gap-2 pt-3">
-              <CustomInput
-                name="rate"
-                label="খতিয়ানের রেট"
-                placeholder="খতিয়ানের রেট"
-                register={register}
-                type="number"
-
-              />
-
-              <CustomInput
-                name="quantity"
-                label="পরিমাণ ভাজক (যদি থাকে)"
-                placeholder="পরিমাণ ভাজক"
-                register={register}
-                type="number"
-
-              />
-            </div>
-          }
-
-
-          <div className="flex items-center justify-between pt-5">
+          <div className="flex items-center w-full gap-2 justify-between pt-5">
             <div
               onClick={() => reset()}
-              className="text-[14px] border border-gray-300 bg-white hover:border-[#039A63] px-10 py-1.5  text-gray-500 duration-500 hover:text-[#039A63] font-medium rounded cursor-pointer"
+              className="text-[14px] border w-full text-center border-gray-300 bg-white hover:border-[#039A63] px-10 py-1.5  text-gray-500 duration-500 hover:text-[#039A63] font-medium rounded cursor-pointer"
             >
               ক্লিয়ার
             </div>
             <button
               disabled={createLoading}
-              className="text-[14px] bg-[#039A63] px-8 py-1.5 text-gray-100 font-medium rounded cursor-pointer disabled:bg-gray-500"
+              className="text-[14px] bg-[#039A63] w-full px-8 py-1.5 text-gray-100 font-medium rounded cursor-pointer disabled:bg-gray-500"
             >
               অ্যাড করুন
             </button>
           </div>
         </form>
       )}
+
+
+
+
     </CustomModal>
   );
 };

@@ -377,18 +377,24 @@ const RemainingDeliveryPrint = ({
                 </table>
             </div>
 
-            <div className="mt-10 grid grid-cols-2">
+            <div className="mt-10 grid grid-cols-3">
                 <div className="text-center">
-                    <div className="mx-auto w-[80px] border-t border-black" />
+                    <div className="mx-auto w-[150px] border-t border-black" />
                     <p className="mt-1 text-[8px] font-semibold">
                         ম্যানেজার
                     </p>
                 </div>
 
                 <div className="text-center">
-                    <div className="mx-auto w-[80px] border-t border-black" />
+                    <div className="mx-auto w-[150px] border-t border-black" />
                     <p className="mt-1 text-[8px] font-semibold">
                         মালিক
+                    </p>
+                </div>
+                <div className="text-center">
+                    <div className="border-t border-black w-[150px]  mx-auto" />
+                    <p className="text-[10px] font-semibold mt-1">
+                        অপারেটর
                     </p>
                 </div>
             </div>

@@ -22,8 +22,8 @@ const MobileLayout = ({ children }: TChildren) => {
               <FaIndustry className="h-6 w-6 text-orange-700" />
             </div>
 
-            <h1 className="text-lg font-semibold text-gray-900 pl-1 lg:pl-0">
-              {information?.nameBangla}
+            <h1 className="text-[16px] font-semibold text-gray-900 pl-1 lg:pl-0">
+              {information?.nameBangla?.split(" ")?.slice(0, 3)?.join(" ")}
             </h1>
           </div>
           <Seasons />

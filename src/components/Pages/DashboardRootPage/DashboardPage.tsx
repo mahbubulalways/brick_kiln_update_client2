@@ -135,10 +135,10 @@ const DashboardPage = () => {
         <button
           type="button"
           onClick={() => printRef.current?.print()}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#039A63] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#028653] hover:shadow-md active:scale-[0.98]"
+          className="inline-flex items-center gap-1 lg:gap-2 rounded-lg bg-[#039A63] px-2 lg:px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#028653] hover:shadow-md active:scale-[0.98]"
         >
           <Printer size={18} strokeWidth={2} />
-          হিসাবের সারাংশ প্রিন্ট
+          সারাংশ প্রিন্ট
         </button>
 
         <div className="w-fit">

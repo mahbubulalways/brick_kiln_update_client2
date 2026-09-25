@@ -19,15 +19,15 @@ const ledgerAPi = baseApi.injectEndpoints({
         url: `/ledger/all`,
         method: "GET",
       }),
-      providesTags: ["LEDGER","SEASON"],
+      providesTags: ["LEDGER", "SEASON"],
     }),
     // GET ALL LEDGER
     getAllLedgerPagination: builder.query({
-      query: (query:TQuery) => ({
+      query: (query: TQuery) => ({
         url: `/ledger/all-ledgers?page=${query.page}&limit=${query.limit}&search=${query.search}`,
         method: "GET",
       }),
-      providesTags: ["LEDGER","SEASON"],
+      providesTags: ["LEDGER", "SEASON"],
     }),
 
     // GET ALL LEDGER WITH AMOUNT
@@ -42,12 +42,11 @@ const ledgerAPi = baseApi.injectEndpoints({
 
     getAllLedgerDetails: builder.query({
       query: (payload) => ({
-        url: `/ledger/details/${payload.id}?page=${payload?.params?.page}&limit=${payload?.params?.page}&date=${payload.date}`,
+        url: `/ledger/details/${payload.id}?page=${payload?.params?.page}&limit=${payload?.params?.limit}&date=${payload.date}`,
         method: "GET",
       }),
       providesTags: ["LEDGER"],
     }),
-
 
     // GET LEDGER OPTION
     getLedgerOption: builder.query({
@@ -69,7 +68,7 @@ const ledgerAPi = baseApi.injectEndpoints({
     }),
 
     // GET SINGLE
-      getSingleLedger: builder.query({
+    getSingleLedger: builder.query({
       query: (id) => ({
         url: `/ledger/single/${id}`,
         method: "GET",
@@ -77,23 +76,22 @@ const ledgerAPi = baseApi.injectEndpoints({
       providesTags: ["LEDGER"],
     }),
     // GET SINGLE
-      updateLedger: builder.mutation({
+    updateLedger: builder.mutation({
       query: (payload) => ({
         url: `/ledger/update/${payload.id}`,
         method: "PATCH",
-        body:payload.data
+        body: payload.data,
       }),
       invalidatesTags: ["LEDGER"],
     }),
     // GET SINGLE
-      deleteleLedger: builder.mutation({
+    deleteleLedger: builder.mutation({
       query: (id) => ({
         url: `/ledger/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["LEDGER"],
     }),
-
   }),
 });
 
@@ -107,5 +105,5 @@ export const {
   useGetAllLedgerPaginationQuery,
   useGetSingleLedgerQuery,
   useDeleteleLedgerMutation,
-  useUpdateLedgerMutation
+  useUpdateLedgerMutation,
 } = ledgerAPi;

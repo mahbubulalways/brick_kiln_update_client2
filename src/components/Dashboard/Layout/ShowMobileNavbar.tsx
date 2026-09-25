@@ -71,10 +71,8 @@ export default function ShowMobileNavbar() {
     return (
         <div className="z-[9999] mx-auto mt-4 w-full max-w-5xl pb-8">
 
-            {/* =========================
-                Top Summary Section
-            ========================== */}
-            <div className="grid grid-cols-2 overflow-hidden rounded bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-sm">
+
+            {/* <div className="grid grid-cols-2 overflow-hidden rounded bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-sm">
 
                 <div className="flex flex-col items-center justify-center border-r border-white/20 py-8">
                     <span className="text-gray-200">
@@ -96,11 +94,9 @@ export default function ShowMobileNavbar() {
                     </span>
                 </div>
 
-            </div>
+            </div> */}
 
-            {/* =========================
-                Main Grid
-            ========================== */}
+
             <div className="pt-5">
 
                 {chunkArray(
@@ -193,7 +189,7 @@ export default function ShowMobileNavbar() {
                                             </span>
 
                                             {openItemId ===
-                                            item.id ? (
+                                                item.id ? (
                                                 <ChevronUp className="mt-1 h-4 w-4 text-gray-400" />
                                             ) : (
                                                 <ChevronDown className="mt-1 h-4 w-4 text-gray-400" />
@@ -214,7 +210,7 @@ export default function ShowMobileNavbar() {
                             .filter(
                                 (item) =>
                                     item.id ===
-                                        openItemId &&
+                                    openItemId &&
                                     item.children?.length
                             )
                             .map((item) => (

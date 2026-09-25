@@ -10,12 +10,10 @@ import CustomLoader from "@/components/Reusable/CustomLoader";
 import TableHead from "@/components/Reusable/TableHead";
 import TableData from "@/components/Reusable/TableData";
 import { TablePagination } from "@/components/Reusable/TablePagination";
-
 import {
   useDeleteleLedgerMutation,
   useGetAllLedgerPaginationQuery,
 } from "@/redux/features/ledger.features";
-
 import { TQuery } from "@/interface/query";
 import { TMetaConfig } from "@/interface/meta";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
@@ -36,6 +34,11 @@ type TLedger = {
 
   rate?: number;
   quantity?: number;
+  salary?: number;
+  weeklyFood?: number;
+  openingBalance?: number;
+  openingBalanceType?: string;
+
   serial: number;
   phoneNumber: string;
   startDate: string;
@@ -121,11 +124,13 @@ const Khotiyan = ({
         <h1 className="py-3 text-xl font-semibold text-gray-900">
           খতিয়ান অ্যাড/আপডেট
         </h1>
+
         <SearchBar
           value={searchItems}
           onChange={(e) => setSearchItem(e.target.value)}
           onClear={() => setSearchItem("")}
         />
+
         <button
           type="button"
           onClick={() => setIsOpen(true)}
@@ -137,7 +142,7 @@ const Khotiyan = ({
 
       <div className="w-full">
         <div className="mt-2 w-full overflow-x-auto">
-          <table className="min-w-full border-collapse">
+          <table className="min-w-[1200px] border-collapse">
             <thead>
               <tr className="bg-[#039A63] text-center text-white">
                 <TableHead th="#" />
@@ -147,6 +152,10 @@ const Khotiyan = ({
                 <TableHead th="তারিখ" />
                 <TableHead th="রেট" />
                 <TableHead th="পরিমাণ" />
+                <TableHead th="বেতন" />
+                <TableHead th="সাপ্তাহিক খোরাকি" />
+                <TableHead th="ওপেনিং ব্যালেন্স" />
+                <TableHead th="ধরন" />
                 <TableHead th="বাটন" />
               </tr>
             </thead>
@@ -154,14 +163,14 @@ const Khotiyan = ({
             <tbody className="text-center">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="border p-8">
+                  <td colSpan={12} className="border p-8">
                     <CustomLoader cls="h-[30vh]" />
                   </td>
                 </tr>
               ) : isError ? (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={12}
                     className="border p-8 text-center text-sm text-gray-500"
                   >
                     {SERVER_ERROR_MESSAGE}
@@ -170,7 +179,7 @@ const Khotiyan = ({
               ) : !ledgers.length ? (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={12}
                     className="border p-8 text-center text-sm text-gray-500"
                   >
                     কোনো খতিয়ান পাওয়া যায়নি।
@@ -214,21 +223,33 @@ const Khotiyan = ({
 
                       <TableData td={row.quantity ?? 0} />
 
+                      <TableData td={row.salary ?? 0} />
+
+                      <TableData td={row.weeklyFood ?? 0} />
+
+                      <TableData td={row.openingBalance ?? 0} />
+
+                      <TableData
+                        td={row.openingBalanceType || "-"}
+                      />
+
                       <td className="border p-2">
-                        <div className="flex justify-center gap-3">
+                        <div className="flex items-center justify-center gap-2">
                           <button
                             type="button"
-                            className="cursor-pointer text-blue-600 transition hover:text-blue-800"
+                            title="এডিট করুন"
                             onClick={() => handleEdit(row.id)}
+                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700"
                           >
                             <Pencil className="h-4 w-4" />
                           </button>
 
                           <button
                             type="button"
+                            title="ডিলেট করুন"
                             disabled={deleteLoading}
-                            className="cursor-pointer text-red-600 transition hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
                             onClick={() => handleDelete(row.id)}
+                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -248,14 +269,12 @@ const Khotiyan = ({
           dataLength={ledgers.length}
           title="খতিয়ান"
         />
-
       </div>
 
       {isOpen && (
         <KhotiyanModal
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
-          showRateQuantity={true}
         />
       )}
 

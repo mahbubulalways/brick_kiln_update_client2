@@ -204,25 +204,79 @@ const A4LedgerPrint = ({
 
                         <div className="mt-1 border-b border-dotted border-gray-500" />
                     </div>
-                    <div className="mt-2 flex items-center justify-between gap-3">
-                        <div className="flex-1 text-center">
-                            <div className="mx-auto h-7 max-w-[180px] border-b border-dotted border-[#555] sm:h-10 sm:max-w-[250px]" />
-                            <p className="mt-1 text-[8px] font-semibold text-[#555] sm:text-[11px]">
+                    <div
+                        className={`grid grid-cols-4 text-center ${compact ? "mt-3 gap-3" : "mt-4 gap-3"
+                            }`}
+                    >
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
                                 গ্রহীতার স্বাক্ষর
                             </p>
                         </div>
 
-                        <div className="flex-1 text-center">
-                            <div className="mx-auto h-7 max-w-[180px] border-b border-dotted border-[#555] sm:h-10 sm:max-w-[250px]" />
-                            <p className="mt-1 text-[8px] font-semibold text-[#555] sm:text-[11px]">
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
                                 ম্যানেজার
                             </p>
                         </div>
 
-                        <div className="flex-1 text-center">
-                            <div className="mx-auto h-7 max-w-[180px] border-b border-dotted border-[#555] sm:h-10 sm:max-w-[250px]" />
-                            <p className="mt-1 text-[8px] font-semibold text-[#555] sm:text-[11px]">
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
                                 মালিক
+                            </p>
+                        </div>
+
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
+                                অপারেটর
                             </p>
                         </div>
                     </div>

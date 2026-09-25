@@ -95,7 +95,8 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
                                 <TableHead th="#" />
                                 <TableHead th="শ্রেণির নাম" />
                                 <TableHead th="শ্রেণির ধরণ" />
-                                <TableHead th="রেট" />
+                                <TableHead th="রেগুলার/সিজন রেট" />
+                                <TableHead th="আনসিজন রেট" />
                                 <TableHead th="বাটন" />
                             </tr>
                         </thead>
@@ -123,33 +124,33 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
                                             key={row.id}
                                             className="transition-colors hover:bg-gray-50"
                                         >
-                                            <TableData
-                                                td={index + 1}
-                                            />
+                                            <TableData td={index + 1} />
 
                                             <TableData td={row.className} />
 
                                             <TableData td={row.classType} />
 
-                                            <TableData td={`৳ ${row.rate}`} />
+                                            <TableData
+                                                td={`৳ ${row.rate}`}
+                                            />
+
+                                            <TableData
+                                                td={`৳ ${row.advanceRate}`}
+                                            />
 
                                             <td className="border p-2">
                                                 <div className="flex justify-center gap-3">
-                                                    {/* Edit */}
                                                     <button
                                                         type="button"
                                                         onClick={() => {
                                                             setIsOpenEditModal(true);
-                                                            setClassId(
-                                                                row.id as number
-                                                            );
+                                                            setClassId(row.id as number);
                                                         }}
                                                         className="text-blue-600 transition hover:text-blue-800"
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </button>
 
-                                                    {/* Delete */}
                                                     <button
                                                         type="button"
                                                         disabled={isDeleting}

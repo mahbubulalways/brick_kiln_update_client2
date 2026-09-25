@@ -1,6 +1,5 @@
 "use client"
 import { TVataInformation } from "@/interface/vata";
-import { useGetVataInfoQuery } from "@/redux/features/vata.features";
 import { IChallanForDataShow, IChallanItem, TClassAndRate } from "@/types/types";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
@@ -156,6 +155,9 @@ const DailyChallanPrint = ({
                         <th className="border border-gray-300 font-normal text-nowrap py-1 px-1">
                             চালান
                         </th>
+                        <th className="border border-gray-300 font-normal text-nowrap py-1 px-1">
+                            ধরন
+                        </th>
 
                         <th className="border border-gray-300 font-normal text-nowrap py-1 px-1">
                             কাস্টমার
@@ -222,6 +224,12 @@ const DailyChallanPrint = ({
                                                     className="border border-gray-300 py-1 px-1 text-center whitespace-nowrap"
                                                 >
                                                     {toBanglaNumber(String(row?.serial || "-"))}
+                                                </td>
+                                                <td
+                                                    rowSpan={items.length}
+                                                    className="border border-gray-300 py-1 px-1 text-center whitespace-nowrap"
+                                                >
+                                                    {row?.chalanType || "-"}
                                                 </td>
 
                                                 {/* কাস্টমার */}
@@ -337,7 +345,7 @@ const DailyChallanPrint = ({
                             {/* TOTAL */}
                             <tr className="bg-[#F1F2F3]">
                                 <td
-                                    colSpan={3}
+                                    colSpan={4}
                                     className="border border-gray-300 py-1 px-1 text-right"
                                 >
                                     মোট যোগ
@@ -483,11 +491,11 @@ const DailyChallanPrint = ({
                 </tbody>
             </table>
 
-            <div className="grid grid-cols-2 mt-14">
+            <div className="grid grid-cols-3 mt-14">
                 {/* MANAGER */}
 
                 <div className="text-center">
-                    <div className="border-t border-black w-[85px] mx-auto" />
+                    <div className="border-t border-black w-[150px] mx-auto" />
 
                     <p className="text-[11px] font-semibold mt-1">
                         ম্যানেজার
@@ -497,17 +505,21 @@ const DailyChallanPrint = ({
                 {/* OWNER */}
 
                 <div className="text-center">
-                    <div className="border-t border-black w-[85px] mx-auto" />
+                    <div className="border-t border-black w-[150px] mx-auto" />
 
                     <p className="text-[11px] font-semibold mt-1">
                         মালিক
                     </p>
                 </div>
-            </div>
 
-            {/* =================================================
-          FOOTER
-      ================================================= */}
+
+                <div className="text-center">
+                    <div className="border-t border-black w-[150px] mx-auto" />
+                    <p className="text-[10px] font-semibold mt-1">
+                        অপারেটর
+                    </p>
+                </div>
+            </div>
 
             {/* <div className="border-t border-gray-300 mt-7 pt-2 text-center">
         <p className="text-[7px] text-gray-400">

@@ -84,6 +84,9 @@ const ClassWiseDeliveryChart = ({
                                     fill: "#64748b",
                                 }}
                                 interval={0}
+                                angle={-20}
+                                textAnchor="middle"
+
                             />
 
                             <YAxis

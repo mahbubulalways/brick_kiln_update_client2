@@ -86,7 +86,8 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                     <table className="min-w-full border-collapse ">
                         <thead>
                             <tr className="bg-[#039A63] text-white text-center">
-                                <TableHead th={"#"} />
+                                <TableHead th={"চালান নং"} />
+                                <TableHead th={"ধরন"} />
                                 <TableHead th={"কাস্টমার"} />
                                 <TableHead th={"ঠিকানা"} cls="hidden lg:table-cell" />
                                 <TableHead th={"শ্রেণি"} />
@@ -105,13 +106,13 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                         <tbody className="text-center">
                             {fetchInvoiceLoading ? (
                                 <TableLazyLoading
-                                    smallColumns={6}
-                                    largeColumns={14}
+                                    smallColumns={15}
+                                    largeColumns={15}
                                     rows={6}
                                 />
                             ) : !invoices?.length ? (
                                 <tr>
-                                    <td colSpan={14}>
+                                    <td colSpan={15}>
                                         <CustomStatus
                                             type="empty"
                                             description="কোনো চালান পাওয়া যায়নি"
@@ -129,7 +130,11 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                 {index === 0 && (
                                                     <>
                                                         <TableData
-                                                            td={toBanglaNumber(index + 1)}
+                                                            td={toBanglaNumber(row?.serial)}
+                                                            rowSpan={row?.items?.length}
+                                                        />
+                                                        <TableData
+                                                            td={row?.chalanType}
                                                             rowSpan={row?.items?.length}
                                                         />
 
@@ -303,10 +308,10 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                             key={row?.id}
                                             className="transition-colors hover:bg-gray-50"
                                         >
+                                            <TableData td={toBanglaNumber(row?.serial)} />
                                             <TableData
-                                                td={toBanglaNumber(idx + 1)}
+                                                td={row?.chalanType}
                                             />
-
                                             <TableData
                                                 td={row?.customer?.name}
                                             />

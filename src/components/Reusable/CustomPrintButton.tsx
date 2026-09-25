@@ -19,10 +19,10 @@ const CustomPrintButton = ({
         gap-2
         bg-white
         text-[#039A63]
-        px-2
-        lg:px-3
-        py-1.5
+    px-2 lg:px-3 py-[5px]
+    text-[15px]
         rounded
+        font-medium
         border
         border-[#039A63]
         hover:bg-[#039A63]
@@ -33,7 +33,8 @@ const CustomPrintButton = ({
       `}
     >
       <FiPrinter className="h-4 w-4" />
-      <span className="hidden lg:block text-[15px]">প্রিন্ট</span>
+      {/* hidden lg:block */}
+      <span className=" text-[15px]">প্রিন্ট</span>
     </button>
   );
 };

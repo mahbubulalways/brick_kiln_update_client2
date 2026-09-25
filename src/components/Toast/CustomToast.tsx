@@ -1,6 +1,6 @@
-// utils/showToast.ts
-import { toast } from "sonner";
 import { ReactElement, ReactNode } from "react";
+import { toast } from "sonner";
+import { CheckCircle2, Info, XCircle } from "lucide-react";
 
 type ToastType = "success" | "error" | "info";
 
@@ -17,11 +17,24 @@ type TToast = {
   options?: ToastOptions;
 };
 
-export const showToast = ({ title, type, options = {} }: TToast) => {
+export const showToast = ({
+  title,
+  type,
+  options = {},
+}: TToast) => {
+  const defaultIcon =
+    type === "success" ? (
+      <CheckCircle2 className="h-5 w-5" />
+    ) : type === "error" ? (
+      <XCircle className="h-5 w-5" />
+    ) : (
+      <Info className="h-5 w-5" />
+    );
+
   toast(title, {
     description: options.description,
-    icon: options.icon as ReactNode,
-    duration: options.duration || 4000,
+    icon: options.icon || defaultIcon,
+    duration: options.duration || 2000,
     position: "top-center",
     style: {
       backgroundColor:
@@ -31,12 +44,8 @@ export const showToast = ({ title, type, options = {} }: TToast) => {
             ? "#ef4444"
             : "#DA851D",
       color: "white",
-      padding: "14px 20px",
-      borderRadius: "12px",
-      textAlign: "center",
-      lineHeight: "1.4",
-      fontSize: "14px",
       fontWeight: "bold",
+      border: "none",
     },
   });
 };

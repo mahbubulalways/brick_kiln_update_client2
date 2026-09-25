@@ -5,13 +5,35 @@ import { TVataInformation } from "@/interface/vata";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 
+type TLedgerDetails = {
+    id: string;
+    name: string;
+    parentId: string | null;
+    phoneNumber: string | null;
+    rate: number | null;
+    quantity: number | null;
+    salary: number | null;
+    serial: number | null;
+    startDate: Date | null;
+    openingBalance: number | null;
+    openingBalanceType: string | null;
+    weeklyFood: number | null;
+    season: {
+        name: string;
+    } | null;
+    _count: {
+        payments: number;
+    };
+};
+
 type TLedgerDetailsPrintProps = {
     payments: TPaymentResponse[];
-    ledger?: string;
+    ledger?: TLedgerDetails;
     vataInformation: TVataInformation;
     startDate?: Date | null;
     endDate?: Date | null;
 };
+
 
 const LedgerDetailsPrint = ({
     payments = [],
@@ -70,6 +92,9 @@ const LedgerDetailsPrint = ({
 
     const totalCutting = payments.reduce((sum, row) => {
         return sum + Number(row?.cutting || 0);
+    }, 0);
+    const totalKombesi = payments.reduce((sum, row) => {
+        return sum + Number(row?.paymentDifference || 0);
     }, 0);
 
     const formatDatePeriod = () => {
@@ -205,15 +230,142 @@ const LedgerDetailsPrint = ({
                     খতিয়ান বিস্তারিত
                 </p>
             </div>
+
+            <div className="mt-2 overflow-hidden border border-gray-300">
+                {/* Ledger Person */}
+                <div className="flex items-center justify-between border-b border-gray-300 bg-[#F1F2F3] px-3 py-1.5">
+                    <div className="flex items-center gap-2">
+                        <span className="text-[12px] font-bold">
+                            {ledger?.name || "-"}
+                        </span>
+
+                        {ledger?.phoneNumber && (
+                            <>
+                                <span className="text-gray-400">•</span>
+
+                                <span className="text-[10px]">
+                                    {ledger.phoneNumber}
+                                </span>
+                            </>
+                        )}
+
+                        {ledger?.season?.name && (
+                            <>
+                                <span className="text-gray-400">•</span>
+
+                                <span className="text-[10px] font-semibold">
+                                    {ledger.season.name}
+                                </span>
+                            </>
+                        )}
+                    </div>
+
+                    <div className="flex items-center gap-3 text-[10px]">
+                        {/* {ledger?.serial !== null && (
+                            <span>
+                                সিরিয়াল:{" "}
+                                <span className="font-bold">
+                                    {toBanglaNumber(ledger?.serial!)}
+                                </span>
+                            </span>
+                        )} */}
+
+                        <span>
+                            মোট পেমেন্ট:{" "}
+                            <span className="font-bold">
+                                {toBanglaNumber(
+                                    ledger?._count?.payments ?? 0
+                                )}
+                            </span>
+                            টি
+                        </span>
+                    </div>
+                </div>
+
+                {/* Ledger Information */}
+                <div className="grid grid-cols-6">
+                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-gray-500">
+                            রেট
+                        </p>
+
+                        <p className="text-[11px] font-bold">
+                            ৳ {toBanglaNumber(ledger?.rate ?? 0)}
+                        </p>
+                    </div>
+
+                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-gray-500">
+                            পরিমাণ
+                        </p>
+
+                        <p className="text-[11px] font-bold">
+                            {toBanglaNumber(ledger?.quantity ?? 0)}
+                        </p>
+                    </div>
+
+                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-gray-500">
+                            বেতন
+                        </p>
+
+                        <p className="text-[11px] font-bold">
+                            ৳ {toBanglaNumber(ledger?.salary ?? 0)}
+                        </p>
+                    </div>
+
+                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-gray-500">
+                            সাপ্তাহিক খোরাকি
+                        </p>
+
+                        <p className="text-[11px] font-bold">
+                            ৳ {toBanglaNumber(ledger?.weeklyFood ?? 0)}
+                        </p>
+                    </div>
+
+                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-gray-500">
+                            যোগদানের তারিখ
+                        </p>
+
+                        <p className="text-[11px] font-bold">
+                            {ledger?.startDate
+                                ? formatBanglaDate({
+                                    date: ledger.startDate,
+                                })
+                                : "-"}
+                        </p>
+                    </div>
+
+                    <div className="px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-gray-500">
+                            ওপেনিং ব্যালেন্স
+                        </p>
+
+                        <p className="text-[11px] font-bold">
+                            ৳ {toBanglaNumber(
+                                ledger?.openingBalance ?? 0
+                            )}
+
+                            {ledger?.openingBalanceType && (
+                                <span className="ml-1 text-[9px] font-normal">
+                                    ({ledger.openingBalanceType})
+                                </span>
+                            )}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
             <div className="relative mt-4 flex min-h-[30px] items-center justify-between">
                 <p className="text-[12px] font-semibold leading-none">
                     হিসাবের সময়ঃ {formatDatePeriod()}
                 </p>
 
 
-                <p className="text-[12px] font-bold leading-none">
-                    লেজারঃ {ledger || "-"}
-                </p>
+
             </div>
 
             {/* <div className="mt-3 grid grid-cols-5 gap-2">
@@ -475,7 +627,9 @@ const LedgerDetailsPrint = ({
                                 </td>
 
                                 <td className="border border-gray-300 px-1 py-1 text-center">
-                                    -
+                                    {toBanglaNumber(
+                                        totalKombesi.toLocaleString()
+                                    )}
                                 </td>
                             </tr>
                         </>
@@ -526,9 +680,9 @@ const LedgerDetailsPrint = ({
                 </div>
             </div> */}
 
-            <div className="mt-14 grid grid-cols-2">
+            <div className="mt-14 grid grid-cols-3">
                 <div className="text-center">
-                    <div className="mx-auto w-[85px] border-t border-black" />
+                    <div className="mx-auto w-[150px] border-t border-black" />
 
                     <p className="mt-1 text-[11px] font-semibold">
                         ম্যানেজার
@@ -536,10 +690,17 @@ const LedgerDetailsPrint = ({
                 </div>
 
                 <div className="text-center">
-                    <div className="mx-auto w-[85px] border-t border-black" />
+                    <div className="mx-auto w-[150px] border-t border-black" />
 
                     <p className="mt-1 text-[11px] font-semibold">
                         মালিক
+                    </p>
+                </div>
+
+                <div className="text-center">
+                    <div className="border-t border-black w-[150px] mx-auto" />
+                    <p className="text-[10px] font-semibold mt-1">
+                        অপারেটর
                     </p>
                 </div>
             </div>

@@ -7,6 +7,7 @@ export type TClassAndRate = {
   classType: string;
   className: string;
   rate: number | string;
+  advanceRate: number | string;
   id?: number;
 };
 
@@ -23,8 +24,8 @@ export type TChallanCreate = {
     serial: number;
     chalanType: string;
     deliveryDate: Date | null;
-    challanDate: Date|null;
-    duePaymentDate: Date|null;
+    challanDate: Date | null;
+    duePaymentDate: Date | null;
     note: string;
     productPrice: number;
     discount: number;
@@ -32,7 +33,7 @@ export type TChallanCreate = {
     totalPrice: number;
     cash: number;
     due: number;
-    deliverySeason?: string|null;
+    deliverySeason?: string | null;
   };
   customer: {
     phoneNumber: string;
@@ -50,7 +51,7 @@ export type TCustomInvoiceModal = {
   onClose: () => void;
   setInvoiceId: Dispatch<SetStateAction<number | undefined>>;
   invoiceId: number;
-  vataInformation?: TVataInformation
+  vataInformation?: TVataInformation;
 };
 
 // Types for showing challan
@@ -65,9 +66,9 @@ export interface ICustomer {
   totalPurchased: number;
   totalPaid: number;
   nextPaymentDate: string;
-  note:string
-  customerCode:string;
-  remainingDelivery:number
+  note: string;
+  customerCode: string;
+  remainingDelivery: number;
 }
 
 export interface IChallanItem {
@@ -87,7 +88,7 @@ export interface IChallanItem {
 export interface IChallanForDataShow {
   id: string;
   serial: number;
-  season:ISeason;
+  season: ISeason;
   chalanType: string;
   challanDate: string;
   deliverySeason: string;
@@ -96,7 +97,7 @@ export interface IChallanForDataShow {
   customerId: number;
   customer: ICustomer;
   items: IChallanItem[];
-  createdBy:IUser,
+  createdBy: IUser;
   productPrice: number;
   discount: number;
   totalPrice: number;
@@ -108,7 +109,7 @@ export interface IChallanForDataShow {
   carRent: number;
 
   // NOT IN DB
-  totalDue:number
+  totalDue: number;
 }
 
 // DELIVERY
@@ -116,6 +117,6 @@ export interface IChallanForDataShow {
 export type TTodaySDelivery = {
   customer: ICustomer;
   id: number;
-  serial:number;
+  serial: number;
   items: IChallanItem[];
 };

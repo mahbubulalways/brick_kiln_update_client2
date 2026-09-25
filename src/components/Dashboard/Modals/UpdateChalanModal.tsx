@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm, useWatch } from "react-hook-form";
 
 import { Plus, Trash } from "lucide-react";
 import { MdOutlineError } from "react-icons/md";
@@ -85,7 +85,7 @@ const UpdateChalanModal = ({
         note: "",
         serial: 0,
         discount: 0,
-        // carRent: 0,
+        carRent: 0,
         due: 0,
         cash: 0,
         chalanType: "",
@@ -119,12 +119,19 @@ const UpdateChalanModal = ({
   });
 
   const chalanType = watch("invoice.chalanType");
-  const watchItems = watch("invoiceItems.items") || [];
 
-  // const carRent = Number(watch("invoice.carRent")) || 0;
+  const watchItems =
+    useWatch({
+      control,
+      name: "invoiceItems.items",
+    }) || [];
+
+  const carRent = Number(watch("invoice.carRent")) || 0;
   const discount = Number(watch("invoice.discount")) || 0;
   const cash = Number(watch("invoice.cash")) || 0;
   const due = Number(watch("invoice.due")) || 0;
+
+
 
   const classOptions = classAndRate.map((cls) => ({
     label: cls.className,
@@ -156,7 +163,7 @@ const UpdateChalanModal = ({
         serial: Number(data.serial) || 0,
 
         discount: Number(data.discount) || 0,
-        // carRent: Number(data.carRent) || 0,
+        carRent: Number(data.carRent) || 0,
         due: Number(data.due) || 0,
         cash: Number(data.cash) || 0,
 
@@ -179,7 +186,7 @@ const UpdateChalanModal = ({
         // If API says advance challan, keep deliverySeason.
         // =====================================================
         deliverySeason:
-          data.chalanType === "অগ্রীম চালান সিজন"
+          data.chalanType === "অগ্রীম চালান আনসিজন"
             ? data.deliverySeason || null
             : null,
 
@@ -234,7 +241,7 @@ const UpdateChalanModal = ({
 
     // If user changes from Advance -> Regular,
     // then delivery season should be removed.
-    if (chalanType === "রেগুলার চালান") {
+    if (chalanType !== "অগ্রীম চালান আনসিজন") {
       setValue("invoice.deliverySeason", null, {
         shouldDirty: true,
         shouldValidate: false,
@@ -250,30 +257,61 @@ const UpdateChalanModal = ({
     watchItems.forEach((item, index) => {
       const selectedClass = item?.class;
 
-      const rate =
-        classAndRate.find(
-          (cls) => cls.className === selectedClass,
-        )?.rate || 0;
+      if (!selectedClass) {
+        return;
+      }
+
+      const selectedRate = classAndRate.find(
+        (cls) =>
+          String(cls.className).trim() ===
+          String(selectedClass).trim(),
+      );
+
+      if (!selectedRate) {
+        return;
+      }
 
       const quantity = Number(item?.quantity) || 0;
 
-      const price = Number(rate) * quantity;
+      const isAdvance =
+        chalanType === "অগ্রীম চালান আনসিজন";
 
-      if (Number(item?.rate) !== Number(rate)) {
+      const expectedRate = isAdvance
+        ? Number(selectedRate.advanceRate) || 0
+        : Number(selectedRate.rate) || 0;
+
+      const price = expectedRate * quantity;
+
+      if (Number(item?.rate) !== expectedRate) {
         setValue(
           `invoiceItems.items.${index}.rate`,
-          Number(rate),
+          expectedRate,
+          {
+            shouldDirty: true,
+            shouldValidate: false,
+          },
         );
       }
 
-      if (Number(item?.price) !== Number(price)) {
+      if (Number(item?.price) !== price) {
         setValue(
           `invoiceItems.items.${index}.price`,
           price,
+          {
+            shouldDirty: true,
+            shouldValidate: false,
+          },
         );
       }
     });
-  }, [watchItems, classAndRate, setValue]);
+  }, [
+    watchItems,
+    classAndRate,
+    chalanType,
+    setValue,
+  ]);
+
+
 
   // =========================================================
   // TOTAL CALCULATION
@@ -286,7 +324,7 @@ const UpdateChalanModal = ({
   );
 
   const totalPrice = Math.max(
-    totalProductPrice - discount, //+ carRent
+    totalProductPrice + carRent - discount,
     0,
   );
 
@@ -370,7 +408,7 @@ const UpdateChalanModal = ({
     }
 
     if (
-      data.invoice.chalanType === "অগ্রীম চালান সিজন" &&
+      data.invoice.chalanType === "অগ্রীম চালান আনসিজন" &&
       !data.invoice.deliverySeason
     ) {
       showToast({
@@ -398,8 +436,8 @@ const UpdateChalanModal = ({
       productPrice:
         Number(data.invoice.productPrice) || 0,
 
-      // carRent:
-      //   Number(data.invoice.carRent) || 0,
+      carRent: Number(data.invoice.carRent) || 0,
+
 
       cash:
         Number(data.invoice.cash) || 0,
@@ -634,7 +672,7 @@ const UpdateChalanModal = ({
                   ]}
                 />
 
-                {chalanType === "অগ্রীম চালান সিজন" && (
+                {chalanType === "অগ্রীম চালান আনসিজন" && (
                   <CustomSelect
                     name="invoice.deliverySeason"
                     label="ডেলিভারি সিজন"
@@ -699,7 +737,9 @@ const UpdateChalanModal = ({
                   disablePastDates
                   rules={{
                     required:
-                      "ডেলিভারি তারিখ নির্বাচন করুন",
+                      chalanType === "অগ্রীম চালান আনসিজন"
+                        ? false
+                        : "ডেলিভারি তারিখ নির্বাচন করুন",
                   }}
                 />
 
@@ -992,7 +1032,7 @@ const UpdateChalanModal = ({
                     }}
                   />
 
-                  {/* <CustomInput
+                  <CustomInput
                     name="invoice.carRent"
                     label="গাড়ি ভাড়া"
                     placeholder="৳ 0"
@@ -1002,7 +1042,7 @@ const UpdateChalanModal = ({
                     rules={{
                       required: "গাড়ি ভাড়া আবশ্যক",
                     }}
-                  /> */}
+                  />
 
                   <CustomInput
                     name="invoice.totalPrice"

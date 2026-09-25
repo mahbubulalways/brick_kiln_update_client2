@@ -1,12 +1,8 @@
 "use client";
-
 import { useEffect, useState } from "react";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import {
-  CalendarDays,
-  Car,
   FileText,
   Package,
   Search,
@@ -17,11 +13,9 @@ import {
 
 import CustomInput from "@/components/Reusable/CustomInput";
 import CustomModalBottom from "@/components/Reusable/CustomModalBottom";
-import { Input } from "@/components/ui/input";
 import SmsSwitch from "@/components/Reusable/SmsSwitch";
 
 import {
-  useLazyGetSingleInvoiceQuery,
   useSearchInvoiceForDeliveryQuery,
 } from "@/redux/features/invoice.features";
 
@@ -69,6 +63,7 @@ type TSearchResult = {
   items?: TDeliveryItem[];
   note?: string;
   serial?: number;
+  carRent: number
 };
 
 type TDelivery = {
@@ -292,6 +287,10 @@ const NewDeliveryModalForInput = ({
     setValue(
       "items.class",
       firstItem?.class || "",
+    );
+    setValue(
+      "carRent",
+      String(result?.carRent),
     );
 
     const remainingQuantity =

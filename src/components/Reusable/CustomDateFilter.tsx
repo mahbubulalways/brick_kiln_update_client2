@@ -902,12 +902,12 @@ export default function CustomDateFilter({
                     border
                     border-gray-200
                     bg-white
-                    px-3
+                    px-2  lg:px-3
                     transition
                     hover:border-gray-300
                 "
             >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 lg:gap-2">
                     <CalendarDays
                         size={18}
                         className="text-gray-500"
@@ -915,7 +915,7 @@ export default function CustomDateFilter({
 
                     <span
                         className={`
-                            text-sm
+                            text-[13px] lg:text-sm
                             ${startDate
                                 ? "text-gray-800"
                                 : "text-gray-400"
@@ -1021,8 +1021,8 @@ export default function CustomDateFilter({
                     ================================================= */}
 
                     {showCalendar && (
-                        <div className="bg-white p-2">
-                            <div className="flex gap-2">
+                        <div className="w-full max-w-[calc(100vw-16px)] overflow-x-auto bg-white p-2 sm:max-w-none">
+                            <div className="flex flex-col gap-2 sm:flex-row">
                                 {/* =====================================
                                     LEFT CALENDAR
                                 ===================================== */}

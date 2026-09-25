@@ -297,9 +297,9 @@ const DeliveryPrint = ({
             </div>
 
 
-            <div className="mt-12 grid grid-cols-2">
+            <div className="mt-12 grid grid-cols-3">
                 <div className="text-center">
-                    <div className="mx-auto w-[88px] border-t border-black" />
+                    <div className="mx-auto w-[150px]  border-t border-black" />
 
                     <p className="mt-1 text-[9px] font-semibold">
                         ম্যানেজার
@@ -307,10 +307,17 @@ const DeliveryPrint = ({
                 </div>
 
                 <div className="text-center">
-                    <div className="mx-auto w-[88px] border-t border-black" />
+                    <div className="mx-auto w-[150px]  border-t border-black" />
 
                     <p className="mt-1 text-[9px] font-semibold">
                         মালিক
+                    </p>
+                </div>
+
+                <div className="text-center">
+                    <div className="border-t border-black w-[150px] mx-auto" />
+                    <p className="text-[10px] font-semibold mt-1">
+                        অপারেটর
                     </p>
                 </div>
             </div>

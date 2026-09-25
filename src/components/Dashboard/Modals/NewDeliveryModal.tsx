@@ -192,9 +192,8 @@ const NewDeliveryModal = ({
           0,
         ),
       },
-
       note: data.data.note || "",
-
+      carRent: data?.data?.carRent,
       deliveryNo: nextDeliveryNo?.data || "",
     });
   }, [data, reset, nextDeliveryNo?.data]);

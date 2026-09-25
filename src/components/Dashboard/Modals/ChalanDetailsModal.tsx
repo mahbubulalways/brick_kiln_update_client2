@@ -105,7 +105,7 @@ const ChalanDetailsModal = ({
 
                   <p>
                     <span className="">ডেলিভারি তারিখ:</span>{" "}
-                    {formatBanglaDate({ date: invoice?.deliveryDate })}
+                    {formatBanglaDate({ date: invoice?.deliveryDate }) || "নেই"}
                   </p>
                 </div>
               </div>

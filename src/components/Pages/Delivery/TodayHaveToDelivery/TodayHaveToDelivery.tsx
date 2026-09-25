@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import {
   DropdownMenu,
@@ -16,10 +15,8 @@ import { useGetDeliveryHaveTodayQuery } from "@/redux/features/delivery.features
 import { IChallanItem, TTodaySDelivery } from "@/types/types";
 import CustomDropDownMenuItem from "@/components/Reusable/CustomDropDownMenuItem";
 import UpdateDeliveryDateModal from "@/components/Dashboard/Modals/EditModals/UpdateDeliveryDateModal";
-import CustomLoader from "@/components/Reusable/CustomLoader";
 import DeliveryReportModal from "@/components/Dashboard/Modals/ReportModal/DeliveryReportModal";
 import { remainingAllDelivery } from "@/utils/getDeliveryReportData";
-import CustomDatePickerState from "@/components/Reusable/CustomDatePickerState";
 import { TQuery } from "@/interface/query";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { TMetaConfig } from "@/interface/meta";

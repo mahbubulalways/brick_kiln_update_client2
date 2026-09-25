@@ -62,20 +62,20 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
           <table className="min-w-full border-collapse ">
             <thead>
               <tr className="bg-[#039A63] text-white text-center">
-                <TableHead th={"#"} />
+                <TableHead th={"চালান নং"} />
                 <TableHead th={"ধরন"} />
                 <TableHead th={"কাস্টমার"} />
-                <TableHead th={"ঠিকানা"} cls="hidden lg:table-cell" />
+                <TableHead th={"ঠিকানা"} />
                 <TableHead th={"শ্রেণি"} />
                 <TableHead th={"পরিমাণ"} />
-                <TableHead th={"রেট"} cls="hidden lg:table-cell" />
-                <TableHead th={"মূল্য"} cls="hidden lg:table-cell" />
-                <TableHead th={"মোট মূল্য"} cls="hidden lg:table-cell" />
-                <TableHead th={"ছাড়"} cls="hidden lg:table-cell" />
-                <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" />
+                <TableHead th={"রেট"} />
+                <TableHead th={"মূল্য"} />
+                <TableHead th={"মোট মূল্য"} />
+                <TableHead th={"ছাড়"} />
+                <TableHead th={"ভাড়া"} />
                 <TableHead th={"সর্বমোট"} />
-                <TableHead th={"নগদ"} cls="hidden lg:table-cell" />
-                <TableHead th={"বাকি"} cls="hidden lg:table-cell" />
+                <TableHead th={"নগদ"} />
+                <TableHead th={"বাকি"} />
                 <TableHead th={"বাটন"} />
               </tr>
             </thead>
@@ -106,7 +106,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                         {index === 0 && (
                           <>
                             <TableData
-                              td={index + 1}
+                              td={toBanglaNumber(row?.serial)}
                               rowSpan={row?.items?.length}
                             />
                             <TableData
@@ -119,7 +119,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                             />
                             <TableData
                               td={row?.customer?.address}
-                              cls="hidden lg:table-cell"
+
                               rowSpan={row?.items?.length}
                             />
                           </>
@@ -127,10 +127,10 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
 
                         <TableData td={item?.class} />
                         <TableData td={item?.quantity?.toLocaleString()} />
-                        <TableData td={item?.rate} cls="hidden lg:table-cell" />
+                        <TableData td={item?.rate} />
                         <TableData
                           td={`৳ ${item?.price?.toLocaleString()}`}
-                          cls="hidden lg:table-cell"
+
                         />
 
                         {index === 0 && (
@@ -249,7 +249,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
                       key={row?.id}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <TableData td={idx + 1} />
+                      <TableData td={toBanglaNumber(row?.serial)} />
                       <TableData
                         td={row?.chalanType}
                       />
@@ -257,7 +257,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
 
                       <TableData
                         td={row?.customer?.address}
-                        cls="hidden lg:table-cell"
+
                       />
 
                       <TableData td={row.items[0]?.class} />
@@ -270,14 +270,14 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
 
                       <TableData
                         td={toBanglaNumber(row.items[0]?.rate)}
-                        cls="hidden lg:table-cell"
+
                       />
 
                       <TableData
                         td={`৳ ${toBanglaNumber(
                           row.items[0]?.price?.toLocaleString(),
                         )}`}
-                        cls="hidden lg:table-cell"
+
                       />
 
                       <TableData

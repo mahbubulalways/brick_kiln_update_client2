@@ -80,11 +80,14 @@ const ClassWiseSellChart = ({ data }: ClassWiseSellChartProps) => {
                                 dataKey="class"
                                 tickLine={false}
                                 axisLine={false}
+                                interval={0}
+                                height={55}
                                 tick={{
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     fill: "#64748b",
                                 }}
-                                interval={0}
+                                angle={-20}
+                                textAnchor="middle"
                             />
 
                             {/* Quantity */}
@@ -93,9 +96,10 @@ const ClassWiseSellChart = ({ data }: ClassWiseSellChartProps) => {
                                 axisLine={false}
                                 width={45}
                                 tick={{
-                                    fontSize: 11,
+                                    fontSize: 12,
                                     fill: "#64748b",
                                 }}
+                                interval={0}
                                 tickFormatter={(value) =>
                                     Number(value).toLocaleString("bn-BD")
                                 }

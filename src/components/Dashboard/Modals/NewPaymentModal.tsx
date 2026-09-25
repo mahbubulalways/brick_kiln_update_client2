@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import { modifyPayload } from "@/utils/modifyPayload";
 import CustomFilePicker from "@/components/Reusable/CustomImagePicker/CustomFilePicker";
+import { TLedger } from "@/interface/ledger";
 type TCustomModal = {
   isOpen: boolean;
   onClose: () => void;
@@ -34,7 +35,7 @@ type TKhatiyan = {
 const NewPaymentModal = ({ isOpen, onClose }: TCustomModal) => {
   const [mutateAsync, { isLoading }] = useCreatePaymentMutation();
   const [openLedgerModal, setOpenLedgerModal] = useState(false);
-  const [ledger, setLedger] = useState<string>("");
+  const [ledger, setLedger] = useState<TLedger | null>(null);
   const {
     register,
     handleSubmit,
@@ -50,7 +51,11 @@ const NewPaymentModal = ({ isOpen, onClose }: TCustomModal) => {
   useEffect(() => {
     if (ledger) {
       reset({
-        ledger: ledger,
+        ledger: ledger?.name,
+        quantity: ledger?.quantity,
+        rate: ledger?.rate,
+        totalBill: ledger?.salary
+
       });
     }
   }, [ledger, reset]);
@@ -69,12 +74,15 @@ const NewPaymentModal = ({ isOpen, onClose }: TCustomModal) => {
   }, [quantity, rate, cutting, setValue]);
 
   const paymentState = Number(watch("payment") || 0);
+
   useEffect(() => {
     const totalBill = quantity * rate;
     const expectedPayment = totalBill - cutting;
     const difference = paymentState - expectedPayment;
     setValue("paymentDifference", difference);
   }, [quantity, rate, cutting, setValue, paymentState]);
+
+
 
   const onSubmit: SubmitHandler<TKhatiyan> = async (data) => {
     const formdata = modifyPayload(data);
@@ -262,13 +270,13 @@ const NewPaymentModal = ({ isOpen, onClose }: TCustomModal) => {
         // error={errors.file}
         // rules={{ required: "ফাইল আপলোড করুন" }}
         />
-        <div className="flex items-center justify-between pt-5">
-          <div className="text-[14px] border border-gray-300 bg-white hover:border-[#039A63] px-10 py-1.5  text-gray-500 duration-500 hover:text-[#039A63] font-medium rounded cursor-pointer">
+        <div className="flex  w-full gap-2 items-center justify-between pt-5">
+          <div className="text-[14px] w-full border border-gray-300 bg-white hover:border-[#039A63] px-10 py-1.5  text-gray-500 duration-500 hover:text-[#039A63] font-medium rounded cursor-pointer">
             ক্লিয়ার
           </div>
           <button
             disabled={isLoading}
-            className="text-[14px] disabled:cursor-default  bg-[#039A63] px-8 py-1.5 text-gray-100 font-medium rounded cursor-pointer disabled:bg-gray-500"
+            className="text-[14px] w-full disabled:cursor-default  bg-[#039A63] px-8 py-1.5 text-gray-100 font-medium rounded cursor-pointer disabled:bg-gray-500"
           >
             অ্যাড করুন
           </button>

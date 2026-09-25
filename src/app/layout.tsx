@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NextTopLoader from 'nextjs-toploader';
-
-import { Anek_Bangla, Hind_Siliguri } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
+import { Anek_Bangla } from "next/font/google";
 import Providers from "@/components/Providers/Providers";
 import { Toaster } from "sonner";
 import NetworkStatusProvider from "@/components/Dashboard/common/NetworkStatusProvider";
@@ -37,11 +36,22 @@ export default function RootLayout({
             showSpinner={false}
             height={3}
           />
+
           <Providers>
-            {/* <NetworkStatusProvider> */}
-            {children}
-            {/* </NetworkStatusProvider> */}
-            <Toaster />
+            <NetworkStatusProvider>
+              {children}
+            </NetworkStatusProvider>
+
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                classNames: {
+                  toast: `${anekBangla.className} !px-4 !py-2 !text-[15px] !w-fit`,
+                  title: `${anekBangla.className} !text-center`,
+                  description: `${anekBangla.className} !text-center`,
+                },
+              }}
+            />
           </Providers>
         </LayoutGuard>
       </body>

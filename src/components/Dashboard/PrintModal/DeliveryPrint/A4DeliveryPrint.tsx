@@ -380,40 +380,79 @@ export default function A4DeliveryPrint({
 
                     {/* Signatures */}
                     <div
-                        className={`grid grid-cols-3 gap-5 ${compact ? "mt-5" : "mt-8"
+                        className={`grid grid-cols-4 text-center ${compact ? "mt-3 gap-3" : "mt-4 gap-3"
                             }`}
                     >
-                        <div className="text-center">
+                        <div>
                             <div
-                                className={`border-t border-dotted border-[#8C3A22] font-semibold text-[#6E1D14] ${compact
-                                    ? "pt-0.5 text-[7px]"
-                                    : "pt-1.5 text-[9px] sm:text-[11px]"
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
                                     }`}
                             >
-                                কাস্টমারের স্বাক্ষর
-                            </div>
+                                গ্রহীতার স্বাক্ষর
+                            </p>
                         </div>
 
-                        <div className="text-center">
+                        <div>
                             <div
-                                className={`border-t border-dotted border-[#8C3A22] font-semibold text-[#6E1D14] ${compact
-                                    ? "pt-0.5 text-[7px]"
-                                    : "pt-1.5 text-[9px] sm:text-[11px]"
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
                                     }`}
                             >
-                                ড্রাইভারের স্বাক্ষর
-                            </div>
+                                ম্যানেজার
+                            </p>
                         </div>
 
-                        <div className="text-center">
+                        <div>
                             <div
-                                className={`border-t border-dotted border-[#8C3A22] font-semibold text-[#6E1D14] ${compact
-                                    ? "pt-0.5 text-[7px]"
-                                    : "pt-1.5 text-[9px] sm:text-[11px]"
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
                                     }`}
                             >
-                                ম্যানেজারের স্বাক্ষর
-                            </div>
+                                মালিক
+                            </p>
+                        </div>
+
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
+                                অপারেটর
+                            </p>
                         </div>
                     </div>
 

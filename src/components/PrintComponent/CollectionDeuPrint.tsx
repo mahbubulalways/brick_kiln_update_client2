@@ -251,10 +251,10 @@ const CollectionDeuPrint = ({
                 </tbody>
             </table>
 
-            <div className="grid grid-cols-2 mt-14">
+            <div className="grid grid-cols-3 mt-14">
                 {/* Manager */}
                 <div className="text-center">
-                    <div className="border-t border-black w-[85px] mx-auto" />
+                    <div className="border-t border-black w-[150px] mx-auto" />
 
                     <p className="text-[10px] font-semibold mt-1">
                         ম্যানেজার
@@ -262,10 +262,17 @@ const CollectionDeuPrint = ({
                 </div>
 
                 <div className="text-center">
-                    <div className="border-t border-black w-[85px] mx-auto" />
+                    <div className="border-t border-black w-[150px] mx-auto" />
 
                     <p className="text-[10px] font-semibold mt-1">
                         মালিক
+                    </p>
+                </div>
+
+                <div className="text-center">
+                    <div className="border-t border-black w-[150px] mx-auto" />
+                    <p className="text-[10px] font-semibold mt-1">
+                        অপারেটর
                     </p>
                 </div>
             </div>

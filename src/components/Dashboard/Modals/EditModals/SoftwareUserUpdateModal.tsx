@@ -22,7 +22,7 @@ type TCustomModal = {
 type TSoftwareUserForm = {
   name: string;
   username: string;
-  role: "OWNER" | "ADMIN" | "MANAGER";
+  role: "OWNER" | "ADMIN" | "MANAGER" | "OPERATOR";
 };
 
 const SoftwareUserUpdateModal = ({
@@ -67,6 +67,9 @@ const SoftwareUserUpdateModal = ({
     {
       label: "ম্যানেজার",
       value: "MANAGER",
+    }, {
+      label: "অপারেটর",
+      value: "OPERATOR",
     },
   ];
 

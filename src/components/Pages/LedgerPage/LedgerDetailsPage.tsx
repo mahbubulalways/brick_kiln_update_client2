@@ -25,6 +25,10 @@ import LedgerDetailsPrint from "@/components/PrintComponent/LedgerDetailsPrint";
 import { useGetVataInfoQuery } from "@/redux/features/vata.features";
 import CommonPrint, { TCommonPrintRef } from "@/components/Reusable/CommonPrint";
 import CustomPrintButton from "@/components/Reusable/CustomPrintButton";
+import VataHeader from "./VataHeader";
+import LedgerUserInformation from "./LedgerUserInformation";
+import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
+import CustomStatus from "@/components/Reusable/CustomStatus";
 
 const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
     const printRef = useRef<TCommonPrintRef>(null);
@@ -37,7 +41,6 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
         endDate: null,
     });
 
-    const router = useRouter()
     const formatDate = formatDateRange({
         start: filterDate.startDate,
         end: filterDate.endDate
@@ -47,108 +50,27 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
         isLoading,
         isFetching,
         isError,
-        error
     } = useGetAllLedgerDetailsQuery({ id, params, date: formatDate }, { refetchOnMountOrArgChange: true });
     const payments = data?.data?.data?.data as TPaymentResponse[] ?? [];
-
-    const meta = data?.data?.meta as TMetaConfig;
-
-    const totalAdvance = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            if (row?.paymentType === "অগ্রিম পেমেন্ট") {
-                return sum + Number(row?.payment || 0);
-            }
-
-            return sum;
-        }, 0);
-    }, [payments]);
-
-    const totalPayment = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            if (row?.paymentType !== "অগ্রিম পেমেন্ট") {
-                return sum + Number(row?.payment || 0);
-            }
-
-            return sum;
-        }, 0);
-    }, []);
-
-    const totalAdvanceDue = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            if (row?.paymentType === "অগ্রিম পেমেন্ট") {
-                const difference = Number(
-                    row?.paymentDifference || 0
-                );
-
-                return sum + Math.max(difference, 0);
-            }
-
-            return sum;
-        }, 0);
-    }, [payments]);
-
-    const totalDue = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            const totalBill = Number(
-                row?.totalBill || 0
-            );
-
-            const cutting = Number(
-                row?.cutting || 0
-            );
-
-            const payment = Number(
-                row?.payment || 0
-            );
-
-            const due =
-                totalBill -
-                cutting -
-                payment;
-
-            return sum + Math.max(due, 0);
-        }, 0);
-    }, [payments]);
-    const totalQuantity = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            return sum + Number(row?.quantity || 0);
-        }, 0);
-    }, [payments]);
-
-    const totalBill = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            return sum + Number(row?.totalBill || 0);
-        }, 0);
-    }, [payments]);
-
-    const totalPaymentAmount = useMemo(() => {
-        return payments.reduce((sum, row) => {
-            return sum + Number(row?.payment || 0);
-        }, 0);
-    }, [payments]);
-
-    // const totalCutting = useMemo(() => {
-    //     return payments.reduce((sum, row) => {
-    //         return sum + Number(row?.cutting || 0);
-    //     }, 0);
-    // }, [payments]);
-
+    const meta = data?.data?.meta as TMetaConfig
+    const summary = data?.data?.data?.summary;
     return (
-        <div className="bg-white p-2 rounded-md border border-gray-200 shadow-sm">
-            <div className="flex gap-2 items-center justify-between mb-2 flex-col w-full md:flex-row">
 
-                {/* LEFT */}
+        <>
+            <VataHeader vata={vata?.data} />
+            <LedgerUserInformation ledger={data?.data?.data?.ledger} />
+            <div className="bg-white p-2 rounded-t-md border border-gray-200 shadow-sm">
+                <div className="flex gap-2 items-center justify-between mb-2 flex-col w-full md:flex-row">
 
-                <div className="flex items-center gap-2 w-full">
+                    {/* LEFT */}
 
-                    {/* খতিয়ান */}
+                    <div className="flex items-center gap-2 w-full">
+                        <Link href={`/dashboard/ledger`} className="w-full md:w-max">
 
-                    <Link href={`/dashboard/ledger`} className="w-full md:w-max">
+                            <button
 
-                        <button
-
-                            type="button"
-                            className="
+                                type="button"
+                                className="
                             w-full
                 flex-1
                 py-1
@@ -167,20 +89,19 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                 hover:bg-[#028453]
                 transition-all
             "
-                        >
-                            <FileText
-                                size={17}
-                                strokeWidth={2}
-                            />
+                            >
+                                <FileText
+                                    size={17}
+                                    strokeWidth={2}
+                                />
 
-                            খতিয়ান
-                        </button>
-                    </Link>
-                    {/* লেজার নং */}
+                                খতিয়ান
+                            </button>
+                        </Link>
 
-                    <button
-                        type="button"
-                        className="
+                        <button
+                            type="button"
+                            className="
                         w-full
                         md:w-max
 
@@ -200,52 +121,54 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                 hover:bg-[#F0FBF7]
                 transition-all
             "
-                    >
-                        <FileText size={16} />
+                        >
+                            <FileText size={16} />
 
-                        {data?.data?.data?.ledger}
-                    </button>
+                            {data?.data?.data?.ledger?.name}
+                        </button>
 
-                </div>
+                    </div>
 
 
-                <div className="flex w-full items-center justify-between gap-2">
-                    {/* Summary */}
                     <div className="hidden md:block">
                         <div className="flex items-center gap-2">
-                            {/* মোট পেমেন্ট */}
                             <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#B5F1D5] bg-[#E9FFF5] px-3 py-1 text-[14px] font-normal text-[#039A63]">
                                 <span>মোট পেমেন্ট:</span>
-                                <span>৳ {toBanglaNumber(totalPaymentAmount)}</span>
+                                <span>
+                                    ৳ {toBanglaNumber(summary?.totalPaymentAmount ?? 0)}
+                                </span>
                             </div>
 
-                            {/* পরিমাণ */}
                             <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD7A5] bg-[#FFF4E7] px-3 py-1 text-[14px] font-normal text-[#FF8A00]">
                                 <span>পরিমাণ:</span>
-                                <span>{toBanglaNumber(totalQuantity)}</span>
+                                <span>
+                                    {toBanglaNumber(summary?.totalQuantity ?? 0)}
+                                </span>
                             </div>
 
-                            {/* মোট বিল */}
                             <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#B5F1D5] bg-[#E9FFF5] px-3 py-1 text-[14px] font-normal text-[#039A63]">
                                 <span>মোট বিল:</span>
-                                <span>৳ {toBanglaNumber(totalBill)}</span>
+                                <span>
+                                    ৳ {toBanglaNumber(summary?.totalBill ?? 0)}
+                                </span>
                             </div>
 
-                            {/* অগ্রিম */}
                             <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD7A5] bg-[#FFF4E7] px-3 py-1 text-[14px] font-normal text-[#FF8A00]">
                                 <span>অগ্রিম:</span>
-                                <span>৳ {toBanglaNumber(totalAdvance)}</span>
+                                <span>
+                                    ৳ {toBanglaNumber(summary?.totalAdvance ?? 0)}
+                                </span>
                             </div>
 
-                            {/* অগ্রিম বাকি */}
                             <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD1D1] bg-[#FFF0F0] px-3 py-1 text-[14px] font-normal text-[#FF480D]">
                                 <span>অগ্রিম বাকি:</span>
-                                <span>৳ {toBanglaNumber(totalAdvanceDue)}</span>
+                                <span>
+                                    ৳ {toBanglaNumber(summary?.totalAdvanceDue ?? 0)}
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    {/* Date Range */}
                     <div className="w-full md:w-[280px] md:shrink-0">
                         <CustomDateFilter
                             value={filterDate}
@@ -260,7 +183,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                     />
                 </div>
             </div>
-            <div className="overflow-x-auto pt-2">
+            <div className="overflow-x-auto  bg-white">
                 <table className="min-w-full   text-center border-t">
                     <thead className="bg-[#039A63] text-white">
                         <tr>
@@ -280,19 +203,27 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                     <tbody>
 
                         {isLoading || isFetching ? (
-                            <tr>
-                                <td colSpan={11}>
-                                    <CustomLoader cls="h-[30vh]" />
-                                </td>
-                            </tr>
+                            <TableLazyLoading
+                                smallColumns={11}
+                                largeColumns={11}
+                                rows={6}
+                            />
                         ) : isError ? (
                             <tr>
-                                <td colSpan={11} className="py-8">{SERVER_ERROR_MESSAGE}</td>
+                                <td colSpan={11} >
+                                    <CustomStatus
+                                        type="error"
+                                        description={SERVER_ERROR_MESSAGE}
+                                    />
+                                </td>
                             </tr>
                         ) : !payments?.length ? (
                             <tr>
-                                <td colSpan={11} className="py-8 text-gray-600">
-                                    {data?.message}
+                                <td colSpan={11} >
+                                    <CustomStatus
+                                        type="error"
+                                        description={data?.message}
+                                    />
                                 </td>
                             </tr>
                         ) : (payments?.map((row, index) => (
@@ -389,7 +320,9 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                     endDate={filterDate.endDate}
                 />
             </CommonPrint>
-        </div>
+
+        </>
+
     );
 };
 

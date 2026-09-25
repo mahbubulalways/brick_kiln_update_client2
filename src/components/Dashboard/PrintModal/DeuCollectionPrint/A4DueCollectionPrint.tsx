@@ -55,8 +55,8 @@ export default function A4DueCollectionPrint({
                     >
                         <div
                             className={`flex shrink-0 items-center justify-center rounded-lg border-2 border-[#8B3158] bg-[#F8E9EF] font-black leading-none text-[#8B3158] ${compact
-                                    ? "h-8 w-[68px] text-[18px]"
-                                    : "h-11 w-[86px] text-[23px]"
+                                ? "h-8 w-[68px] text-[18px]"
+                                : "h-11 w-[86px] text-[23px]"
                                 }`}
                         >
                             {shortForm}
@@ -72,8 +72,8 @@ export default function A4DueCollectionPrint({
 
                             <h1
                                 className={`font-black leading-none text-[#8B3158] ${compact
-                                        ? "mt-0.5 text-[20px]"
-                                        : "mt-0.5 text-[27px] sm:text-[32px]"
+                                    ? "mt-0.5 text-[20px]"
+                                    : "mt-0.5 text-[27px] sm:text-[32px]"
                                     }`}
                             >
                                 জমা রশিদ
@@ -82,8 +82,8 @@ export default function A4DueCollectionPrint({
 
                         <div
                             className={`shrink-0 text-right leading-tight ${compact
-                                    ? "text-[8px]"
-                                    : "text-[10px] sm:text-[12px]"
+                                ? "text-[8px]"
+                                : "text-[10px] sm:text-[12px]"
                                 }`}
                         >
                             <p className="font-bold text-[#8B3158]">
@@ -99,8 +99,8 @@ export default function A4DueCollectionPrint({
                     <div className="text-center">
                         <h2
                             className={`font-black leading-none tracking-tight text-[#8B3158] ${compact
-                                    ? "text-[23px]"
-                                    : "text-[30px] sm:text-[40px]"
+                                ? "text-[23px]"
+                                : "text-[30px] sm:text-[40px]"
                                 }`}
                         >
                             {vataInformation?.nameBangla}
@@ -108,8 +108,8 @@ export default function A4DueCollectionPrint({
 
                         <p
                             className={`font-medium text-[#8B3158] ${compact
-                                    ? "mt-1 text-[8px]"
-                                    : "mt-1 text-[9px] sm:text-[12px]"
+                                ? "mt-1 text-[8px]"
+                                : "mt-1 text-[9px] sm:text-[12px]"
                                 }`}
                         >
                             {vataInformation?.shortDescription}
@@ -118,8 +118,8 @@ export default function A4DueCollectionPrint({
 
                     <div
                         className={`mt-2 rounded-md bg-[#8B3158] text-center font-semibold leading-tight text-white ${compact
-                                ? "px-3 py-1.5 text-[8px]"
-                                : "px-3 py-2 text-[9px] sm:text-[12px]"
+                            ? "px-3 py-1.5 text-[8px]"
+                            : "px-3 py-2 text-[9px] sm:text-[12px]"
                             }`}
                     >
                         {vataInformation?.additionalAddress}
@@ -134,8 +134,8 @@ export default function A4DueCollectionPrint({
 
                     <div
                         className={`flex flex-wrap items-center justify-center text-center font-semibold text-[#8B3158] ${compact
-                                ? "mt-1.5 gap-x-4 gap-y-0.5 text-[8px]"
-                                : "mt-2 gap-x-5 gap-y-1 text-[9px] sm:text-[12px]"
+                            ? "mt-1.5 gap-x-4 gap-y-0.5 text-[8px]"
+                            : "mt-2 gap-x-5 gap-y-1 text-[9px] sm:text-[12px]"
                             }`}
                     >
                         {vataInformation?.challanPersonOneName && (
@@ -162,8 +162,8 @@ export default function A4DueCollectionPrint({
 
                     <div
                         className={`mt-2 flex items-center justify-between gap-4 border-y border-[#8B3158]/30 font-semibold ${compact
-                                ? "py-1 text-[8px]"
-                                : "py-1.5 text-[10px] sm:text-[12px]"
+                            ? "py-1 text-[8px]"
+                            : "py-1.5 text-[10px] sm:text-[12px]"
                             }`}
                     >
                         <div className="flex items-center gap-1.5">
@@ -202,8 +202,8 @@ export default function A4DueCollectionPrint({
                     >
                         <div
                             className={`mb-1.5 font-bold text-[#8B3158] ${compact
-                                    ? "text-[8px]"
-                                    : "text-[10px] sm:text-[12px]"
+                                ? "text-[8px]"
+                                : "text-[10px] sm:text-[12px]"
                                 }`}
                         >
                             গ্রাহকের তথ্য
@@ -211,8 +211,8 @@ export default function A4DueCollectionPrint({
 
                         <div
                             className={`grid grid-cols-[48px_10px_1fr] items-end ${compact
-                                    ? "gap-y-1 text-[8px]"
-                                    : "gap-y-1.5 text-[10px] sm:text-[12px]"
+                                ? "gap-y-1 text-[8px]"
+                                : "gap-y-1.5 text-[10px] sm:text-[12px]"
                                 }`}
                         >
                             <span className="font-bold">নাম</span>
@@ -255,8 +255,8 @@ export default function A4DueCollectionPrint({
                         >
                             <div
                                 className={`border-b border-gray-200 pb-1 font-bold text-[#8B3158] ${compact
-                                        ? "text-[8px]"
-                                        : "text-[11px] sm:text-[12px]"
+                                    ? "text-[8px]"
+                                    : "text-[11px] sm:text-[12px]"
                                     }`}
                             >
                                 লেনদেনের তথ্য
@@ -264,8 +264,8 @@ export default function A4DueCollectionPrint({
 
                             <div
                                 className={`space-y-2 ${compact
-                                        ? "mt-2 text-[8px]"
-                                        : "mt-3 text-[10px] sm:text-[11px]"
+                                    ? "mt-2 text-[8px]"
+                                    : "mt-3 text-[10px] sm:text-[11px]"
                                     }`}
                             >
                                 <div className="flex items-center justify-between gap-2">
@@ -307,8 +307,8 @@ export default function A4DueCollectionPrint({
                         >
                             <div
                                 className={`border-b border-[#8B3158]/20 pb-1 font-bold text-[#8B3158] ${compact
-                                        ? "text-[8px]"
-                                        : "text-[11px] sm:text-[12px]"
+                                    ? "text-[8px]"
+                                    : "text-[11px] sm:text-[12px]"
                                     }`}
                             >
                                 হিসাবের বিবরণ
@@ -316,8 +316,8 @@ export default function A4DueCollectionPrint({
 
                             <div
                                 className={`space-y-2 ${compact
-                                        ? "mt-2 text-[8px]"
-                                        : "mt-3 text-[10px] sm:text-[11px]"
+                                    ? "mt-2 text-[8px]"
+                                    : "mt-3 text-[10px] sm:text-[11px]"
                                     }`}
                             >
                                 <div className="flex items-center justify-between gap-2">
@@ -360,14 +360,14 @@ export default function A4DueCollectionPrint({
 
                     <div
                         className={`flex items-center justify-between rounded-lg border border-[#8B3158]/30 bg-[#F8E9EF] ${compact
-                                ? "mt-2 px-3 py-1.5"
-                                : "mt-3 px-4 py-2"
+                            ? "mt-2 px-3 py-1.5"
+                            : "mt-3 px-4 py-2"
                             }`}
                     >
                         <span
                             className={`font-bold text-[#8B3158] ${compact
-                                    ? "text-[8px]"
-                                    : "text-[10px] sm:text-[12px]"
+                                ? "text-[8px]"
+                                : "text-[10px] sm:text-[12px]"
                                 }`}
                         >
                             এই রশিদে জমা
@@ -375,8 +375,8 @@ export default function A4DueCollectionPrint({
 
                         <span
                             className={`font-black text-[#8B3158] ${compact
-                                    ? "text-[13px]"
-                                    : "text-[17px] sm:text-[20px]"
+                                ? "text-[13px]"
+                                : "text-[17px] sm:text-[20px]"
                                 }`}
                         >
                             ৳{" "}
@@ -387,28 +387,78 @@ export default function A4DueCollectionPrint({
                     </div>
 
                     <div
-                        className={`grid grid-cols-2 gap-10 ${compact ? "mt-6" : "mt-9"
+                        className={`grid grid-cols-4 text-center ${compact ? "mt-3 gap-3" : "mt-4 gap-3"
                             }`}
                     >
-                        <div className="text-center">
-                            <div className="border-t border-dotted border-gray-700" />
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
 
                             <p
-                                className={`mt-1 font-semibold text-gray-700 ${compact ? "text-[7px]" : "text-[10px]"
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
                                     }`}
                             >
-                                গ্রাহকের স্বাক্ষর
+                                প্রদানকারীর স্বাক্ষর
                             </p>
                         </div>
 
-                        <div className="text-center">
-                            <div className="border-t border-dotted border-gray-700" />
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
 
                             <p
-                                className={`mt-1 font-semibold text-gray-700 ${compact ? "text-[7px]" : "text-[10px]"
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
                                     }`}
                             >
-                                ম্যানেজারের স্বাক্ষর
+                                ম্যানেজার
+                            </p>
+                        </div>
+
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
+                                মালিক
+                            </p>
+                        </div>
+
+                        <div>
+                            <div
+                                className={`mx-auto border-b border-dotted border-[#555] ${compact
+                                    ? "h-6 w-[100px]"
+                                    : "h-8 w-[120px] sm:h-10 sm:w-[140px]"
+                                    }`}
+                            />
+
+                            <p
+                                className={`font-semibold text-[#555] ${compact
+                                    ? "mt-0.5 text-[7px]"
+                                    : "mt-1 text-[8px] sm:text-[11px]"
+                                    }`}
+                            >
+                                অপারেটর
                             </p>
                         </div>
                     </div>
@@ -427,8 +477,8 @@ export default function A4DueCollectionPrint({
 
                     <div
                         className={`text-center font-black tracking-wide text-[#8B3158] ${compact
-                                ? "mt-1 px-2 py-0.5 text-[8px]"
-                                : "mt-1 px-2.5 py-1 text-[10px]"
+                            ? "mt-1 px-2 py-0.5 text-[8px]"
+                            : "mt-1 px-2.5 py-1 text-[10px]"
                             }`}
                     >
                         {isOffice ? "অফিস কপি" : "কাস্টমার কপি"}

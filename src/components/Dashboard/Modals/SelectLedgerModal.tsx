@@ -20,8 +20,8 @@ import CustomStatus from "@/components/Reusable/CustomStatus";
 type TCustomModal = {
   isOpen: boolean;
   onClose: () => void;
-  ledger: string;
-  setLedger: Dispatch<SetStateAction<string>>;
+  ledger: TLedger | null;
+  setLedger: Dispatch<SetStateAction<TLedger | null>>;
 };
 
 const SelectLedgerModal = ({ isOpen, onClose, setLedger }: TCustomModal) => {
@@ -58,7 +58,7 @@ const SelectLedgerModal = ({ isOpen, onClose, setLedger }: TCustomModal) => {
                       <Card
                         onClick={() => {
                           if (!hasChildren) {
-                            setLedger(ledger.name);
+                            setLedger(ledger);
                             onClose();
                           }
                         }}
@@ -76,7 +76,7 @@ const SelectLedgerModal = ({ isOpen, onClose, setLedger }: TCustomModal) => {
                           <div
                             key={child.id}
                             onClick={() => {
-                              setLedger(child.name);
+                              setLedger(child);
                               onClose();
                             }}
                             className="cursor-pointer rounded-md p-1 hover:bg-gray-100"
@@ -93,13 +93,12 @@ const SelectLedgerModal = ({ isOpen, onClose, setLedger }: TCustomModal) => {
               })}
             </div>
           </ScrollArea>
-         
-            <CustomNewButton title="+ নতুন খতিয়ান অ্যাড" onClick={() => setOpenNewModal(true)}/>
-        
+
+          <CustomNewButton title="+ নতুন খতিয়ান অ্যাড" onClick={() => setOpenNewModal(true)} />
+
 
           {openNewModal && (
             <KhotiyanModal
-            showRateQuantity={false}
               isOpen={openNewModal}
               onClose={() => setOpenNewModal(false)}
             />

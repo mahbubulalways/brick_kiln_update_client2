@@ -92,14 +92,20 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
     const rateFromClass =
       classAndRate.find(
         (cls: TClassAndRate) => cls.className === selectedClassName,
-      )?.rate || 0;
+      )
 
     const quantity = Number(item.quantity) || 0;
-    const price = rateFromClass * quantity;
+    let price = 0;
 
     // Update rate if it's different
     if (Number(item.rate) !== rateFromClass) {
-      setValue(`invoiceItems.items.${index}.rate`, rateFromClass);
+      if (chalanType === "অগ্রীম চালান আনসিজন") {
+        setValue(`invoiceItems.items.${index}.rate`, rateFromClass?.advanceRate || 0);
+        price = rateFromClass?.advanceRate * quantity
+      } else {
+        setValue(`invoiceItems.items.${index}.rate`, rateFromClass?.rate || 0);
+        price = rateFromClass?.rate * quantity
+      }
     }
 
     // Update price if it's different
@@ -122,7 +128,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
     setValue("invoice.productPrice", Number(totalProductPrice.toFixed(2)));
     setValue("invoice.totalPrice", Number(totalPrice.toFixed(2)));
     setValue("invoice.due", Number(due.toFixed(2)));
-  }, [due, setValue, totalPrice, totalProductPrice]);
+  }, [due, setValue, totalPrice, totalProductPrice, chalanType]);
 
   // MIN MAX DATE OF CHALLANS
   const deliverySeason = watch("invoice.deliverySeason");
@@ -365,7 +371,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                     ]}
                   />
 
-                  {chalanType === "অগ্রীম চালান সিজন" && (
+                  {chalanType === "অগ্রীম চালান আনসিজন" && (
                     <CustomSelect
                       name="invoice.deliverySeason"
                       label="ডেলিভারি সিজন"
@@ -400,7 +406,10 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                     maxDate={maxDate}
                     error={errors.invoice?.deliveryDate}
                     rules={{
-                      required: "ডেলিভারি তারিখ নির্বাচন করুন",
+                      required:
+                        chalanType === "অগ্রীম চালান আনসিজন"
+                          ? false
+                          : "ডেলিভারি তারিখ নির্বাচন করুন",
                     }}
                   />
 

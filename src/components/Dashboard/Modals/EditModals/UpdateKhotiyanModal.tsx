@@ -7,6 +7,7 @@ import CustomInput from "@/components/Reusable/CustomInput";
 import CustomModal from "@/components/Reusable/CustomModal";
 import CustomSelect from "@/components/Reusable/CustomSelect";
 import CustomStatus from "@/components/Reusable/CustomStatus";
+import CustomDatePicker from "@/components/Reusable/CustomDatePicker";
 
 import { showToast } from "@/components/Toast/CustomToast";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
@@ -18,7 +19,6 @@ import {
 } from "@/redux/features/ledger.features";
 
 import formatLabelValuePair from "@/utils/formatLabelValuePair";
-import CustomDatePicker from "@/components/Reusable/CustomDatePicker";
 
 type TUpdateKhotiyanModal = {
   isOpen: boolean;
@@ -29,11 +29,15 @@ type TUpdateKhotiyanModal = {
 type TUpdateKhotiyan = {
   serial: string;
   name: string;
-  parentId: number;
+  parentId: string | null;
   rate: number;
   quantity: number;
-  phoneNumber: string,
-  startDate: string
+  phoneNumber: string;
+  startDate: string;
+  salary: number;
+  weeklyFood: number;
+  openingBalance: number;
+  openingBalanceType: string | null;
 };
 
 const UpdateKhotiyanModal = ({
@@ -47,6 +51,7 @@ const UpdateKhotiyanModal = ({
     isError: singleError,
   } = useGetSingleLedgerQuery(ledgerId!, {
     skip: !ledgerId || !isOpen,
+    refetchOnMountOrArgChange: true
   });
 
   const {
@@ -64,13 +69,7 @@ const UpdateKhotiyanModal = ({
     control,
     reset,
     formState: { errors },
-  } = useForm<TUpdateKhotiyan>({
-
-  });
-
-  // =========================
-  // GROUP OPTIONS
-  // =========================
+  } = useForm<TUpdateKhotiyan>();
 
   const labelValuePairArray = formatLabelValuePair({
     data: optionData?.data,
@@ -78,29 +77,25 @@ const UpdateKhotiyanModal = ({
     value: "id",
   });
 
-  // =========================
-  // SET DEFAULT VALUE
-  // =========================
-
   useEffect(() => {
     if (singleData?.data) {
       const ledger = singleData.data;
-      console.log(ledger)
+
       reset({
         serial: String(ledger.serial ?? ""),
         name: ledger.name ?? "",
-        parentId: ledger.parentId || null,
+        parentId: ledger.parentId ?? null,
         rate: Number(ledger.rate ?? 0),
         quantity: Number(ledger.quantity ?? 0),
-        startDate: ledger.startDate,
-        phoneNumber: ledger.phoneNumber,
+        phoneNumber: ledger.phoneNumber ?? "",
+        startDate: ledger.startDate ?? "",
+        salary: Number(ledger.salary ?? 0),
+        weeklyFood: Number(ledger.weeklyFood ?? 0),
+        openingBalance: Number(ledger.openingBalance ?? 0),
+        openingBalanceType: ledger.openingBalanceType ?? null,
       });
     }
   }, [singleData, reset]);
-
-  // =========================
-  // SUBMIT UPDATE
-  // =========================
 
   const onSubmit: SubmitHandler<TUpdateKhotiyan> = async (formData) => {
     if (!ledgerId) return;
@@ -110,6 +105,10 @@ const UpdateKhotiyanModal = ({
       parentId: formData.parentId || null,
       rate: Number(formData.rate || 0),
       quantity: Number(formData.quantity || 0),
+      salary: Number(formData.salary || 0),
+      weeklyFood: Number(formData.weeklyFood || 0),
+      openingBalance: Number(formData.openingBalance || 0),
+      openingBalanceType: formData.openingBalanceType || null,
     };
 
     try {
@@ -133,24 +132,25 @@ const UpdateKhotiyanModal = ({
       }
     } catch (error: any) {
       showToast({
-        title:
-          error?.data?.message || SERVER_ERROR_MESSAGE,
+        title: error?.data?.message || SERVER_ERROR_MESSAGE,
         type: "error",
       });
     }
   };
 
-  // =========================
-  // CLOSE
-  // =========================
-
   const handleClose = () => {
     reset({
       serial: "",
       name: "",
-      parentId: 0,
+      parentId: null,
       rate: 0,
       quantity: 0,
+      phoneNumber: "",
+      startDate: "",
+      salary: 0,
+      weeklyFood: 0,
+      openingBalance: 0,
+      openingBalanceType: null,
     });
 
     onClose();
@@ -167,20 +167,12 @@ const UpdateKhotiyanModal = ({
       width="xl"
     >
       {isLoading ? (
-        <CustomStatus
-          type="loading"
-          fullScreen={false}
-        />
+        <CustomStatus type="loading" fullScreen={false} />
       ) : isError ? (
-        <CustomStatus
-          type="error"
-          fullScreen={false}
-        />
+        <CustomStatus type="error" fullScreen={false} />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-2 gap-4">
-
-            {/* Serial */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <CustomInput
               name="serial"
               label="সিরিয়াল"
@@ -191,7 +183,6 @@ const UpdateKhotiyanModal = ({
               error={errors.serial}
             />
 
-            {/* Name */}
             <CustomInput
               name="name"
               label="খতিয়ানের নাম"
@@ -204,22 +195,6 @@ const UpdateKhotiyanModal = ({
               }}
             />
 
-            <CustomInput
-              name="phoneNumber"
-              label="ফোন নম্বর"
-              placeholder="ফোন নম্বর"
-              register={register}
-              type="number"
-            />
-            <CustomDatePicker
-              control={control}
-              name="startDate"
-              label="শুরুর তারিখ"
-              disablePastDates
-              placeholder="শুরুর তারিখ"
-            />
-
-            {/* Group */}
             <CustomSelect
               name="parentId"
               label="খতিয়ানের গ্রুপ"
@@ -228,32 +203,85 @@ const UpdateKhotiyanModal = ({
               options={labelValuePairArray}
             />
 
-            {/* Rate & Quantity */}
-            <div className="grid grid-cols-2 gap-2">
-              <CustomInput
-                name="rate"
-                label="খতিয়ানের রেট"
-                placeholder="খতিয়ানের রেট"
-                register={register}
-                type="number"
-              />
+            <CustomInput
+              name="phoneNumber"
+              label="ফোন নম্বর"
+              placeholder="ফোন নম্বর"
+              register={register}
+              type="number"
+            />
 
-              <CustomInput
-                name="quantity"
-                label="পরিমাণ ভাজক"
-                placeholder="পরিমাণ ভাজক"
-                register={register}
-                type="number"
-              />
-            </div>
+            <CustomDatePicker
+              control={control}
+              name="startDate"
+              label="শুরুর তারিখ"
+              disablePastDates
+              placeholder="শুরুর তারিখ"
+            />
+
+            <CustomInput
+              name="rate"
+              label="খতিয়ানের রেট"
+              placeholder="খতিয়ানের রেট"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="quantity"
+              label="পরিমাণ"
+              placeholder="পরিমাণ ভাজক"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="salary"
+              label="বেতন"
+              placeholder="বেতনের পরিমাণ"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="weeklyFood"
+              label="সাপ্তাহিক খোরাকি"
+              placeholder="সাপ্তাহিক খোরাকির পরিমাণ"
+              register={register}
+              type="number"
+            />
+
+            <CustomInput
+              name="openingBalance"
+              label="ওপেনিং ব্যালেন্স"
+              placeholder="ওপেনিং ব্যালেন্স লিখুন"
+              register={register}
+              type="number"
+            />
+
+            <CustomSelect
+              name="openingBalanceType"
+              label="ওপেনিং ব্যালেন্সের ধরন"
+              placeholder="ওপেনিং ব্যালেন্সের ধরন নির্বাচন করুন"
+              control={control}
+              options={[
+                {
+                  label: "পাওনা",
+                  value: "পাওনা",
+                },
+                {
+                  label: "দেনা",
+                  value: "দেনা",
+                },
+              ]}
+            />
           </div>
 
-          {/* Buttons */}
-          <div className="flex items-center justify-between pt-5">
+          <div className="flex w-full items-center justify-between gap-2 pt-5">
             <button
               type="button"
               onClick={handleClose}
-              className="text-[14px] border border-gray-300 bg-white hover:border-[#039A63] px-10 py-1.5 text-gray-500 duration-500 hover:text-[#039A63] font-medium rounded cursor-pointer"
+              className="w-full cursor-pointer rounded border border-gray-300 bg-white px-10 py-1.5 text-[14px] font-medium text-gray-500 duration-500 hover:border-[#039A63] hover:text-[#039A63]"
             >
               বাতিল
             </button>
@@ -261,7 +289,7 @@ const UpdateKhotiyanModal = ({
             <button
               type="submit"
               disabled={updateLoading}
-              className="text-[14px] bg-[#039A63] px-8 py-1.5 text-gray-100 font-medium rounded cursor-pointer disabled:bg-gray-500"
+              className="w-full cursor-pointer rounded bg-[#039A63] px-8 py-1.5 text-[14px] font-medium text-gray-100 disabled:bg-gray-500"
             >
               {updateLoading ? "আপডেট হচ্ছে..." : "আপডেট করুন"}
             </button>
