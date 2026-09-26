@@ -5,7 +5,6 @@ const approvalApi = baseApi.injectEndpoints({
   overrideExisting: true,
 
   endpoints: (builder) => ({
-    // // GET ALL
     getAllApprovalRequest: builder.query({
       query: (query: TQuery) => ({
         url: "/approval/all",
@@ -15,37 +14,22 @@ const approvalApi = baseApi.injectEndpoints({
           limit: query.limit,
         },
       }),
-      providesTags: ["UNLOAD", "SEASON"],
-    }),
-
-    // GET REPORT
-    getAllUnloadReport: builder.query({
-      query: () => ({
-        url: "/unload/report",
-        method: "GET",
-      }),
-      providesTags: ["UNLOAD", "SEASON"],
+      providesTags: ["APPROVAL"],
     }),
 
     // CREATE UNLOAD INFO
-    createUnloadInfo: builder.mutation({
+    changeApprovalStatus: builder.mutation({
       query: (payload) => ({
-        url: "/unload/create",
-        method: "POST",
-        body: payload,
+        url: `/approval/update-status/${payload.id}`,
+        method: "PATCH",
+        body: payload.data,
       }),
-      invalidatesTags: ["UNLOAD", "STOCK_BOOK"],
-    }),
-
-    // DELETE LOAD INFO
-    deleteUnloadInfo: builder.mutation({
-      query: (id) => ({
-        url: `/unload/delete/${id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["UNLOAD"],
+      invalidatesTags: ["APPROVAL"],
     }),
   }),
 });
 
-export const { useGetAllApprovalRequestQuery } = approvalApi;
+export const {
+  useGetAllApprovalRequestQuery,
+  useChangeApprovalStatusMutation,
+} = approvalApi;

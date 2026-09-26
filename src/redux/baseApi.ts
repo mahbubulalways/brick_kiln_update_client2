@@ -52,6 +52,8 @@ export const baseApi = createApi({
     "SEND_SMS",
     "NOTE",
     "NOTIFICATION",
+    "APPROVAL",
+    "ACTIVITY_LOG",
     "FAQ", //both
     "ABOUT_US", //both
     "SOFTWARE_PAYMENT", // both\

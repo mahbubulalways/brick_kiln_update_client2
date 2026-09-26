@@ -14,6 +14,8 @@ import { ProfileMenu } from "../NavbarOptions/Profile";
 
 import { useTitleStore } from "@/zustand/store/titleStore";
 import { useGetUnreadNotificationsNumberQuery } from "@/redux/features/notification.features";
+import { getUserInformation } from "@/service/auth.services";
+import { ClipboardCheck, ClipboardList, History } from "lucide-react";
 
 interface DashboardNavbarProps {
     onToggleDrawer?: () => void;
@@ -39,6 +41,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
 
     if (!mounted) return null;
 
+    const userRole = getUserInformation().role
     return (
         <header className="sticky top-0 isolate z-50 w-full bg-white">
             <div className="relative flex w-full items-center justify-between bg-white px-5 py-2 shadow-sm">
@@ -64,6 +67,12 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                 <div className="flex items-center gap-2">
                     <Seasons />
 
+
+                    <NavbarIcon
+                        Icon={History}
+                        path="/dashboard/activity-log"
+                        title="অ্যাক্টিভিটি লগ"
+                    />
                     <div className="hidden lg:block">
                         <div className="flex items-center gap-2">
                             {/* Notification */}
@@ -80,6 +89,16 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                                     </span>
                                 )}
                             </div>
+
+                            {
+                                (userRole === "ADMIN" || userRole === "OWNER") && (
+                                    <NavbarIcon
+                                        Icon={ClipboardCheck}
+                                        path="/dashboard/approval"
+                                        title="অনুমোদন"
+                                    />
+                                )
+                            }
 
                             <NavbarIcon
                                 Icon={IoDocumentTextOutline}

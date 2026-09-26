@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export type TActivityAction = "CREATE" | "UPDATE" | "DELETE";
 
 export type TApprovalAction = "UPDATE" | "DELETE";
@@ -32,4 +34,5 @@ export interface IApprovalRequest {
   reviewedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  requestedBy: IUser;
 }

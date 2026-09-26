@@ -59,136 +59,167 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
         <>
             <VataHeader vata={vata?.data} />
             <LedgerUserInformation ledger={data?.data?.data?.ledger} />
-            <div className="bg-white p-2 rounded-t-md border border-gray-200 shadow-sm">
-                <div className="flex gap-2 items-center justify-between mb-2 flex-col w-full md:flex-row">
+            <div className="bg-white border border-gray-200 rounded-t-md shadow-sm p-2">
+                <div className="flex flex-col gap-2">
 
-                    {/* LEFT */}
+                    {/* TOP ROW */}
+                    <div className="flex flex-col md:flex-row md:items-center gap-2">
 
-                    <div className="flex items-center gap-2 w-full">
-                        {/* <Link href={`/dashboard/ledger`} className="w-full md:w-max">
+                        {/* LEFT */}
+                        <div className="flex items-center gap-2 w-full md:w-auto md:flex-1">
+
+                            <Link
+                                href="/dashboard/ledger"
+                                className="w-full md:w-auto"
+                            >
+                                <button
+                                    type="button"
+                                    className="
+                            w-full
+                            lg:w-max
+                            h-[34px]
+                            px-4
+                            rounded
+                            bg-[#039A63]
+                            text-white
+                            flex
+                            items-center
+                            justify-center
+                            gap-1.5
+                            text-[14px]
+                            font-normal
+                            shadow-sm
+                            hover:bg-[#028453]
+                            transition-colors
+                            cursor-pointer
+                            whitespace-nowrap
+                            flex-1
+                        "
+                                >
+                                    <FileText size={16} strokeWidth={2} />
+                                    খতিয়ান
+                                </button>
+                            </Link>
 
                             <button
-
                                 type="button"
                                 className="
-                            w-full
-                flex-1
-                py-1.5
-                cursor-pointer
-                px-4
-                rounded
-                bg-[#039A63]
-                text-white
-                flex
-                items-center
-                justify-center
-                gap-2
-                text-[14px]
-                font-normal
-                shadow-sm
-                hover:bg-[#028453]
-                transition-all
-            "
-                            >
-                                <FileText
-                                    size={17}
-                                    strokeWidth={2}
-                                />
-
-                                খতিয়ান
-                            </button>
-                        </Link> */}
-
-                        <button
-                            type="button"
-                            className="
                         w-full
-                        md:w-max
+                        lg:w-max
+                        h-[34px]
+                        px-4
+                        rounded
+                        border
+                        border-[#039A63]
+                        bg-[#F7FFFC]
+                        text-[#039A63]
+                        flex
+                        items-center
+                        justify-center
+                        gap-1.5
+                        text-[14px]
+                        font-normal
+                        hover:bg-[#E9FFF5]
+                        transition-colors
+                        cursor-pointer
+                        truncate
 
-                px-4
-                py-1
-                rounded
-                border
-                border-[#039A63]
-                bg-white
-                text-[#039A63]
-                flex
-                flex-wrap
-                items-center
-                justify-center
-                gap-2
-                text-[14px]
-                font-normal
-                hover:bg-[#F0FBF7]
-                transition-all
-            "
-                        >
-                            <FileText size={16} />
+                    "
+                            >
+                                <FileText size={16} strokeWidth={2} />
 
-                            {data?.data?.data?.ledger?.name}
-                        </button>
-
-                    </div>
-
-
-                    <div className="hidden md:block">
-                        <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#B5F1D5] bg-[#E9FFF5] px-3 py-1 text-[14px] font-normal text-[#039A63]">
-                                <span>মোট পেমেন্ট:</span>
-                                <span>
-                                    ৳ {toBanglaNumber(summary?.totalPaymentAmount ?? 0)}
+                                <span className="">
+                                    {data?.data?.data?.ledger?.name}
                                 </span>
-                            </div>
-                            {/* <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD1D1] bg-[#fbfff0] px-3 py-1 text-[14px] font-normal text-[#290dff]">
-                                <span>বাকি পেমেন্ট:</span>
-                                <span>
-                                    ৳ {toBanglaNumber(summary?.totalLoanPayment ?? 0)}
-                                </span>
-                            </div> */}
-                            <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD7A5] bg-[#FFF4E7] px-3 py-1 text-[14px] font-normal text-[#FF8A00]">
-                                <span>পরিমাণ:</span>
-                                <span>
-                                    {toBanglaNumber(summary?.totalQuantity ?? 0)}
-                                </span>
+                            </button>
+
+                        </div>
+
+                        {/* FILTER + PRINT */}
+                        <div className="flex items-center gap-2 w-full md:w-auto">
+
+                            <div className="flex-1 md:w-[250px]">
+                                <CustomDateFilter
+                                    value={filterDate}
+                                    onChange={setDateFiter}
+                                    placeholder="তারিখ ফিল্টার করুন"
+                                    className="w-full"
+                                />
                             </div>
 
-                            <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#B5F1D5] bg-[#E9FFF5] px-3 py-1 text-[14px] font-normal text-[#039A63]">
-                                <span>মোট বিল:</span>
-                                <span>
-                                    ৳ {toBanglaNumber(summary?.totalBill ?? 0)}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD7A5] bg-[#FFF4E7] px-3 py-1 text-[14px] font-normal text-[#FF8A00]">
-                                <span>অগ্রিম:</span>
-                                <span>
-                                    ৳ {toBanglaNumber(summary?.totalAdvance ?? 0)}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD1D1] bg-[#FFF0F0] px-3 py-1 text-[14px] font-normal text-[#FF480D]">
-                                <span>অগ্রিম বাকি:</span>
-                                <span>
-                                    ৳ {toBanglaNumber(summary?.totalAdvanceDue ?? 0)}
-                                </span>
-                            </div>
+                            <CustomPrintButton
+                                onClick={() => printRef.current?.print()}
+                                className="shrink-0 w-max"
+                            />
 
                         </div>
                     </div>
 
-                    <div className="w-full md:w-[280px] md:shrink-0">
-                        <CustomDateFilter
-                            value={filterDate}
-                            onChange={setDateFiter}
-                            placeholder="তারিখ ফিল্টার করুন"
-                            className="w-full lg:w-auto"
-                        />
+                    {/* SUMMARY */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5">
+
+                        {/* মোট পেমেন্ট */}
+                        <div className="flex items-center justify-between gap-2 rounded border border-[#B5F1D5] bg-[#E9FFF5] px-2.5 py-1.5">
+                            <span className="text-[13px] text-gray-600 whitespace-nowrap">
+                                মোট পেমেন্ট
+                            </span>
+                            <span className="text-[13px] font-medium text-[#039A63] whitespace-nowrap">
+                                ৳ {toBanglaNumber(summary?.totalPaymentAmount ?? 0)}
+                            </span>
+                        </div>
+
+                        {/* বাকি পেমেন্ট */}
+                        <div className="flex items-center justify-between gap-2 rounded border border-[#D8D2FF] bg-[#F5F3FF] px-2.5 py-1.5">
+                            <span className="text-[13px] text-gray-600 whitespace-nowrap">
+                                বাকি পেমেন্ট
+                            </span>
+                            <span className="text-[13px] font-medium text-[#4B35E8] whitespace-nowrap">
+                                ৳ {toBanglaNumber(summary?.totalLoanPayment ?? 0)}
+                            </span>
+                        </div>
+
+                        {/* পরিমাণ */}
+                        <div className="flex items-center justify-between gap-2 rounded border border-[#FFD7A5] bg-[#FFF4E7] px-2.5 py-1.5">
+                            <span className="text-[13px] text-gray-600 whitespace-nowrap">
+                                পরিমাণ
+                            </span>
+                            <span className="text-[13px] font-medium text-[#FF8A00] whitespace-nowrap">
+                                {toBanglaNumber(summary?.totalQuantity ?? 0)}
+                            </span>
+                        </div>
+
+                        {/* মোট বিল */}
+                        <div className="flex items-center justify-between gap-2 rounded border border-[#B5F1D5] bg-[#E9FFF5] px-2.5 py-1.5">
+                            <span className="text-[13px] text-gray-600 whitespace-nowrap">
+                                মোট বিল
+                            </span>
+                            <span className="text-[13px] font-medium text-[#039A63] whitespace-nowrap">
+                                ৳ {toBanglaNumber(summary?.totalBill ?? 0)}
+                            </span>
+                        </div>
+
+                        {/* অগ্রিম */}
+                        <div className="flex items-center justify-between gap-2 rounded border border-[#FFD7A5] bg-[#FFF4E7] px-2.5 py-1.5">
+                            <span className="text-[13px] text-gray-600 whitespace-nowrap">
+                                অগ্রিম
+                            </span>
+                            <span className="text-[13px] font-medium text-[#FF8A00] whitespace-nowrap">
+                                ৳ {toBanglaNumber(summary?.totalAdvance ?? 0)}
+                            </span>
+                        </div>
+
+                        {/* অগ্রিম বাকি */}
+                        <div className="flex items-center justify-between gap-2 rounded border border-[#FFD1D1] bg-[#FFF0F0] px-2.5 py-1.5">
+                            <span className="text-[13px] text-gray-600 whitespace-nowrap">
+                                অগ্রিম বাকি
+                            </span>
+                            <span className="text-[13px] font-medium text-[#FF480D] whitespace-nowrap">
+                                ৳ {toBanglaNumber(summary?.totalAdvanceDue ?? 0)}
+                            </span>
+                        </div>
+
                     </div>
 
-                    <CustomPrintButton
-                        onClick={() => printRef.current?.print()}
-                        className="shrink-0 w-max"
-                    />
                 </div>
             </div>
             <div className="overflow-x-auto  bg-white">
@@ -200,12 +231,12 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                             <TableHead th="পেমেন্টের ধরণ" />
                             <TableHead th="পরিমাণ" />
                             <TableHead th="রেট" />
-                            <TableHead th="মোট বিল" cls="hidden lg:table-cell" />
-                            <TableHead th="অগ্রিম" cls="hidden lg:table-cell" />
-                            <TableHead th="কর্তন" cls="hidden lg:table-cell" />
+                            <TableHead th="মোট বিল" />
+                            <TableHead th="অগ্রিম" />
+                            <TableHead th="কর্তন" />
                             <TableHead th="পেমেন্ট" />
-                            <TableHead th="কম/বেশি" cls="hidden lg:table-cell" />
-                            <TableHead th="ডক" cls="hidden lg:table-cell" />
+                            <TableHead th="কম/বেশি" />
+                            <TableHead th="ডক" />
                         </tr>
                     </thead>
                     <tbody>
@@ -237,26 +268,26 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                         ) : (payments?.map((row, index) => (
                             <React.Fragment key={row.id}>
                                 <tr
-                                    className="hover:bg-gray-50"
+                                    className="hover:bg-gray-50 h-[40]"
                                 //   onClick={() => toggleRow(row.id)}
                                 >
                                     <TableData td={formatBanglaDate({ date: row?.paymentDate })} />
                                     <TableData
                                         td={row?.paymentDetails as string}
-                                        cls="hidden lg:table-cell"
+
                                     />
                                     <TableData
                                         td={row?.paymentType}
-                                        cls="hidden lg:table-cell"
+
                                     />
                                     <TableData td={row?.quantity} />
                                     <TableData
                                         td={`৳ ${row?.rate}`}
-                                        cls="hidden lg:table-cell"
+
                                     />
                                     <TableData
                                         td={`৳ ${row?.totalBill}`}
-                                        cls="hidden lg:table-cell"
+
                                     />
 
                                     <TableData
@@ -265,10 +296,10 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                                                 ? `৳ ${row?.payment}`
                                                 : "৳ 0"
                                         }
-                                        cls="border p-2 text-red-500 hidden lg:table-cell"
+                                        cls="border p-2 text-red-500 "
                                     />
                                     <TableData
-                                        cls="border p-2 text-green-600 hidden lg:table-cell"
+                                        cls="border p-2 text-green-600 "
                                         td={`৳ ${row?.cutting}`}
                                     />
                                     <TableData
@@ -276,7 +307,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                                         td={`৳ ${row?.payment}`}
                                     />
                                     <TableData
-                                        cls={`border hidden lg:table-cell p-2 ${row?.paymentDifference < 0
+                                        cls={`border  p-2 ${row?.paymentDifference < 0
                                             ? "text-red-500"
                                             : row?.paymentDifference > 0
                                                 ? "text-green-600"
@@ -286,7 +317,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                                     />
 
                                     <td
-                                        className={`border hidden lg:table-cell p-1 lg:p-2 text-center whitespace-nowrap text-sm lg:text-[15px] text-green-600`}
+                                        className={`border  p-1 lg:p-2 text-center whitespace-nowrap text-sm lg:text-[15px] text-green-600`}
                                     >
                                         {
                                             row?.document ? <Link
