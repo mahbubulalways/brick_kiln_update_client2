@@ -187,7 +187,7 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
                         />
                         <TableData td={row?.season?.name} cls="hidden lg:table-cell" />
 
-                        <td className="border p-2 ">
+                        <td className="border p-2 text-center">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <button className="p-1.5 rounded hover:bg-gray-100 transition">

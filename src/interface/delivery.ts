@@ -25,6 +25,15 @@ export type TDeliveryInvoice = {
   deliveryDate: string;
 };
 
+export type TDeliveryStatusTime = {
+  id: string;
+  deliveryId: string;
+  pendingTime: string;
+  processingTime: string;
+  deliveredTime: string;
+  cancelTime: string;
+};
+
 export type TDeliveryResponse = {
   id: number;
   carNo: string;
@@ -43,6 +52,7 @@ export type TDeliveryResponse = {
   deliveryBy: IUser;
   lastDelivered: number;
   status: TDeliveryStatus;
+  deliveryStatusActionTimes: TDeliveryStatusTime;
 };
 
 export type TDeliveryWithCustomer = {

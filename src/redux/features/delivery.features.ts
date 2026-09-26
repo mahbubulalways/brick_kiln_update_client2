@@ -57,6 +57,16 @@ const deliveryApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    //  CHANGE DELIVERY STATUS
+    changeDeliveryStatus: builder.mutation({
+      query: (payload) => ({
+        url: `/delivery/status/${payload.id}`,
+        method: "PATCH",
+        body: payload.data,
+      }),
+      invalidatesTags: ["Delivery"],
+    }),
   }),
 });
 
@@ -67,4 +77,5 @@ export const {
   useGetDeliveryHaveTodayQuery,
   useGetAllDeliveryListQuery,
   useGetSingleDeliveryQuery,
+  useChangeDeliveryStatusMutation,
 } = deliveryApi;

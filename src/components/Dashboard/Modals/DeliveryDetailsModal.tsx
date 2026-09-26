@@ -6,6 +6,7 @@ import { TDeliveryResponse } from "@/interface/delivery";
 import { TVataInformation } from "@/interface/vata";
 import { useGetSingleDeliveryQuery } from "@/redux/features/delivery.features";
 import { useGetVataInfoQuery } from "@/redux/features/vata.features";
+import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 import moment from "moment";
 import { Dispatch, SetStateAction } from "react";
@@ -50,6 +51,43 @@ const DeliveryDetailsModal = ({
 
         return moment(date).format("hh:mm A");
     };
+
+
+    const statusTimes = invoice?.deliveryStatusActionTimes;
+
+    const deliveryStatusLabel: Record<string, string> = {
+        PENDING: "অপেক্ষমাণ",
+        PROCESSING: "প্রক্রিয়াধীন",
+        CANCEL: "বাতিল",
+        DELIVERED: "সম্পন্ন",
+    };
+
+    const deliveryStatusClass: Record<string, string> = {
+        PENDING: "bg-yellow-50 text-yellow-600 border-yellow-200",
+        PROCESSING: "bg-blue-50 text-blue-600 border-blue-200",
+        CANCEL: "bg-red-50 text-red-600 border-red-200",
+        DELIVERED: "bg-green-50 text-green-600 border-green-200",
+    };
+
+    const deliveryStatusTimes = [
+        {
+            status: "PENDING",
+            time: statusTimes?.pendingTime,
+        },
+        {
+            status: "PROCESSING",
+            time: statusTimes?.processingTime,
+        },
+        {
+            status: "DELIVERED",
+            time: statusTimes?.deliveredTime,
+        },
+        {
+            status: "CANCEL",
+            time: statusTimes?.cancelTime,
+        },
+    ].filter((item) => item.time);
+
 
     return (
         <CustomModalBottom
@@ -194,6 +232,47 @@ const DeliveryDetailsModal = ({
                             </tbody>
                         </table>
                     </div>
+
+                    {deliveryStatusTimes.length > 0 && (
+                        <div className="mt-4">
+                            <div className="space-y-3">
+                                {deliveryStatusTimes.map((item, index) => (
+                                    <div
+                                        key={item.status}
+                                        className="relative flex items-start gap-3"
+                                    >
+                                        {index !== deliveryStatusTimes.length - 1 && (
+                                            <div className="absolute left-[7px] top-5 h-full w-px bg-gray-200" />
+                                        )}
+
+                                        <div
+                                            className={`relative z-10 mt-1 h-4 w-4 rounded-full border-2 bg-white ${item.status === "CANCEL"
+                                                ? "border-red-500"
+                                                : item.status === "DELIVERED"
+                                                    ? "border-green-500"
+                                                    : item.status === "PROCESSING"
+                                                        ? "border-blue-500"
+                                                        : "border-yellow-500"
+                                                }`}
+                                        />
+
+                                        <div className="flex flex-1 items-center justify-between">
+                                            <span
+                                                className={`rounded border px-2.5 py-1 text-xs font-medium ${deliveryStatusClass[item.status]
+                                                    }`}
+                                            >
+                                                {deliveryStatusLabel[item.status]}
+                                            </span>
+
+                                            <span className="text-xs text-gray-500">
+                                                {formatBanglaDate({ date: item.time, showTime: true })}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* ================= DRIVER & CAR ================= */}
                     <div className="mt-5 rounded-xl border border-gray-200 px-4 py-4">

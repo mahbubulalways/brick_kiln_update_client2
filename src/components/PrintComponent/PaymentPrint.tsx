@@ -258,6 +258,9 @@ const PaymentPrint = ({
                             <th className="w-[70px] border border-gray-300 px-1 py-1.5 font-normal">
                                 পেমেন্ট
                             </th>
+                            <th className="w-[70px] border border-gray-300 px-1 py-1.5 font-normal">
+                                কম/বেশি
+                            </th>
                         </tr>
                     </thead>
 
@@ -350,6 +353,13 @@ const PaymentPrint = ({
                                             )}
                                         </td>
 
+                                        <td className="border border-gray-300 px-1 py-1.5 text-center font-medium">
+                                            ৳{" "}
+                                            {formatNumber(
+                                                row.paymentDifference,
+                                            )}
+                                        </td>
+
                                     </tr>
                                 ),
                             )
@@ -418,6 +428,12 @@ const PaymentPrint = ({
                                     ৳{" "}
                                     {formatNumber(
                                         totalPayment,
+                                    )}
+                                </td>
+                                <td className="border border-gray-300 px-1 py-1.5 text-center">
+                                    ৳{" "}
+                                    {formatNumber(
+                                        totalDifference,
                                     )}
                                 </td>
                             </tr>

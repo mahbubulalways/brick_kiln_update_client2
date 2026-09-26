@@ -10,7 +10,7 @@ import { Calendar, MoreVertical, Truck, User } from "lucide-react";
 import CustomNewButton from "@/components/Reusable/CustomNewButton";
 import CustomReportButton from "@/components/Reusable/CustomReportButton";
 import TableHead from "@/components/Reusable/TableHead";
-import { useGetTodaysDeliveryQuery } from "@/redux/features/delivery.features";
+import { useChangeDeliveryStatusMutation, useGetTodaysDeliveryQuery } from "@/redux/features/delivery.features";
 import moment from "moment";
 import TableData from "@/components/Reusable/TableData";
 import CustomDropDownMenuItem from "@/components/Reusable/CustomDropDownMenuItem";
@@ -39,41 +39,38 @@ import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 import CustomSelect2 from "@/components/Reusable/CustomSelect2";
+import Swal from "sweetalert2";
 
 const deliveryStatusOptions = [
-  {
-    label: "অপেক্ষমাণ",
-    value: "PENDING" as TDeliveryStatus,
-  },
+  // {
+  //   label: "অপেক্ষমাণ",
+  //   value: "PENDING" as TDeliveryStatus,
+  // },
   {
     label: "প্রক্রিয়াধীন",
     value: "PROCESSING" as TDeliveryStatus,
   },
   {
-    label: "বাতিল",
-    value: "CANCEL" as TDeliveryStatus,
+    label: "সম্পন্ন",
+    value: "DELIVERED" as TDeliveryStatus,
   },
   {
-    label: "ডেলিভারি সম্পন্ন",
-    value: "DELIVERED" as TDeliveryStatus,
+    label: "বাতিল",
+    value: "CANCEL" as TDeliveryStatus,
   },
 ];
 
 const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
   const [openDeliveryReport, setOpenDeliveryReport] =
     useState<boolean>(false);
-
   const [openDeliveryDetailsModal, setOpenDeliveryDetailsModal] =
     useState<boolean>(false);
-
   const [openPrintModal, setOpenPrintModal] =
     useState<boolean>(false);
-
   const [deliveryId, setDeliveryId] =
     useState<number | undefined>();
-
+  const printRef = useRef<TCommonPrintRef>(null);
   const [filterDate, setDateFiter] = useState<{
     startDate: Date | null;
     endDate: Date | null;
@@ -98,8 +95,7 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
         refetchOnMountOrArgChange: true,
       },
     );
-
-  const printRef = useRef<TCommonPrintRef>(null);
+  const [statusChangeAsync, { isLoading: statusLoading }] = useChangeDeliveryStatusMutation()
 
   const { data: vata } = useGetVataInfoQuery(undefined);
 
@@ -118,14 +114,57 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
 
   const result: TItems[] = groupAndSumByClass(items);
 
-  const handleStatusChange = (
+  const handleStatusChange = async (
     deliveryId: number,
     status: TDeliveryStatus,
   ) => {
-    console.log("Delivery ID:", deliveryId);
-    console.log("New Status:", status);
+    const getDeliveryStatusLabel = (status: TDeliveryStatus) => {
+      return (
+        deliveryStatusOptions.find((item) => item.value === status)?.label ||
+        status
+      );
+    };
+    const result = await Swal.fire({
+      title: "আপনি কি নিশ্চিত?",
+      text: `ডেলিভারির স্ট্যাটাস ${getDeliveryStatusLabel(status)} করতে চান?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#039A63",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "হ্যাঁ, পরিবর্তন করুন",
+      cancelButtonText: "বাতিল",
+    });
 
-    // এখানে তোমার update status API mutation call করবে
+    if (!result.isConfirmed) return;
+
+    try {
+      const info = {
+        id: deliveryId,
+        data: {
+          status,
+        },
+      };
+
+      await statusChangeAsync(info).unwrap();
+
+      await Swal.fire({
+        title: "স্ট্যাটাস পরিবর্তন হয়েছে!",
+        text: `ডেলিভারির স্ট্যাটাস ${getDeliveryStatusLabel(status)} করা হয়েছে।`,
+        icon: "success",
+        confirmButtonColor: "#039A63",
+        confirmButtonText: "ঠিক আছে",
+      });
+    } catch (error: any) {
+      await Swal.fire({
+        title: "ব্যর্থ!",
+        text:
+          error?.data?.message ||
+          "ডেলিভারির স্ট্যাটাস পরিবর্তন করা যায়নি।",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "ঠিক আছে",
+      });
+    }
   };
 
   return (
@@ -288,10 +327,11 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
                         )}
                       />
 
-                      <td className="border p-2 w-40">
+                      <td className="border p-2 w-36">
                         <CustomSelect2
                           options={deliveryStatusOptions}
                           value={row?.status}
+                          disabled={statusLoading}
                           placeholder="স্ট্যাটাস নির্বাচন করুন"
                           onChange={(value) => {
                             handleStatusChange(

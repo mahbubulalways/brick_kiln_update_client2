@@ -1,3 +1,4 @@
+import { TApprovalStatus } from "@/interface/approval";
 import { ISeason } from "@/interface/season";
 import { IUser } from "@/interface/user";
 import { TVataInformation } from "@/interface/vata";
@@ -9,6 +10,8 @@ export type TClassAndRate = {
   rate: number | string;
   advanceRate: number | string;
   id?: number;
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 };
 
 // CREATE INVOICE TYPES

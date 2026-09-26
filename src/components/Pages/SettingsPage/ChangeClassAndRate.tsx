@@ -15,6 +15,7 @@ import TableData from "@/components/Reusable/TableData";
 import CustomLoader from "@/components/Reusable/CustomLoader";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { TQuery } from "@/interface/query";
+import { getUserInformation } from "@/service/auth.services";
 
 const ChangeClassAndRate = ({ limit, page }: TQuery) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -31,13 +32,13 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
     const classAndRates = fetchedData?.data?.data || [];
     const meta = fetchedData?.data?.meta
 
-
-
+    //  USER ROLE
+    const userRole = getUserInformation().role
     // Delete
     const handleDelete = async (id: number) => {
         const result = await Swal.fire({
             title: "আপনি কি নিশ্চিত?",
-            text: "এই শ্রেণি এবং রেটটি ডিলেট করলে এটি আর ফিরে পাওয়া যাবে না!",
+            text: "এই শ্রেণি ডিলেট করলে এটি আর ফিরে পাওয়া যাবে না!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#039A63",
@@ -49,11 +50,10 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
         if (!result.isConfirmed) return;
 
         try {
-            await deleteClassAndRate(id).unwrap();
-
+            const response = await deleteClassAndRate(id).unwrap();
             await Swal.fire({
-                title: "ডিলেট হয়েছে!",
-                text: "শ্রেণি এবং রেটটি সফলভাবে ডিলেট করা হয়েছে।",
+                title: "ডিলেট",
+                text: response?.message,
                 icon: "success",
                 confirmButtonColor: "#039A63",
                 confirmButtonText: "ঠিক আছে",
@@ -141,25 +141,35 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
                                             <td className="border p-2">
                                                 <div className="flex justify-center gap-3">
                                                     <button
+                                                        disabled={
+                                                            userRole !== "ADMIN" &&
+                                                            userRole !== "OWNER" &&
+                                                            row?.updateStatus === "PENDING"
+                                                        }
                                                         type="button"
                                                         onClick={() => {
                                                             setIsOpenEditModal(true);
                                                             setClassId(row.id as number);
                                                         }}
-                                                        className="text-blue-600 transition hover:text-blue-800"
+                                                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >
                                                         <Pencil className="h-4 w-4" />
                                                     </button>
 
                                                     <button
                                                         type="button"
-                                                        disabled={isDeleting}
+                                                        disabled={
+                                                            isDeleting ||
+                                                            (userRole !== "ADMIN" &&
+                                                                userRole !== "OWNER" &&
+                                                                row?.deleteStatus === "PENDING")
+                                                        }
                                                         onClick={() =>
                                                             handleDelete(
                                                                 row.id as number
                                                             )
                                                         }
-                                                        className="text-red-600 transition hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+                                                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </button>

@@ -241,7 +241,7 @@ const CollectionDeuPrint = ({
                     ) : (
                         <tr>
                             <td
-                                colSpan={6}
+                                colSpan={8}
                                 className="border border-gray-300 py-4 text-center text-gray-500"
                             >
                                 কোনো তথ্য পাওয়া যায়নি

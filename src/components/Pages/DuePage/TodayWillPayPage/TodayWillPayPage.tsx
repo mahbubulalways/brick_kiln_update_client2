@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,6 @@ import CustomButtonFixed from "@/components/Reusable/CustomButtonFixed";
 import TableData from "@/components/Reusable/TableData";
 import { useGetTodayHaveDueQuery } from "@/redux/features/dueCollection.features";
 import { IChallanForDataShow, ICustomer } from "@/types/types";
-import CustomLoader from "@/components/Reusable/CustomLoader";
 import { TQuery } from "@/interface/query";
 import SearchBar from "@/components/Reusable/SearchBar";
 import CustomDatePickerState from "@/components/Reusable/CustomDatePickerState";
@@ -31,6 +30,11 @@ import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import { useGetVataInfoQuery } from "@/redux/features/vata.features";
+import CommonPrint, { TCommonPrintRef } from "@/components/Reusable/CommonPrint";
+import CustomPrintButton from "@/components/Reusable/CustomPrintButton";
+import TodayWillPayPrint from "@/components/PrintComponent/TodayWillPayPrint";
+import SendCustomerSmsModal from "@/components/Dashboard/Modals/SendCustomerSmsModal";
 
 type PaymentRow = {
   challans: IChallanForDataShow[];
@@ -42,7 +46,7 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [customerId, setCustomerId] = useState<string | undefined>(undefined)
   const [openDueModal, setOpenDueModal] = useState<boolean>(false);
-  const [openPrintModal, setOpenPrintModal] = useState<boolean>(false);
+  const [openSmsModal, setOpenSmsModal] = useState<boolean>(false);
   const [openDueCollectionModal, setOpenDueCollectionModal] = useState<boolean>(false);
   const [filterDate, setDateFiter] = useState<{
     startDate: Date | null,
@@ -62,8 +66,8 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
     refetchOnMountOrArgChange: true,
   });
 
-
-
+  const { data: vataInfo } = useGetVataInfoQuery(undefined);
+  const printRef = useRef<TCommonPrintRef>(null);
   const dues = data?.data?.data as PaymentRow[]
   const meta = data?.data?.meta as TMetaConfig;
   const totalCredit =
@@ -74,6 +78,13 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
         Number(r?.remainingDue || 0),
       0
     ) || 0;
+
+
+  const handleSendSms = (id: string) => {
+    setCustomerId(id)
+    setOpenSmsModal(true)
+  }
+
 
   return (
     <div className="bg-white rounded-md shadow border ">
@@ -94,11 +105,12 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
             value={filterDate}
             onChange={setDateFiter}
             placeholder="তারিখ ফিল্টার করুন"
-            className=""
+            className="w-max shrink-0"
           />
-          <button onClick={() => setOpenPrintModal(true)}>
-            <CustomButtonFixed title="প্রিন্ট করুন" />
-          </button>
+          <CustomPrintButton
+            onClick={() => printRef.current?.print()}
+            className="w-max shrink-0"
+          />
         </div>
       </div>
 
@@ -168,7 +180,7 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
 
                       <TableData td={row?.challans[0]?.season.name} />
 
-                      <td className="border p-2">
+                      <td className="border p-2 text-center">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <button className="p-1.5 rounded hover:bg-gray-100 transition">
@@ -198,7 +210,7 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
                               />
                             </DropdownMenuItem>
                             <DropdownMenuItem
-
+                              onClick={() => handleSendSms(row?.customerCode)}
                             >
                               <CustomDropDownMenuItem
                                 Icon={MessageSquare}
@@ -250,11 +262,21 @@ const TodayWillPayPage = ({ limit, page, search }: TQuery) => {
         />
       }
 
-      {openPrintModal &&
-        <TodayWillPayPrintModal
-          isOpen={openPrintModal}
-          onClose={() => setOpenPrintModal(false)}
+      <CommonPrint
+        ref={printRef}
+        title="todays due"
+      >
+        <TodayWillPayPrint
           dues={dues}
+          vataInformation={vataInfo?.data}
+
+        />
+      </CommonPrint>
+      {openSmsModal &&
+        <SendCustomerSmsModal
+          onClose={() => setOpenSmsModal(false)}
+          isOpen={openSmsModal}
+          customerId={customerId}
         />
       }
     </div>
