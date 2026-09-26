@@ -1,11 +1,13 @@
-export type TLedger = {
-  id: number;
-  name: string;
-  serial: number;
-  parentId: number;
-  createdAt: string;
-  updatedAt: string;
-};
+// export type TLedger = {
+//   id: number;
+//   name: string;
+//   serial: number;
+//   parentId: number;
+//   createdAt: string;
+//   updatedAt: string;
+// };
+
+import { TLedger } from "./ledger";
 
 export type TPaymentResponse = {
   id: number;

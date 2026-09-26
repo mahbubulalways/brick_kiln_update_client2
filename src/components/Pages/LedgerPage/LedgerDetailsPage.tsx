@@ -65,7 +65,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                     {/* LEFT */}
 
                     <div className="flex items-center gap-2 w-full">
-                        <Link href={`/dashboard/ledger`} className="w-full md:w-max">
+                        {/* <Link href={`/dashboard/ledger`} className="w-full md:w-max">
 
                             <button
 
@@ -73,7 +73,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                                 className="
                             w-full
                 flex-1
-                py-1
+                py-1.5
                 cursor-pointer
                 px-4
                 rounded
@@ -97,7 +97,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
 
                                 খতিয়ান
                             </button>
-                        </Link>
+                        </Link> */}
 
                         <button
                             type="button"
@@ -113,6 +113,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                 bg-white
                 text-[#039A63]
                 flex
+                flex-wrap
                 items-center
                 justify-center
                 gap-2
@@ -138,7 +139,12 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                                     ৳ {toBanglaNumber(summary?.totalPaymentAmount ?? 0)}
                                 </span>
                             </div>
-
+                            {/* <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD1D1] bg-[#fbfff0] px-3 py-1 text-[14px] font-normal text-[#290dff]">
+                                <span>বাকি পেমেন্ট:</span>
+                                <span>
+                                    ৳ {toBanglaNumber(summary?.totalLoanPayment ?? 0)}
+                                </span>
+                            </div> */}
                             <div className="flex items-center gap-2 whitespace-nowrap rounded border border-[#FFD7A5] bg-[#FFF4E7] px-3 py-1 text-[14px] font-normal text-[#FF8A00]">
                                 <span>পরিমাণ:</span>
                                 <span>
@@ -166,6 +172,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
                                     ৳ {toBanglaNumber(summary?.totalAdvanceDue ?? 0)}
                                 </span>
                             </div>
+
                         </div>
                     </div>
 
@@ -180,6 +187,7 @@ const LedgerDetailsPage = ({ id, params }: { id: string, params: TQuery }) => {
 
                     <CustomPrintButton
                         onClick={() => printRef.current?.print()}
+                        className="shrink-0 w-max"
                     />
                 </div>
             </div>

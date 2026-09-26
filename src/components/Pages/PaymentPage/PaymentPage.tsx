@@ -19,7 +19,7 @@ import CustomDatePickerState from "@/components/Reusable/CustomDatePickerState";
 import { TQuery } from "@/interface/query";
 import { useDeletePaymentMutation, useGetPaymentQuery } from "@/redux/features/payment.features";
 import { TPaymentResponse } from "@/interface/payment";
-import { NO_DATA_FOUND_MESSAGE, SERVER_ERROR_MESSAGE, } from "@/constant";
+import { SERVER_ERROR_MESSAGE, } from "@/constant";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import moment from "moment";
 import { TablePagination } from "@/components/Reusable/TablePagination";

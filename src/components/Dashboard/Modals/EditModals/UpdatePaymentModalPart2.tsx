@@ -13,6 +13,7 @@ import {
 
 import { TPaymentResponse } from "@/interface/payment";
 import CustomDatePicker from "@/components/Reusable/CustomDatePicker";
+import { TLedger } from "@/interface/ledger";
 
 type TKhatiyan = {
     ledger: string;
@@ -36,7 +37,7 @@ const UpdatePaymentModalPart2 = ({
 }: TUpdatePaymentModalPart2Props) => {
     const [openLedgerModal, setOpenLedgerModal] =
         useState(false);
-    const [ledger, setLedger] = useState("");
+    const [ledger, setLedger] = useState<TLedger | null>(null);
 
     const {
         register,
@@ -52,7 +53,7 @@ const UpdatePaymentModalPart2 = ({
             paymentDetails: "",
             payment: 0,
             file: undefined,
-            paymentDate:""
+            paymentDate: ""
         },
     });
 
@@ -63,31 +64,29 @@ const UpdatePaymentModalPart2 = ({
         if (!paymentData) return;
 
         const initialLedger =
-            paymentData.ledger?.name || "";
+            paymentData.ledger || "";
 
         // Set ledger state
         setLedger(initialLedger);
 
         // Set all form values
         reset({
-            ledger: initialLedger,
+            ledger: initialLedger.name,
             paymentType:
                 paymentData.paymentType || "",
             paymentDetails:
-            paymentData.paymentDetails || "",
+                paymentData.paymentDetails || "",
             payment: paymentData.payment ?? 0,
             paymentDate: paymentData.paymentDate,
             file: undefined,
         });
     }, [paymentData, reset]);
 
-    // ==========================================
-    // UPDATE FORM LEDGER WHEN NEW LEDGER SELECTED
-    // ==========================================
+
     useEffect(() => {
         if (!ledger) return;
 
-        setValue("ledger", ledger, {
+        setValue("ledger", ledger.name, {
             shouldValidate: true,
             shouldDirty: true,
         });
@@ -100,12 +99,12 @@ const UpdatePaymentModalPart2 = ({
         if (!paymentData) return;
 
         const initialLedger =
-            paymentData.ledger?.name || "";
+            paymentData.ledger
 
         setLedger(initialLedger);
 
         reset({
-            ledger: initialLedger,
+            ledger: initialLedger.name,
             paymentType:
                 paymentData.paymentType || "",
             paymentDetails:
