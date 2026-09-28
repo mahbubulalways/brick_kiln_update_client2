@@ -102,7 +102,7 @@ const DeliveryHistory = ({
                     {/* ================= Header ================= */}
                     <thead>
                         <tr className="bg-[#039A63] text-center text-white">
-                            <TableHead th="#" />
+                            <TableHead th="ডেলিভারি নং" />
                             <TableHead th="চালান নং" />
                             <TableHead th="কাস্টমার" />
                             <TableHead th="ঠিকানা" />
@@ -111,7 +111,6 @@ const DeliveryHistory = ({
                             <TableHead th="ডেলিভারি" />
                             <TableHead th="ডে. বাকি" />
                             <TableHead th="মোট ডেলিভারি" />
-                            <TableHead th="ড্রাইভার" />
                             <TableHead th="তারিখ" />
                             <TableHead th="বাটন" />
                         </tr>
@@ -221,20 +220,11 @@ const DeliveryHistory = ({
                                             )}
                                             cls="text-green-600"
                                         />
-
-                                        {/* ================= Driver ================= */}
-                                        <TableData
-                                            td={
-                                                row?.driverName ||
-                                                "-"
-                                            }
-                                        />
-
                                         {/* ================= Date ================= */}
                                         <TableData
                                             td={formatBanglaDate({
                                                 date: row?.deliveryDate,
-                                                showTime: false,
+                                                showTime: true,
                                             })}
                                         />
 

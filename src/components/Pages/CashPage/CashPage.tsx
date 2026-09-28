@@ -35,6 +35,7 @@ import { formatDateRange } from "@/utils/formatDateRange";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 const CashPage = ({ limit, page, search }: TQuery) => {
   const [searchItem, setSearchItem] = useState("");
@@ -93,9 +94,10 @@ const CashPage = ({ limit, page, search }: TQuery) => {
       text: "এই ক্যাশের হিসাবটি ডিলেট করা হবে!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "হ্যাঁ, ডিলেট করুন",
-      cancelButtonText: "বাতিল",
-      reverseButtons: true,
+      confirmButtonColor: "#039A63",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "হ্যাঁ, মুছে ফেলুন!",
+      cancelButtonText: "বাতিল করুন",
     });
 
     if (!result.isConfirmed) return;
@@ -237,7 +239,6 @@ const CashPage = ({ limit, page, search }: TQuery) => {
                         className="hover:bg-gray-50 transition-colors"
                       >
                         <TableData td={idx + 1} />
-
                         <TableData td={row.source} />
                         <TableData td={row.description} />
                         <TableData td={row.type === "INCOME" ? toBanglaNumber(row.amount) : "-"} />
@@ -256,17 +257,25 @@ const CashPage = ({ limit, page, search }: TQuery) => {
                               align="end"
                               className="rounded-md border bg-white shadow-md"
                             >
-                              <DropdownMenuItem onClick={() => {
-                                setCashId(row?.id)
-                                setOpenUpdateModal(true)
-                              }}>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setCashId(row?.id)
+                                  setOpenUpdateModal(true)
+                                }}
+                                disabled={approvalButtonDisable(row?.updateStatus)}
+
+                              >
                                 <CustomDropDownMenuItem
                                   Icon={Pencil}
                                   title="আপডেট"
                                 />
                               </DropdownMenuItem>
 
-                              <DropdownMenuItem onClick={() => handleDeleteCash(row?.id)}>
+                              <DropdownMenuItem
+                                disabled={isLoading ||
+                                  approvalButtonDisable(row?.updateStatus)
+                                }
+                                onClick={() => handleDeleteCash(row?.id)}>
                                 <CustomDropDownMenuItem
                                   Icon={Trash}
                                   title="ডিলেট"

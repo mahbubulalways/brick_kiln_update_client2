@@ -7,6 +7,7 @@
 //   updatedAt: string;
 // };
 
+import { TApprovalStatus } from "./approval";
 import { TLedger } from "./ledger";
 
 export type TPaymentResponse = {
@@ -27,6 +28,9 @@ export type TPaymentResponse = {
   paymentDate: string;
   address: string;
   serial: number;
+
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 };
 
 export type TPaymentReportResponse = {

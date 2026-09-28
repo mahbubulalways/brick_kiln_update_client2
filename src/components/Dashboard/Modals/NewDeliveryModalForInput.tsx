@@ -172,6 +172,7 @@ const NewDeliveryModalForInput = ({
       skip:
         !searchTriggered ||
         customerSearch.trim().length < 2,
+      refetchOnMountOrArgChange: true
     },
   );
 

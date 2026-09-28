@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import CustomModalBottom from "@/components/Reusable/CustomModalBottom";
 import { Plus, Trash } from "lucide-react";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import SmsSwitch from "@/components/Reusable/SmsSwitch";
 import { useGetAllClassAndRateQuery } from "@/redux/features/classAndRate.features";
 import CustomSelect from "@/components/Reusable/CustomSelect";
@@ -51,10 +50,22 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
   // CREATE NEW INVOICE
   const [mutateAsync, { isLoading: createInvoiceLoading }] =
     useCreateInvoiceMutation();
-  const classOptions = classAndRate?.map((cls: TClassAndRate) => ({
-    label: `${cls?.className}`,
-    value: cls?.className,
-  }));
+  const getClassOptions = (currentIndex: number) => {
+    const selectedClasses = watchItems
+      .filter((_, index) => index !== currentIndex)
+      .map((item) => item.class)
+      .filter(Boolean);
+
+    return classAndRate
+      .filter(
+        (cls: TClassAndRate) =>
+          !selectedClasses.includes(cls.className),
+      )
+      .map((cls: TClassAndRate) => ({
+        label: cls.className,
+        value: cls.className,
+      }));
+  };
   // REACT HOOK FORM
   const {
     register,
@@ -132,7 +143,6 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
 
   // MIN MAX DATE OF CHALLANS
   const deliverySeason = watch("invoice.deliverySeason");
-
   const isAdvanceChalan = chalanType !== "রেগুলার চালান";
 
   const { minDate, maxDate } = generateDeliveryDateRange(
@@ -459,7 +469,7 @@ const NewChalanModal = ({ isOpen, onClose }: TCustomModal) => {
                             label="শ্রেণি"
                             placeholder="শ্রেণি নির্বাচন করুন"
                             control={control}
-                            options={classOptions || []}
+                            options={getClassOptions(index)}
                             error={errors.invoiceItems?.items?.[index]?.class}
                             rules={{
                               required: "শ্রেণি নির্বাচন করুন",

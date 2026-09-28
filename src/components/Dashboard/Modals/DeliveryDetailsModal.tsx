@@ -304,6 +304,12 @@ const DeliveryDetailsModal = ({
                                     {invoice.carNo ? toBanglaNumber(invoice.carNo) : "-"}
                                 </span>
                             </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-gray-500">গাড়ি ভাড়া:</span>
+                                <span className="rounded-md bg-gray-100 px-3 py-1 font-medium text-gray-700">
+                                    {invoice.carNo ? toBanglaNumber(invoice.carRent) : "-"}
+                                </span>
+                            </div>
                         </div>
                     </div>
 

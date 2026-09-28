@@ -17,6 +17,9 @@ import { useChangeApprovalStatusMutation, useGetAllApprovalRequestQuery } from "
 
 import ApprovalViewModal from "./ApprovalViewModal";
 import Swal from "sweetalert2";
+import { formatBanglaDate } from "@/utils/formatBanglaDate";
+import { moduleNames } from "./approval.field";
+
 
 const approvalStatusOptions = [
     {
@@ -104,7 +107,6 @@ const ApprovalRequestPage = ({ page, limit }: TQuery) => {
                 confirmButtonText: "ঠিক আছে",
             });
         } catch (error: any) {
-            console.log(error)
             await Swal.fire({
                 title: "ব্যর্থ!",
                 text:
@@ -119,25 +121,12 @@ const ApprovalRequestPage = ({ page, limit }: TQuery) => {
     const getModuleName = (
         module: IApprovalRequest["module"],
     ) => {
-        const moduleNames: Record<
+        const moduleName: Record<
             IApprovalRequest["module"],
             string
-        > = {
-            CHALLAN: "চালান",
-            DELIVERY: "ডেলিভারি",
-            CUSTOMER: "কাস্টমার",
-            PAYMENT: "পেমেন্ট",
-            STOCK: "স্টক",
-            LEDGER: "লেজার",
-            DUE: "বাকি",
-            CASH: "ক্যাশ",
-            INVOICE: "ইনভয়েস",
-            CLASS_RATE: "শ্রেণি ও রেট",
-            TASK: "টাস্ক",
-            DRIVER: "ড্রাইভার",
-        };
+        > = moduleNames;
 
-        return moduleNames[module];
+        return moduleName[module];
     };
 
     const getActionName = (
@@ -250,11 +239,7 @@ const ApprovalRequestPage = ({ page, limit }: TQuery) => {
                                             </td>
 
                                             <TableData
-                                                td={new Date(
-                                                    row.createdAt,
-                                                ).toLocaleDateString(
-                                                    "bn-BD",
-                                                )}
+                                                td={formatBanglaDate({ date: row.createdAt, showTime: true })}
                                             />
 
                                             <td className="border p-2">
@@ -282,7 +267,7 @@ const ApprovalRequestPage = ({ page, limit }: TQuery) => {
                     page={meta?.page ?? 1}
                     totalPages={meta?.totalPages ?? 1}
                     dataLength={approvals.length}
-                    title="অনুমোদনের অনুরোধ"
+                    title="অনুরোধ"
                 />
             </div>
 

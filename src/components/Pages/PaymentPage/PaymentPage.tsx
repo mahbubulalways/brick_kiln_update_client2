@@ -38,6 +38,7 @@ import { formatDateRange } from "@/utils/formatDateRange";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 import LedgerPrintModal from "@/components/Dashboard/PrintModal/LedgerPrint/LedgerPrintModal";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 const PaymentPage = ({ limit, page, search }: TQuery) => {
   const [searchItems, setSearchItem] = useState("");
@@ -311,10 +312,14 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                           align="end"
                           className="rounded-md border bg-white shadow-md"
                         >
-                          <DropdownMenuItem onClick={() => {
-                            setIsUpdateModalOpen(true);
-                            setSelectedPaymentId(row?.id);
-                          }}>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setIsUpdateModalOpen(true);
+                              setSelectedPaymentId(row?.id);
+                            }}
+
+                            disabled={approvalButtonDisable(row?.updateStatus)}
+                          >
                             <CustomDropDownMenuItem
                               Icon={Pencil}
                               title="আপডেট"
@@ -343,7 +348,9 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            disabled={deleteLoading}
+                            disabled={deleteLoading ||
+                              approvalButtonDisable(row?.deleteStatus)
+                            }
                             onClick={() => handleDeletePayment(row?.id)}
                           >
                             <CustomDropDownMenuItem

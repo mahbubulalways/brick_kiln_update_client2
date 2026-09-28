@@ -45,7 +45,7 @@ const unloadApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["UNLOAD", "STOCK_BOOK"],
+      invalidatesTags: ["UNLOAD", "LOAD_UNLOAD_INFO", "STOCK_BOOK"],
     }),
 
     // DELETE LOAD INFO
@@ -54,7 +54,7 @@ const unloadApi = baseApi.injectEndpoints({
         url: `/unload/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["UNLOAD"],
+      invalidatesTags: ["UNLOAD", "LOAD_UNLOAD_INFO", "STOCK_BOOK"],
     }),
   }),
 });

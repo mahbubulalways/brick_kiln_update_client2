@@ -48,7 +48,7 @@ const loadInfoApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["LOAD_INFO", "ROUND"],
+      invalidatesTags: ["LOAD_INFO", "ROUND", "LOAD_UNLOAD_INFO"],
     }),
 
     // UPDATE LOAD INFO
@@ -58,7 +58,7 @@ const loadInfoApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload.data,
       }),
-      invalidatesTags: ["LOAD_INFO"],
+      invalidatesTags: ["LOAD_INFO", "LOAD_UNLOAD_INFO"],
     }),
 
     // DELETE LOAD INFO
@@ -67,7 +67,7 @@ const loadInfoApi = baseApi.injectEndpoints({
         url: `/load-info/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["LOAD_INFO"],
+      invalidatesTags: ["LOAD_INFO", "LOAD_UNLOAD_INFO"],
     }),
   }),
 });

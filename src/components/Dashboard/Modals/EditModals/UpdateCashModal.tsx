@@ -72,8 +72,7 @@ const UpdateCashModal = ({
         },
     });
 
-    const isLoading =
-        isSingleLoading || isUpdating;
+    const isLoading = isSingleLoading;
 
     // =========================
     // SET SINGLE DATA
@@ -177,23 +176,23 @@ const UpdateCashModal = ({
             onClose={handleClose}
             title="ক্যাশের হিসাব আপডেট"
         >{
-            isLoading ?
-            <CustomStatus type="loading"/>:
-            isError ?   <CustomStatus type="error"/>
-            :
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="w-full relative"
-            >
-                {/* ================= TYPE ================= */}
-                <div className="w-full rounded-[15px] bg-[#EEF2F6] p-2 flex items-center gap-1 mb-5">
-                    <button
-                        type="button"
-                        disabled={isLoading}
-                        onClick={() =>
-                            handleTypeChange("INCOME")
-                        }
-                        className={`
+                isLoading ?
+                    <CustomStatus type="loading" /> :
+                    isError ? <CustomStatus type="error" />
+                        :
+                        <form
+                            onSubmit={handleSubmit(onSubmit)}
+                            className="w-full relative"
+                        >
+                            {/* ================= TYPE ================= */}
+                            <div className="w-full rounded-[15px] bg-[#EEF2F6] p-2 flex items-center gap-1 mb-5">
+                                <button
+                                    type="button"
+                                    disabled={isLoading}
+                                    onClick={() =>
+                                        handleTypeChange("INCOME")
+                                    }
+                                    className={`
               flex-1
               h-[36px]
               rounded-[10px]
@@ -202,21 +201,21 @@ const UpdateCashModal = ({
               transition-all
               duration-300
               ${isIncome
-                                ? "bg-[#039A63] text-white shadow-sm"
-                                : "text-[#687994] hover:text-[#039A63]"
-                            }
+                                            ? "bg-[#039A63] text-white shadow-sm"
+                                            : "text-[#687994] hover:text-[#039A63]"
+                                        }
             `}
-                    >
-                        ক্যাশ ইন (Income)
-                    </button>
+                                >
+                                    ক্যাশ ইন (Income)
+                                </button>
 
-                    <button
-                        type="button"
-                        disabled={isLoading}
-                        onClick={() =>
-                            handleTypeChange("EXPENSE")
-                        }
-                        className={`
+                                <button
+                                    type="button"
+                                    disabled={isLoading}
+                                    onClick={() =>
+                                        handleTypeChange("EXPENSE")
+                                    }
+                                    className={`
               flex-1
               h-[36px]
               rounded-[10px]
@@ -225,90 +224,90 @@ const UpdateCashModal = ({
               transition-all
               duration-300
               ${!isIncome
-                                ? "bg-[#FF480D] text-white shadow-sm"
-                                : "text-[#687994] hover:text-[#FF480D]"
-                            }
+                                            ? "bg-[#FF480D] text-white shadow-sm"
+                                            : "text-[#687994] hover:text-[#FF480D]"
+                                        }
             `}
-                    >
-                        ক্যাশ আউট (Expense)
-                    </button>
-                </div>
+                                >
+                                    ক্যাশ আউট (Expense)
+                                </button>
+                            </div>
 
-                <input
-                    type="hidden"
-                    value={cashType}
-                    {...register("type")}
-                />
+                            <input
+                                type="hidden"
+                                value={cashType}
+                                {...register("type")}
+                            />
 
-                {/* ================= SOURCE ================= */}
-                <div className="mb-5">
-                    <label className="block text-[15px] font-semibold text-[#526078] mb-2">
-                        {isIncome
-                            ? "উৎস (কোথা থেকে টাকা আসলো?)"
-                            : "খাত (কোথায় খরচ হলো?)"}
-                    </label>
+                            {/* ================= SOURCE ================= */}
+                            <div className="mb-5">
+                                <label className="block text-[15px] font-semibold text-[#526078] mb-2">
+                                    {isIncome
+                                        ? "উৎস (কোথা থেকে টাকা আসলো?)"
+                                        : "খাত (কোথায় খরচ হলো?)"}
+                                </label>
 
-                    <CustomInput
-                        name="source"
-                        placeholder={
-                            isIncome
-                                ? "টাকা কে দিয়েছে"
-                                : "কাকে টাকা দেওয়া হলো"
-                        }
-                        register={register}
-                        type="text"
-                    />
-                </div>
+                                <CustomInput
+                                    name="source"
+                                    placeholder={
+                                        isIncome
+                                            ? "টাকা কে দিয়েছে"
+                                            : "কাকে টাকা দেওয়া হলো"
+                                    }
+                                    register={register}
+                                    type="text"
+                                />
+                            </div>
 
-                {/* ================= DESCRIPTION ================= */}
-                <div className="mb-6">
-                    <label className="block text-[15px] font-semibold text-[#526078] mb-2">
-                        হিসাবের বিবরণ
-                    </label>
+                            {/* ================= DESCRIPTION ================= */}
+                            <div className="mb-6">
+                                <label className="block text-[15px] font-semibold text-[#526078] mb-2">
+                                    হিসাবের বিবরণ
+                                </label>
 
-                    <CustomTextArea
-                        name="description"
-                        placeholder="বিবরণ লিখুন (যেমন: মজুরি দেওয়া-নেওয়া)"
-                        register={register}
-                        rows={3}
-                    />
-                </div>
+                                <CustomTextArea
+                                    name="description"
+                                    placeholder="বিবরণ লিখুন (যেমন: মজুরি দেওয়া-নেওয়া)"
+                                    register={register}
+                                    rows={3}
+                                />
+                            </div>
 
-                {/* ================= AMOUNT ================= */}
-                <div
-                    className={`
+                            {/* ================= AMOUNT ================= */}
+                            <div
+                                className={`
             rounded-[15px]
             p-3
             mb-4
             ${isIncome
-                            ? "bg-[#D0F7E5]"
-                            : "bg-[#FFE1E1]"
-                        }
+                                        ? "bg-[#D0F7E5]"
+                                        : "bg-[#FFE1E1]"
+                                    }
           `}
-                >
-                    <label
-                        className={`
+                            >
+                                <label
+                                    className={`
               block
               text-[15px]
               font-bold
               mb-3
               ${isIncome
-                                ? "text-[#039A63]"
-                                : "text-[#FF3D68]"
-                            }
+                                            ? "text-[#039A63]"
+                                            : "text-[#FF3D68]"
+                                        }
             `}
-                    >
-                        পরিমাণ (৳)
-                    </label>
+                                >
+                                    পরিমাণ (৳)
+                                </label>
 
-                    <input
-                        type="number"
-                        min="0"
-                        disabled={isLoading}
-                        {...register("amount", {
-                            valueAsNumber: true,
-                        })}
-                        className={`
+                                <input
+                                    type="number"
+                                    min="0"
+                                    disabled={isLoading}
+                                    {...register("amount", {
+                                        valueAsNumber: true,
+                                    })}
+                                    className={`
               w-full
               h-[60px]
               rounded-[12px]
@@ -320,20 +319,20 @@ const UpdateCashModal = ({
               outline-none
               border
               ${isIncome
-                                ? "border-[#9DE7C8] focus:border-[#039A63]"
-                                : "border-[#FFC2C2] focus:border-[#FF480D]"
-                            }
+                                            ? "border-[#9DE7C8] focus:border-[#039A63]"
+                                            : "border-[#FFC2C2] focus:border-[#FF480D]"
+                                        }
             `}
-                    />
-                </div>
+                                />
+                            </div>
 
-                {/* ================= BUTTONS ================= */}
-                <div className="flex items-center gap-3">
-                    <button
-                        type="button"
-                        disabled={isLoading}
-                        onClick={handleClear}
-                        className="
+                            {/* ================= BUTTONS ================= */}
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    disabled={isLoading}
+                                    onClick={handleClear}
+                                    className="
               px-6
               py-2
               cursor-pointer
@@ -348,14 +347,14 @@ const UpdateCashModal = ({
               hover:bg-gray-50
               disabled:opacity-50
             "
-                    >
-                        রিসেট
-                    </button>
+                                >
+                                    রিসেট
+                                </button>
 
-                    <button
-                        disabled={isUpdating}
-                        type="submit"
-                        className={`
+                                <button
+                                    disabled={isUpdating}
+                                    type="submit"
+                                    className={`
               px-6
               py-2
               cursor-pointer
@@ -366,21 +365,21 @@ const UpdateCashModal = ({
               text-white
               disabled:opacity-50
               ${isIncome
-                                ? "bg-[#039A63]"
-                                : "bg-[#FF480D]"
-                            }
+                                            ? "bg-[#039A63]"
+                                            : "bg-[#FF480D]"
+                                        }
             `}
-                    >
-                        {isUpdating
-                            ? "আপডেট হচ্ছে..."
-                            : "আপডেট করুন"}
-                    </button>
-                </div>
-                {isSingleLoading && (
-                    <div className="absolute inset-0 w-full  bg-gray-100/60 blur-md"></div>
-                )}
-            </form>
-        }
+                                >
+                                    {isUpdating
+                                        ? "আপডেট হচ্ছে..."
+                                        : "আপডেট করুন"}
+                                </button>
+                            </div>
+                            {isSingleLoading && (
+                                <div className="absolute inset-0 w-full  bg-gray-100/60 blur-md"></div>
+                            )}
+                        </form>
+            }
 
         </CustomModal>
     );

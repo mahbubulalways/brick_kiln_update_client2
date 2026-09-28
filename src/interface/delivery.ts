@@ -3,6 +3,7 @@ import { IUser } from "./user";
 import { TCustomer } from "./customer";
 import { TDriver } from "./driver";
 import { TSeason } from "@/components/Dashboard/Modals/SeasonModal";
+import { TApprovalStatus } from "./approval";
 export type TDeliveryStatus = "PENDING" | "PROCESSING" | "CANCEL" | "DELIVERED";
 export type TInvoiceCustomer = {
   id: number;
@@ -53,6 +54,10 @@ export type TDeliveryResponse = {
   lastDelivered: number;
   status: TDeliveryStatus;
   deliveryStatusActionTimes: TDeliveryStatusTime;
+  carRent: string;
+
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 };
 
 export type TDeliveryWithCustomer = {

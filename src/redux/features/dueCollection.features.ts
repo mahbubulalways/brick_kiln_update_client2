@@ -29,7 +29,7 @@ const dueCollectionApi = baseApi.injectEndpoints({
         url: `/due/today-have-due?date=${query.date}&page=${query.page}&limit=${query.limit}&search=${query.search}`,
         method: "GET",
       }),
-      providesTags: ['DueCollection', "SEASON"]
+      providesTags: ["DueCollection", "SEASON"],
     }),
 
     // SEARCH CUSTOMER FOR DWU
@@ -38,9 +38,8 @@ const dueCollectionApi = baseApi.injectEndpoints({
         url: `/due/search-customer?search=${query.search}`,
         method: "GET",
       }),
-      providesTags: ['DueCollection']
+      providesTags: ["DueCollection"],
     }),
-
 
     // GET TODAY PAID
     getTodayPaid: builder.query({
@@ -58,9 +57,8 @@ const dueCollectionApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       keepUnusedDataFor: 0,
-      providesTags: ["DueCollection", "SEASON"]
+      providesTags: ["DueCollection", "SEASON"],
     }),
-
 
     // GET SINGLE DUE
     getSingleDue: builder.query({
@@ -97,6 +95,15 @@ const dueCollectionApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["DueCollection", "CUSTOMER"],
     }),
+
+    // DELETE DUE COLLECTION DATE
+    deleteDueCollection: builder.mutation({
+      query: (id) => ({
+        url: `/due/delete/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DueCollection"],
+    }),
   }),
 });
 
@@ -110,5 +117,6 @@ export const {
   useUpdateDueCollectionMutation,
   useGetSingleDueDateQuery,
   useUpdateDueCollectionDateMutation,
-  useSearchCustomerForDeuQuery
+  useSearchCustomerForDeuQuery,
+  useDeleteDueCollectionMutation,
 } = dueCollectionApi;

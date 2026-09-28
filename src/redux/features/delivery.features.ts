@@ -20,13 +20,13 @@ const deliveryApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: ["Delivery"],
+      invalidatesTags: ["Delivery", "STOCK_BOOK"],
     }),
 
     // GET TODAYS DELIVERY
     getTodaysDelivery: builder.query({
       query: (query: TQuery) => ({
-        url: `/delivery/todays-delivery?page=${query.page}&limit=${query.limit}&date=${query.date}`,
+        url: `/delivery/todays-delivery?page=${query.page}&limit=${query.limit}&date=${query.date}&search=${query.search}`,
         method: "GET",
       }),
       providesTags: ["Delivery", "InvoiceItem", "SEASON"],
@@ -67,6 +67,15 @@ const deliveryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Delivery"],
     }),
+
+    //  DELETE DELIVERY
+    deleteDeliveryStatus: builder.mutation({
+      query: (id) => ({
+        url: `/delivery/delete/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Delivery", "STOCK_BOOK"],
+    }),
   }),
 });
 
@@ -78,4 +87,5 @@ export const {
   useGetAllDeliveryListQuery,
   useGetSingleDeliveryQuery,
   useChangeDeliveryStatusMutation,
+  useDeleteDeliveryStatusMutation,
 } = deliveryApi;

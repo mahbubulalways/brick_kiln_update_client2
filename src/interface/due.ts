@@ -1,5 +1,6 @@
 import { TSeason } from "@/components/Dashboard/Modals/SeasonModal";
 import { ISeason } from "./season";
+import { TApprovalStatus } from "./approval";
 
 export interface ICustomer {
   id: number;
@@ -28,6 +29,9 @@ export interface IDueResponse {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
+
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 }
 
 export interface TDueData {

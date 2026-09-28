@@ -6,11 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Calendar, MoreVertical, Truck, User } from "lucide-react";
+import { Calendar, MoreVertical, Trash, Truck, User } from "lucide-react";
 import CustomNewButton from "@/components/Reusable/CustomNewButton";
 import CustomReportButton from "@/components/Reusable/CustomReportButton";
 import TableHead from "@/components/Reusable/TableHead";
-import { useChangeDeliveryStatusMutation, useGetTodaysDeliveryQuery } from "@/redux/features/delivery.features";
+import { useChangeDeliveryStatusMutation, useDeleteDeliveryStatusMutation, useGetTodaysDeliveryQuery } from "@/redux/features/delivery.features";
 import moment from "moment";
 import TableData from "@/components/Reusable/TableData";
 import CustomDropDownMenuItem from "@/components/Reusable/CustomDropDownMenuItem";
@@ -40,6 +40,8 @@ import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 import CustomSelect2 from "@/components/Reusable/CustomSelect2";
 import Swal from "sweetalert2";
+import SearchBar from "@/components/Reusable/SearchBar";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 const deliveryStatusOptions = [
   // {
@@ -60,8 +62,9 @@ const deliveryStatusOptions = [
   },
 ];
 
-const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
+const TodaysDeliveryPage = ({ limit, page, search }: TQuery) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [searchItems, setSearchItem] = useState("");
   const [openDeliveryReport, setOpenDeliveryReport] =
     useState<boolean>(false);
   const [openDeliveryDetailsModal, setOpenDeliveryDetailsModal] =
@@ -90,17 +93,17 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
         date: formatDate,
         limit,
         page,
+        search
       },
       {
         refetchOnMountOrArgChange: true,
       },
     );
   const [statusChangeAsync, { isLoading: statusLoading }] = useChangeDeliveryStatusMutation()
+  const [deleteDeliveryAsync, { isLoading: deleteLoading }] = useDeleteDeliveryStatusMutation()
 
   const { data: vata } = useGetVataInfoQuery(undefined);
-
   const deliveries = data?.data?.data || [];
-
   const meta = data?.data?.meta as TMetaConfig;
 
   const items = deliveries?.map(
@@ -167,32 +170,86 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
     }
   };
 
+
+
+
+  const handleDeleteDelivery = async (deliveryId: string) => {
+    const result = await Swal.fire({
+      title: "আপনি কি নিশ্চিত?",
+      text: "ডেলিভারিটি মুছে ফেলার অনুরোধ করতে চান?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "হ্যাঁ, মুছে ফেলুন",
+      cancelButtonText: "বাতিল",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const response = await deleteDeliveryAsync(deliveryId).unwrap();
+
+      if (response?.success) {
+        await Swal.fire({
+          title: "অনুরোধ পাঠানো হয়েছে!",
+          text: response?.message,
+          icon: "success",
+          confirmButtonColor: "#039A63",
+          confirmButtonText: "ঠিক আছে",
+        });
+      }
+
+    } catch (error: any) {
+      await Swal.fire({
+        title: "ব্যর্থ!",
+        text:
+          error?.data?.message ||
+          "ডেলিভারিটি মুছে ফেলার অনুরোধ করা যায়নি।",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "ঠিক আছে",
+      });
+    }
+  };
+
   return (
     <div className="rounded-md border bg-white shadow">
       <div className="flex items-center justify-between gap-5 p-2">
-        <CustomNewButton
-          title="নতুন ডেলিভারি"
-          onClick={() => setIsOpen(!isOpen)}
-        />
+        <div className="flex flex-col gap-2 w-full md:flex-row md:items-center md:gap-2">
+          <CustomNewButton
+            title="নতুন ডেলিভারি"
+            onClick={() => setIsOpen(!isOpen)}
+          />
 
-        <div className="flex items-center gap-2">
-          <div className="min-w-0 flex-1 lg:w-auto lg:flex-none">
-            <CustomDateFilter
-              value={filterDate}
-              onChange={setDateFiter}
-              placeholder="তারিখ ফিল্টার করুন"
-              className="w-full lg:w-auto"
+          <div className="w-full md:w-auto md:flex-1">
+            <SearchBar
+              value={searchItems}
+              onChange={(e) => setSearchItem(e.target.value)}
+              onClear={() => setSearchItem("")}
+              placeholder="চালান নম্বর, নাম, মোবাইল নম্বর"
             />
           </div>
+        </div>
 
-          <CustomPrintButton
-            onClick={() => printRef.current?.print()}
-          />
-
-          <CustomReportButton
-            onClick={() => setOpenDeliveryReport(true)}
+        <div className="min-w-0 flex-1 lg:w-auto lg:flex-none">
+          <CustomDateFilter
+            value={filterDate}
+            onChange={setDateFiter}
+            placeholder="তারিখ ফিল্টার করুন"
+            className="w-full lg:w-auto"
           />
         </div>
+
+        <CustomPrintButton
+          onClick={() => printRef.current?.print()}
+          className="w-max"
+        />
+
+        <CustomReportButton
+          onClick={() => setOpenDeliveryReport(true)}
+        />
+
       </div>
 
       <div>
@@ -201,6 +258,7 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
             <thead className="bg-[#039A63] text-white">
               <tr>
                 <TableHead th="চালান নং" />
+                <TableHead th="ডেলিভারি নং" />
                 <TableHead th="কাস্টমার" />
                 <TableHead
                   th="ঠিকানা"
@@ -237,13 +295,13 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
             <tbody>
               {isFetching ? (
                 <TableLazyLoading
-                  smallColumns={6}
-                  largeColumns={12}
+                  smallColumns={14}
+                  largeColumns={14}
                   rows={6}
                 />
               ) : isError ? (
                 <tr>
-                  <td colSpan={13}>
+                  <td colSpan={14}>
                     <CustomStatus
                       type="error"
                       description={SERVER_ERROR_MESSAGE}
@@ -253,7 +311,7 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
               ) : !deliveries?.length ? (
                 <tr>
                   <td
-                    colSpan={13}
+                    colSpan={14}
                     className="py-8 text-gray-600"
                   >
                     <CustomStatus
@@ -270,7 +328,10 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
                       className="hover:bg-gray-50"
                     >
                       <TableData
-                        td={row?.invoice?.serial}
+                        td={toBanglaNumber(row?.invoice?.serial)}
+                      />
+                      <TableData
+                        td={toBanglaNumber(row?.deliveryNo)}
                       />
 
                       <TableData
@@ -391,9 +452,14 @@ const TodaysDeliveryPage = ({ limit, page }: TQuery) => {
                               </Link>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              disabled={deleteLoading ||
+                                approvalButtonDisable(row?.deleteStatus)
+                              }
+                              onClick={() => handleDeleteDelivery(String(row?.id))}
+                            >
                               <CustomDropDownMenuItem
-                                Icon={User}
+                                Icon={Trash}
                                 title="ডিলিট করুন"
                               />
                             </DropdownMenuItem>

@@ -113,6 +113,9 @@ export interface IChallanForDataShow {
 
   // NOT IN DB
   totalDue: number;
+
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 }
 
 // DELIVERY

@@ -102,6 +102,7 @@ const UpdateKhotiyanModal = ({
 
     const payload = {
       ...formData,
+      startDate: formData?.startDate || null,
       parentId: formData.parentId || null,
       rate: Number(formData.rate || 0),
       quantity: Number(formData.quantity || 0),
@@ -109,6 +110,7 @@ const UpdateKhotiyanModal = ({
       weeklyFood: Number(formData.weeklyFood || 0),
       openingBalance: Number(formData.openingBalance || 0),
       openingBalanceType: formData.openingBalanceType || null,
+      serial: Number(formData.serial),
     };
 
     try {

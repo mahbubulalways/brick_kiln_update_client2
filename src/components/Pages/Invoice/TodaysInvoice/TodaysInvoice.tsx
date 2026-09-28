@@ -54,6 +54,7 @@ import { toBanglaNumber } from "@/utils/toBanglaNumber";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
   const [searchItems, setSearchItem] = useState("");
@@ -95,7 +96,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
 
 
   //  CALL DELETE INVOICE HOOK
-  const [deleteInvoice] = useDeleteInvoiceMutation();
+  const [deleteInvoice, { isLoading: deleteLoading }] = useDeleteInvoiceMutation();
   const printRef = useRef<TCommonPrintRef>(null);
   const totalInvoices = invoices?.data?.data as IChallanForDataShow[] || [];
   const meta = invoices?.data?.meta as TMetaConfig;
@@ -107,7 +108,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
       text: "একবার মুছে ফেলা হলে এটি আর ফিরিয়ে আনা যাবে না।",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#039A63",
       cancelButtonColor: "#d33",
       confirmButtonText: "হ্যাঁ, মুছে ফেলুন!",
       cancelButtonText: "বাতিল করুন",
@@ -118,7 +119,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
           if (result?.success) {
             Swal.fire({
               title: "মুছে ফেলা হয়েছে!",
-              text: "আপনার চালান সফলভাবে মুছে ফেলা হয়েছে।",
+              text: result?.message,
               icon: "success",
               confirmButtonText: "ঠিক আছে",
             });
@@ -343,6 +344,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                                       setOpenUpdateModal(true);
                                       setInvoiceId(row?.serial);
                                     }}
+                                    disabled={approvalButtonDisable(row?.updateStatus)}
                                   >
                                     <CustomDropDownMenuItem
                                       Icon={BsPencilSquare}
@@ -525,6 +527,8 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                                 setOpenUpdateModal(true);
                                 setInvoiceId(row?.serial);
                               }}
+
+                              disabled={approvalButtonDisable(row?.updateStatus)}
                             >
                               <CustomDropDownMenuItem
                                 Icon={BsPencilSquare}
@@ -610,6 +614,9 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleDeleteInvoice(row?.id)}
+                              disabled={deleteLoading ||
+                                approvalButtonDisable(row?.deleteStatus)
+                              }
                             >
                               <CustomDropDownMenuItem
                                 Icon={Trash}

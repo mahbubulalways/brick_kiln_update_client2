@@ -6,23 +6,11 @@ import CustomLoader from "@/components/Reusable/CustomLoader";
 import { Clock3 } from "lucide-react";
 import { TMetaConfig } from "@/interface/meta";
 import { TablePagination } from "@/components/Reusable/TablePagination";
+import { moduleNames } from "../ApprovalRequestPage/approval.field";
 
 type TActivityAction = "CREATE" | "UPDATE" | "DELETE";
 
-const moduleNameMap: Record<string, string> = {
-    CHALLAN: "চালান",
-    DELIVERY: "ডেলিভারি",
-    CUSTOMER: "কাস্টমার",
-    PAYMENT: "পেমেন্ট",
-    STOCK: "স্টক",
-    LEDGER: "লেজার",
-    DUE: "বাকি",
-    CASH: "ক্যাশ",
-    INVOICE: "ইনভয়েস",
-    CLASS_RATE: "শ্রেণী ও রেট",
-    TASK: "টাস্ক",
-    DRIVER: "ড্রাইভার",
-};
+const moduleNameMap: Record<string, string> = moduleNames;
 
 const actionNameMap: Record<TActivityAction, string> = {
     CREATE: "তৈরি",

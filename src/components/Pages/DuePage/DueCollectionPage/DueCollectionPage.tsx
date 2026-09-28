@@ -17,11 +17,9 @@ import UpdateDueCollection from "@/components/Dashboard/Modals/UpdateDueCollecti
 import ThermalDueCollectionPrintModal from "@/components/Dashboard/Modals/ThermalDueCollectionPrintModal";
 import CustomButtonFixed from "@/components/Reusable/CustomButtonFixed";
 import { BsPencilSquare } from "react-icons/bs";
-import { useGetTodayPaidQuery } from "@/redux/features/dueCollection.features";
+import { useDeleteDueCollectionMutation, useGetTodayPaidQuery } from "@/redux/features/dueCollection.features";
 import moment from "moment";
-import CustomLoader from "@/components/Reusable/CustomLoader";
 import { TQuery } from "@/interface/query";
-import CustomDatePickerState from "@/components/Reusable/CustomDatePickerState";
 import { TMetaConfig } from "@/interface/meta";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
@@ -31,11 +29,12 @@ import CustomPrintButton from "@/components/Reusable/CustomPrintButton";
 import CommonPrint, { TCommonPrintRef } from "@/components/Reusable/CommonPrint";
 import { useGetVataInfoQuery } from "@/redux/features/vata.features";
 import CollectionDeuPrint from "@/components/PrintComponent/CollectionDeuPrint";
-import NewDueCollectionModalId from "@/components/Dashboard/Modals/NewDueCollectionModalId";
 import { formatDateRange } from "@/utils/formatDateRange";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
+import Swal from "sweetalert2";
 
 
 
@@ -47,7 +46,6 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
     useState<boolean>(false);
   const [isOpenUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  const [customerId, setCustomerId] = useState<string>();
   const [deuId, setDeuId] = useState<string>();
 
   const [filterDate, setDateFiter] = useState<{
@@ -68,6 +66,10 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
   }, {
     refetchOnMountOrArgChange: true,
   });
+  // DELETE DUE
+  const [deleteDueCollection, { isLoading: deleteDueCollectionLoading }] = useDeleteDueCollectionMutation()
+
+
   const printRef = useRef<TCommonPrintRef>(null);
   // VATA INFORMATIONS
   const { data: vata } = useGetVataInfoQuery(undefined)
@@ -81,6 +83,40 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
     setExpandedRow((prev) => (prev === id ? null : id));
   };
 
+
+  const handleDeleteDueCollection = async (id: string) => {
+    Swal.fire({
+      title: "আপনি কি নিশ্চিত?",
+      text: "একবার মুছে ফেলা হলে এটি আর ফিরিয়ে আনা যাবে না।",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#039A63",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "হ্যাঁ, মুছে ফেলুন!",
+      cancelButtonText: "বাতিল করুন",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const result = await deleteDueCollection(String(id)).unwrap();
+          if (result?.success) {
+            Swal.fire({
+              title: "মুছে ফেলা হয়েছে!",
+              text: result?.message || "জমা সফলভাবে মুছে ফেলা হয়েছে।",
+              icon: "success",
+              confirmButtonText: "ঠিক আছে",
+            });
+          }
+        } catch (error: any) {
+          Swal.fire({
+            title: "মুছে ফেলা যায়নি!",
+            text: error?.data?.message || SERVER_ERROR_MESSAGE,
+            icon: "error",
+            confirmButtonText: "ঠিক আছে",
+          });
+        }
+      }
+    });
+  };
 
   return (
     <div className="bg-white rounded-md shadow border ">
@@ -125,7 +161,7 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
           <table className="min-w-full border-collapse ">
             <thead>
               <tr className="bg-[#039A63] text-white text-center">
-                <TableHead th="নং" cls="hidden lg:table-cell" />
+                <TableHead th="কাস্টমার আইডি" cls="hidden lg:table-cell" />
                 <TableHead th="নাম" />
                 <TableHead th="ঠিকানা" />
                 <TableHead th="বাকি ছিল" cls="hidden lg:table-cell" />
@@ -203,6 +239,9 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
                                   setDeuId(row?.id);
                                   setOpenUpdateModal(true);
                                 }}
+                                disabled={
+                                  approvalButtonDisable(row?.updateStatus)
+                                }
                               >
                                 <CustomDropDownMenuItem
                                   Icon={Pencil}
@@ -231,7 +270,14 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
                                   />
                                 </Link>
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={
+                                  () => handleDeleteDueCollection(row.id)
+                                }
+                                disabled={
+                                  approvalButtonDisable(row?.deleteStatus)
+                                }
+                              >
                                 <CustomDropDownMenuItem
                                   Icon={Trash}
                                   title="ডিলেট"
@@ -288,7 +334,9 @@ const DueCollectionPage = ({ limit, page }: TQuery) => {
 
                             {/* Buttons */}
                             <div className="flex items-center justify-between pt-3">
-                              <button onClick={() => setOpenUpdateModal(true)}>
+                              <button
+
+                                onClick={() => setOpenUpdateModal(true)}>
                                 <CustomButtonFixed
                                   title="এডিট"
                                   cls="bg-green-200 text-green-700 px-2"

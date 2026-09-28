@@ -5,10 +5,10 @@ import { modifyQuery } from "@/utils/modifyQuery";
 
 const TodaysDelivery = async ({ searchParams }: TQuerySearch) => {
   const query = await searchParams
-  const { currentLimit, currentPage } = modifyQuery(query)
+  const { currentLimit, currentPage, currentSearch } = modifyQuery(query)
   return (
     <PrivateComponent feature="DELIVERY">
-      <TodaysDeliveryPage limit={currentLimit} page={currentPage} />
+      <TodaysDeliveryPage limit={currentLimit} page={currentPage} search={currentSearch} />
     </PrivateComponent>
   );
 };

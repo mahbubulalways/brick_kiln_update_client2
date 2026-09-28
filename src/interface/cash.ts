@@ -1,3 +1,5 @@
+import { TApprovalStatus } from "./approval";
+
 export type TCash = {
   id: number;
   type: "EXPENSE" | "INCOME";
@@ -7,4 +9,7 @@ export type TCash = {
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;
+
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 };

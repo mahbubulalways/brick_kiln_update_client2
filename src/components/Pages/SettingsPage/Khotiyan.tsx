@@ -19,6 +19,8 @@ import { TMetaConfig } from "@/interface/meta";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import SearchBar from "@/components/Reusable/SearchBar";
+import { TApprovalStatus } from "@/interface/approval";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 type TLedger = {
   id: number;
@@ -42,6 +44,9 @@ type TLedger = {
   serial: number;
   phoneNumber: string;
   startDate: string;
+  deleteStatus: TApprovalStatus
+  updateStatus: TApprovalStatus
+
 };
 
 const Khotiyan = ({
@@ -88,11 +93,11 @@ const Khotiyan = ({
     if (!result.isConfirmed) return;
 
     try {
-      await deleteLedger(id).unwrap();
+      const response = await deleteLedger(id).unwrap();
 
       await Swal.fire({
         title: "ডিলেট হয়েছে!",
-        text: "খতিয়ানটি সফলভাবে ডিলেট করা হয়েছে।",
+        text: response?.message,
         icon: "success",
         confirmButtonColor: "#039A63",
         confirmButtonText: "ঠিক আছে",
@@ -238,8 +243,9 @@ const Khotiyan = ({
                           <button
                             type="button"
                             title="এডিট করুন"
+                            disabled={row?.updateStatus === "PENDING"}
                             onClick={() => handleEdit(row.id)}
-                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700"
+                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             <Pencil className="h-4 w-4" />
                           </button>
@@ -247,7 +253,9 @@ const Khotiyan = ({
                           <button
                             type="button"
                             title="ডিলেট করুন"
-                            disabled={deleteLoading}
+                            disabled={
+                              deleteLoading ||
+                              approvalButtonDisable(row?.deleteStatus)}
                             onClick={() => handleDelete(row.id)}
                             className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                           >

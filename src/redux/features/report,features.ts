@@ -25,6 +25,7 @@ const reportAPi = baseApi.injectEndpoints({
       query: () => ({
         url: "report/load-unload",
       }),
+      providesTags: ["LOAD_UNLOAD_INFO"],
     }),
   }),
 });
