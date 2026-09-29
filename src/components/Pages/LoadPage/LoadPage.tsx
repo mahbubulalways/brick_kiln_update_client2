@@ -41,6 +41,7 @@ import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 import LoadInfoReportModal from "@/components/Dashboard/Modals/ReportModal/LoadReportModal";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 const LoadPage = ({ limit, page }: TQuery) => {
   const [date, setDate] = useState<Date | undefined>();
@@ -97,11 +98,11 @@ const LoadPage = ({ limit, page }: TQuery) => {
     if (!result.isConfirmed) return;
 
     try {
-      await deleteLoadInfo(id).unwrap();
+      const result = await deleteLoadInfo(id).unwrap();
 
       await Swal.fire({
         title: "ডিলেট হয়েছে!",
-        text: "লোডের তথ্য সফলভাবে ডিলেট করা হয়েছে।",
+        text: result?.message,
         icon: "success",
         confirmButtonColor: "#039A63",
         confirmButtonText: "ঠিক আছে",
@@ -119,6 +120,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
     }
   };
 
+  console.log(loads)
 
   return (
     <div className="bg-white rounded-md shadow border">
@@ -252,6 +254,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
                               setLoadId(row?.id)
                               setUpdateOpenModal(true)
                             }}
+                            disabled={approvalButtonDisable(row?.updateStatus)}
                           >
                             <CustomDropDownMenuItem
                               Icon={Pencil}
@@ -261,7 +264,7 @@ const LoadPage = ({ limit, page }: TQuery) => {
 
                           <DropdownMenuItem
                             onClick={() => handleDelete(row.id)}
-                            disabled={deleteLoading}
+                            disabled={deleteLoading || approvalButtonDisable(row?.deleteStatus)}
                           >
                             <CustomDropDownMenuItem
                               Icon={Trash}

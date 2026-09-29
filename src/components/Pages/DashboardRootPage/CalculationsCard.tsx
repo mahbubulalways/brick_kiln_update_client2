@@ -12,7 +12,7 @@ type TCalculate = {
 const CalculationsCard = ({ cashSell, dueSell, totalSell, payment, cash, due }: TCalculate) => {
   const cards = [
     {
-      title: "মোট বিক্রি",
+      title: "মোট বিক্রি (গাড়ির ভাড়া)",
       amount: `৳${totalSell ?? "00"}`,
       color: "bg-[#007bcd]",
       path: "/dashboard/invoice",

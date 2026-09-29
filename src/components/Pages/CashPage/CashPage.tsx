@@ -273,7 +273,7 @@ const CashPage = ({ limit, page, search }: TQuery) => {
 
                               <DropdownMenuItem
                                 disabled={isLoading ||
-                                  approvalButtonDisable(row?.updateStatus)
+                                  approvalButtonDisable(row?.deleteStatus)
                                 }
                                 onClick={() => handleDeleteCash(row?.id)}>
                                 <CustomDropDownMenuItem

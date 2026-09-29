@@ -26,6 +26,7 @@ import { getDeviceInfo } from "@/utils/getClientInfo";
 import { useLogoutFromTheSystemMutation } from "@/redux/features/auth.features";
 import { showToast } from "@/components/Toast/CustomToast";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
+import { getClientIp } from "@/utils/getClientIp";
 
 export function ProfileMenu() {
     const router = useRouter();
@@ -35,8 +36,13 @@ export function ProfileMenu() {
     const handleLogout = async () => {
         setLogoutLoading(true);
         const info = getDeviceInfo();
+        const ip = await getClientIp();
+        const payload = {
+            ...info,
+            ip
+        }
         try {
-            const result = await logout(info).unwrap();
+            const result = await logout(payload).unwrap();
             if (result?.success) {
                 deleteCookie();
                 logoutUserFromSystem();

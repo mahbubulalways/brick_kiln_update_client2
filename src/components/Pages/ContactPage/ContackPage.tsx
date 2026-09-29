@@ -24,6 +24,8 @@ import CustomLoader from "@/components/Reusable/CustomLoader";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
+import { TApprovalStatus } from "@/interface/approval";
 
 
 type TContact = {
@@ -32,6 +34,9 @@ type TContact = {
     address: string;
     occupation: string;
     phone: string;
+
+    deleteStatus: TApprovalStatus;
+    updateStatus: TApprovalStatus;
 };
 
 export default function ContackPage({
@@ -65,11 +70,10 @@ export default function ContackPage({
         if (!result.isConfirmed) return;
 
         try {
-            await deleteContact(id).unwrap();
-
+            const response = await deleteContact(id).unwrap();
             await Swal.fire({
                 title: "ডিলিট হয়েছে!",
-                text: "ফোন নম্বরটি সফলভাবে ডিলিট করা হয়েছে।",
+                text: response?.message,
                 icon: "success",
                 confirmButtonColor: "#039A63",
                 confirmButtonText: "ঠিক আছে",
@@ -181,6 +185,7 @@ export default function ContackPage({
                                                 <div className="flex items-center justify-center gap-4">
                                                     {/* Edit */}
                                                     <button
+                                                        disabled={approvalButtonDisable(contact?.updateStatus)}
                                                         type="button"
                                                         onClick={() => {
                                                             setOpenUpdateContactModal(true)
@@ -193,7 +198,9 @@ export default function ContackPage({
 
                                                     <button
                                                         type="button"
-                                                        disabled={isDeleting}
+                                                        disabled={isDeleting ||
+                                                            approvalButtonDisable(contact?.deleteStatus)
+                                                        }
                                                         onClick={() => handleDelete(contact.id)}
                                                         className="text-[#ff4d4f] transition-all duration-200 hover:scale-110 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >

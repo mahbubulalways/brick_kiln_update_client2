@@ -13,10 +13,8 @@ import CustomSelect2 from "@/components/Reusable/CustomSelect2";
 import TableData from "@/components/Reusable/TableData";
 import TableHead from "@/components/Reusable/TableHead";
 import CustomDropDownMenuItem from "@/components/Reusable/CustomDropDownMenuItem";
-import CustomLoader from "@/components/Reusable/CustomLoader";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import { TQuery } from "@/interface/query";
-import CustomDatePickerState from "@/components/Reusable/CustomDatePickerState";
 import { useGetAllRoundQuery } from "@/redux/features/round.features";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 import Swal from "sweetalert2";
@@ -246,9 +244,9 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                                 <TableHead
                                     th="মোট ইট"
                                 />
-                                <TableHead
+                                {/* <TableHead
                                     th="বাটন"
-                                />
+                                /> */}
 
                             </tr>
 
@@ -330,11 +328,6 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                                                         (
                                                             ft: TClassAndRate
                                                         ) => {
-
-                                                            /*
-                                                             * এই row-এর unloadItems
-                                                             * থেকে current classId খুঁজে বের করছি
-                                                             */
                                                             const classData =
                                                                 row.items?.find(
                                                                     (
@@ -369,8 +362,7 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                                                         )}
                                                     />
 
-                                                    {/* ================= ACTION ================= */}
-                                                    <td className="border p-2">
+                                                    {/* <td className="border p-2">
 
                                                         <DropdownMenu>
 
@@ -409,8 +401,6 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                                                             shadow-md
                                                         "
                                                             >
-
-                                                                {/* DELETE */}
                                                                 <DropdownMenuItem
                                                                     onClick={() =>
                                                                         handleDelete(
@@ -435,7 +425,7 @@ const UnloadPage = ({ limit, page }: TQuery) => {
 
                                                         </DropdownMenu>
 
-                                                    </td>
+                                                    </td> */}
 
                                                 </tr>
 

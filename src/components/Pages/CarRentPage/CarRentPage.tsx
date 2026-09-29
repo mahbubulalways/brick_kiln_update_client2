@@ -13,7 +13,6 @@ import {
 import { TQuery } from "@/interface/query";
 import { useGetAllCarRentQuery, useDeleteCarRentMutation } from "@/redux/features/carRent.features";
 
-import CustomLoader from "@/components/Reusable/CustomLoader";
 import TableHead from "@/components/Reusable/TableHead";
 import TableData from "@/components/Reusable/TableData";
 import { TablePagination } from "@/components/Reusable/TablePagination";
@@ -26,6 +25,7 @@ import Swal from "sweetalert2";
 import CustomStatus from "@/components/Reusable/CustomStatus";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 export default function CarRentPage({
     limit,
@@ -241,6 +241,8 @@ export default function CarRentPage({
                                                                     row?.id
                                                                 );
                                                             }}
+
+                                                            disabled={approvalButtonDisable(row?.deleteStatus)}
                                                         >
                                                             <CustomDropDownMenuItem
                                                                 Icon={Pencil}
@@ -250,7 +252,9 @@ export default function CarRentPage({
 
                                                         {/* Delete */}
                                                         <DropdownMenuItem
-                                                            disabled={deleteLoading}
+                                                            disabled={deleteLoading
+                                                                || approvalButtonDisable(row?.deleteStatus)
+                                                            }
                                                             onClick={() =>
                                                                 handleDeleteCarRent(
                                                                     row?.id

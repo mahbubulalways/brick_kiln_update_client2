@@ -1,3 +1,5 @@
+import { TApprovalStatus } from "./approval";
+
 export type TLoadResponse = {
   id: string;
   roundId: number;
@@ -7,9 +9,12 @@ export type TLoadResponse = {
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
-  classType:string
+  classType: string;
   round: {
     id: number;
     name: string;
   };
+
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 };

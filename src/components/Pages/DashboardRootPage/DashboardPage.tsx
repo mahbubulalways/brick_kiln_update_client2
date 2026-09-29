@@ -61,7 +61,7 @@ const DashboardPage = () => {
   const { data: vata } = useGetVataInfoQuery(undefined)
   const reports = data?.data as TDashboardReport;
 
-  const totalSell = reports?.challan?.summary?.totalSale;
+  const totalSell = reports?.challan?.summary?.totalSaleWithRent;
   const cashSell = reports?.challan?.summary?.cash;
   const dueSell = reports?.challan?.summary?.due;
   const payment = reports?.payment?.total;

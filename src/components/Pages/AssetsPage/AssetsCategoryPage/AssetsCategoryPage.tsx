@@ -30,6 +30,7 @@ import CustomStatus from "@/components/Reusable/CustomStatus";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 
 import UpdateAssetsCategoryModal from "@/components/Dashboard/Modals/EditModals/UpdateAssetsCategoryModal";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 export default function AssetsCategoryPage() {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -76,11 +77,11 @@ export default function AssetsCategoryPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await deleteGoodsCategory(id).unwrap();
+            const result = await deleteGoodsCategory(id).unwrap();
 
             await Swal.fire({
                 title: "ডিলেট হয়েছে!",
-                text: "মালামালের ক্যাটাগরি সফলভাবে ডিলেট করা হয়েছে।",
+                text: result?.message,
                 icon: "success",
                 confirmButtonColor: "#039A63",
                 confirmButtonText: "ঠিক আছে",
@@ -200,6 +201,8 @@ export default function AssetsCategoryPage() {
                                                                 category,
                                                             )
                                                         }
+
+                                                        disabled={approvalButtonDisable(category?.updateStatus)}
                                                     >
                                                         <CustomDropDownMenuItem
                                                             Icon={Pencil}
@@ -209,7 +212,7 @@ export default function AssetsCategoryPage() {
 
                                                     <DropdownMenuItem
                                                         className="cursor-pointer"
-                                                        disabled={isDeleting}
+                                                        disabled={isDeleting || approvalButtonDisable(category?.deleteStatus)}
                                                         onClick={() =>
                                                             handleDelete(
                                                                 category.id,

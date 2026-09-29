@@ -13,13 +13,13 @@ import {
 
 import TableHead from "@/components/Reusable/TableHead";
 import TableData from "@/components/Reusable/TableData";
-import TableFooter from "@/components/Reusable/TableFooter";
 import CustomLoader from "@/components/Reusable/CustomLoader";
 import { TDriver } from "@/interface/driver";
 import { TQuery } from "@/interface/query";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { TMetaConfig } from "@/interface/meta";
 import EditDriverModal from "@/components/Dashboard/Modals/EditModals/EditDriverModa";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 const DriverPage = ({ limit, page, search }: TQuery) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,11 +54,11 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
     if (!result.isConfirmed) return;
 
     try {
-      await deleteDriver(id).unwrap();
+      const result = await deleteDriver(id).unwrap();
 
       await Swal.fire({
         title: "ডিলেট হয়েছে!",
-        text: "ড্রাইভারটি সফলভাবে ডিলেট করা হয়েছে।",
+        text: result?.message,
         icon: "success",
         confirmButtonColor: "#039A63",
         confirmButtonText: "ঠিক আছে",
@@ -149,6 +149,8 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
                             setIsOpenEditModal(true);
                             setDriverId(row.id);
                           }}
+
+                          disabled={approvalButtonDisable(row?.updateStatus)}
                           className="text-blue-600 transition hover:text-blue-800"
                         >
                           <Pencil className="h-4 w-4" />
@@ -157,7 +159,7 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
                         {/* Delete */}
                         <button
                           type="button"
-                          disabled={isDeleting}
+                          disabled={isDeleting || approvalButtonDisable(row?.deleteStatus)}
                           onClick={() =>
                             handleDelete(row.id)
                           }

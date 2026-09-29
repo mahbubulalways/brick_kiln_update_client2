@@ -14,6 +14,7 @@ import { SERVER_ERROR_MESSAGE } from "@/constant";
 import { getSubdomain } from "@/utils/getSubdomain";
 import { useVerifySubDomainMutation } from "@/redux/features/vata.features";
 import logo from "@/assets/login.svg"
+import { getClientIp } from "@/utils/getClientIp";
 type TLogin = {
   username: string;
   password: string;
@@ -47,6 +48,8 @@ export default function LoginPage() {
     try {
       const extraInfo = getDeviceInfo()
       data.extra = extraInfo
+      const ip = await getClientIp();
+      data.ip = ip
       const result = await userLogin(data);
       setIsLoading(false);
       if (result?.success && result?.redirectPath) {

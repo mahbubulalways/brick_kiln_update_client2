@@ -11,6 +11,7 @@ import { logoutUserFromSystem } from "@/service/auth.services";
 import { showToast } from "@/components/Toast/CustomToast";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import { useRouter } from "next/navigation";
+import { getClientIp } from "@/utils/getClientIp";
 
 export default function LogoutButton() {
     const [logoutOpen, setLogoutOpen] = useState(false);
@@ -25,9 +26,13 @@ export default function LogoutButton() {
         setLogoutLoading(true);
 
         const info = getDeviceInfo();
-
+        const ip = await getClientIp();
+        const payload = {
+            ...info,
+            ip
+        }
         try {
-            const result = await logout(info).unwrap();
+            const result = await logout(payload).unwrap();
 
             if (result?.success) {
                 deleteCookie();
