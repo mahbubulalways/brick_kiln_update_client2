@@ -20,6 +20,8 @@ import { TablePagination } from "@/components/Reusable/TablePagination";
 import { TMetaConfig } from "@/interface/meta";
 import EditDriverModal from "@/components/Dashboard/Modals/EditModals/EditDriverModa";
 import approvalButtonDisable from "@/utils/approvalButtonDisable";
+import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
+import CustomStatus from "@/components/Reusable/CustomStatus";
 
 const DriverPage = ({ limit, page, search }: TQuery) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +29,7 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
 
   const [driverId, setDriverId] = useState<string>();
 
-  const [deleteDriver, { isLoading: isDeleting }] =
+  const [deleteDriver, { isLoading: isDeleting, isError }] =
     useDeleteDriverMutation();
 
   // Get All Drivers
@@ -55,7 +57,6 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
 
     try {
       const result = await deleteDriver(id).unwrap();
-
       await Swal.fire({
         title: "ডিলেট হয়েছে!",
         text: result?.message,
@@ -107,21 +108,33 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
 
           <tbody className="text-center">
             {isLoading ? (
-              <tr>
-                <td colSpan={5}>
-                  <CustomLoader cls="h-[30vh]" />
-                </td>
-              </tr>
+              <TableLazyLoading
+                smallColumns={5}
+                largeColumns={5}
+                rows={6}
+              />
             ) : !drivers?.length ? (
               <tr>
                 <td
                   colSpan={5}
-                  className="py-8 text-gray-600"
                 >
-                  কোনো ড্রাইভারের ডাটা পাওয়া যায়নি
+                  <CustomStatus
+                    type="empty"
+                    description="কোনো ড্রাইভারের ডাটা পাওয়া যায়নি"
+                  />
+
                 </td>
               </tr>
-            ) : (
+            ) : isError ? <tr>
+              <td
+                colSpan={5}
+              >
+                <CustomStatus
+                  type="error"
+                />
+
+              </td>
+            </tr> : (
               drivers?.map(
                 (row: TDriver, index: number) => (
                   <tr
@@ -151,7 +164,7 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
                           }}
 
                           disabled={approvalButtonDisable(row?.updateStatus)}
-                          className="text-blue-600 transition hover:text-blue-800"
+                          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
@@ -163,7 +176,7 @@ const DriverPage = ({ limit, page, search }: TQuery) => {
                           onClick={() =>
                             handleDelete(row.id)
                           }
-                          className="text-red-600 transition hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

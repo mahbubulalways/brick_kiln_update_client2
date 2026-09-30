@@ -126,12 +126,11 @@ const CreateCarRentModal = ({
                     />
                 </div>
 
-                <div className="flex items-center justify-between pt-5">
-
+                <div className="flex items-center  w-full gap-2  justify-between pt-5">
                     <button
                         type="button"
                         onClick={() => reset()}
-                        className="cursor-pointer rounded border border-gray-300 bg-white px-10 py-1.5 text-[14px] font-medium text-gray-500 duration-500 hover:border-[#039A63] hover:text-[#039A63]"
+                        className="cursor-pointer  w-full rounded border border-gray-300 bg-white px-10 py-1.5 text-[14px] font-medium text-gray-500 duration-500 hover:border-[#039A63] hover:text-[#039A63]"
                     >
                         ক্লিয়ার
                     </button>
@@ -139,7 +138,7 @@ const CreateCarRentModal = ({
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="cursor-pointer rounded bg-[#039A63] px-8 py-1.5 text-[14px] font-medium text-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="cursor-pointer  w-full rounded bg-[#039A63] px-8 py-1.5 text-[14px] font-medium text-gray-100 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoading
                             ? "অ্যাড হচ্ছে..."

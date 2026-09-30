@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MoreVertical, Pencil, Trash } from "lucide-react";
+import { MoreVertical, Pencil, Trash, Trash2 } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -80,11 +80,11 @@ export default function CarRentPage({
         if (!result.isConfirmed) return;
 
         try {
-            await deleteCarRent(id).unwrap();
+            const result = await deleteCarRent(id).unwrap();
 
             await Swal.fire({
                 title: "ডিলেট হয়েছে!",
-                text: "গাড়ি ভাড়ার তথ্যটি সফলভাবে ডিলেট করা হয়েছে।",
+                text: result?.message,
                 icon: "success",
                 confirmButtonColor: "#039A63",
                 confirmButtonText: "ঠিক আছে",
@@ -220,59 +220,43 @@ export default function CarRentPage({
                                                 }
                                             />
 
-                                            {/* Button */}
                                             <td className="border p-2">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <button className="rounded p-1.5 transition hover:bg-gray-100">
-                                                            <MoreVertical className="h-4 w-4 cursor-pointer text-gray-600" />
-                                                        </button>
-                                                    </DropdownMenuTrigger>
+                                                <div className="flex justify-center gap-3">
+                                                    {/* Edit */}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setOpenUpdateCarRent(true);
+                                                            setSelectCarRenttId(
+                                                                row?.id
+                                                            );
+                                                        }}
 
-                                                    <DropdownMenuContent
-                                                        align="end"
-                                                        className="rounded-md border bg-white shadow-md"
+                                                        disabled={approvalButtonDisable(row?.updateStatus)}
+                                                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >
-                                                        {/* Update */}
-                                                        <DropdownMenuItem
-                                                            onClick={() => {
-                                                                setOpenUpdateCarRent(true);
-                                                                setSelectCarRenttId(
-                                                                    row?.id
-                                                                );
-                                                            }}
+                                                        <Pencil className="h-4 w-4" />
+                                                    </button>
 
-                                                            disabled={approvalButtonDisable(row?.deleteStatus)}
-                                                        >
-                                                            <CustomDropDownMenuItem
-                                                                Icon={Pencil}
-                                                                title="আপডেট"
-                                                            />
-                                                        </DropdownMenuItem>
+                                                    {/* Delete */}
+                                                    <button
+                                                        type="button"
 
-                                                        {/* Delete */}
-                                                        <DropdownMenuItem
-                                                            disabled={deleteLoading
-                                                                || approvalButtonDisable(row?.deleteStatus)
-                                                            }
-                                                            onClick={() =>
-                                                                handleDeleteCarRent(
-                                                                    row?.id
-                                                                )
-                                                            }
-                                                        >
-                                                            <CustomDropDownMenuItem
-                                                                Icon={Trash}
-                                                                title={
-                                                                    deleteLoading
-                                                                        ? "ডিলেট হচ্ছে..."
-                                                                        : "ডিলেট"
-                                                                }
-                                                            />
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                                        disabled={deleteLoading
+                                                            || approvalButtonDisable(row?.deleteStatus)
+                                                        }
+                                                        onClick={() =>
+                                                            handleDeleteCarRent(
+                                                                row?.id
+                                                            )
+                                                        }
+                                                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
                                             </td>
+
                                         </tr>
                                     )
                                 )

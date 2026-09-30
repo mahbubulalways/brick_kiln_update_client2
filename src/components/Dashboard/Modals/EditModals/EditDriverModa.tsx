@@ -117,8 +117,8 @@ const EditDriverModal = ({
       title="ড্রাইভারের তথ্য পরিবর্তন"
     >
       {isGettingDriver ? (
-      <CustomStatus type="loading"/>
-      ) : isError? <CustomStatus type="loading"/>: (
+        <CustomStatus type="loading" />
+      ) : isError ? <CustomStatus type="loading" /> : (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full"
@@ -182,7 +182,7 @@ const EditDriverModal = ({
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center w-full gap-3">
             <button
               type="button"
               onClick={handleClear}
@@ -190,7 +190,7 @@ const EditDriverModal = ({
               className="
                 w-full
                 cursor-pointer
-                rounded-lg
+                rounded
                 border
                 border-gray-300
                 bg-white
@@ -213,7 +213,7 @@ const EditDriverModal = ({
               className="
                 w-full
                 cursor-pointer
-                rounded-lg
+                rounded
                 bg-[#039A63]
                 px-6
                 py-2

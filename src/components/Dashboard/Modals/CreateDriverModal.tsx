@@ -105,7 +105,7 @@ const CreateDriverModal = ({ isOpen, onClose }: TCustomModal) => {
                     label="মাসিক বেতন (৳)"
                 />
 
-                <div className="flex items-center gap-3 pt-3">
+                <div className="flex  w-full gap-2  items-center gap-3 pt-3">
                     <button
                         type="button"
                         onClick={handleClear}
@@ -113,7 +113,7 @@ const CreateDriverModal = ({ isOpen, onClose }: TCustomModal) => {
               px-6
               py-2
               cursor-pointer
-              rounded-lg
+              rounded
               w-full
               border
               border-gray-300
@@ -134,7 +134,7 @@ const CreateDriverModal = ({ isOpen, onClose }: TCustomModal) => {
               px-6
               py-2
               cursor-pointer
-              rounded-lg
+              rounded
               w-full
               text-sm
               font-medium

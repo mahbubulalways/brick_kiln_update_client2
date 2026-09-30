@@ -191,7 +191,7 @@ export default function ContackPage({
                                                             setOpenUpdateContactModal(true)
                                                             setSelectedContactId(contact.id)
                                                         }}
-                                                        className="text-[#039A63] transition-all duration-200 hover:scale-110"
+                                                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >
                                                         <Pencil size={18} strokeWidth={2} />
                                                     </button>
@@ -202,7 +202,7 @@ export default function ContackPage({
                                                             approvalButtonDisable(contact?.deleteStatus)
                                                         }
                                                         onClick={() => handleDelete(contact.id)}
-                                                        className="text-[#ff4d4f] transition-all duration-200 hover:scale-110 disabled:cursor-not-allowed disabled:opacity-50"
+                                                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >
                                                         <Trash2 size={18} strokeWidth={2} />
                                                     </button>
