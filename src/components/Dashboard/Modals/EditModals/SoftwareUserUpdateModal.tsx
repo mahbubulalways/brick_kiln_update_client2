@@ -12,6 +12,7 @@ import {
   useGetSingleUserQuery,
   useUpdateUserMutation,
 } from "@/redux/features/user.features";
+import CustomStatus from "@/components/Reusable/CustomStatus";
 
 type TCustomModal = {
   isOpen: boolean;
@@ -129,19 +130,29 @@ const SoftwareUserUpdateModal = ({
       width="md"
     >
       {isUserLoading ? (
-        <div className="flex h-40 items-center justify-center">
-          <span className="text-sm text-gray-500">
-            ইউজারের তথ্য লোড হচ্ছে...
-          </span>
-        </div>
+        <CustomStatus
+          type="loading"
+        />
       ) : isError ? (
-        <div className="py-10 text-center text-sm text-red-500">
-          ইউজারের তথ্য লোড করতে সমস্যা হয়েছে।
-        </div>
+        <CustomStatus
+          type="error"
+        />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-3">
-            {/* Name */}
+            <CustomInput
+              name="username"
+              label="ইউজারনেম"
+              placeholder="ইউজারনেম লিখুন"
+              register={register}
+              type="text"
+              error={errors.username}
+              rules={{
+                required: "ইউজারনেম লিখুন",
+              }}
+              readonly
+            />
+
             <CustomInput
               name="name"
               label="নাম"
@@ -154,20 +165,6 @@ const SoftwareUserUpdateModal = ({
               }}
             />
 
-            {/* Username */}
-            <CustomInput
-              name="username"
-              label="ইউজারনেম"
-              placeholder="ইউজারনেম লিখুন"
-              register={register}
-              type="text"
-              error={errors.username}
-              rules={{
-                required: "ইউজারনেম লিখুন",
-              }}
-            />
-
-            {/* User Type */}
             <CustomSelect
               name="role"
               label="ইউজারের ধরন"

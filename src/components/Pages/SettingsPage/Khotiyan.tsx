@@ -21,6 +21,8 @@ import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import SearchBar from "@/components/Reusable/SearchBar";
 import { TApprovalStatus } from "@/interface/approval";
 import approvalButtonDisable from "@/utils/approvalButtonDisable";
+import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
+import CustomStatus from "@/components/Reusable/CustomStatus";
 
 type TLedger = {
   id: number;
@@ -167,27 +169,30 @@ const Khotiyan = ({
 
             <tbody className="text-center">
               {isLoading ? (
-                <tr>
-                  <td colSpan={12} className="border p-8">
-                    <CustomLoader cls="h-[30vh]" />
-                  </td>
-                </tr>
+                <TableLazyLoading
+                  smallColumns={12}
+                  largeColumns={12}
+                  rows={6}
+                />
               ) : isError ? (
                 <tr>
                   <td
                     colSpan={12}
-                    className="border p-8 text-center text-sm text-gray-500"
                   >
-                    {SERVER_ERROR_MESSAGE}
+                    <CustomStatus
+                      type="error"
+                    />
                   </td>
                 </tr>
               ) : !ledgers.length ? (
                 <tr>
                   <td
                     colSpan={12}
-                    className="border p-8 text-center text-sm text-gray-500"
+
                   >
-                    কোনো খতিয়ান পাওয়া যায়নি।
+                    <CustomStatus
+                      type="empty"
+                    />
                   </td>
                 </tr>
               ) : (
@@ -243,7 +248,7 @@ const Khotiyan = ({
                           <button
                             type="button"
                             title="এডিট করুন"
-                            disabled={row?.updateStatus === "PENDING"}
+                            disabled={approvalButtonDisable(row?.updateStatus)}
                             onClick={() => handleEdit(row.id)}
                             className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                           >

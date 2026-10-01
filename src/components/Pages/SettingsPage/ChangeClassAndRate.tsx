@@ -16,6 +16,8 @@ import CustomLoader from "@/components/Reusable/CustomLoader";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { TQuery } from "@/interface/query";
 import { getUserInformation } from "@/service/auth.services";
+import CustomStatus from "@/components/Reusable/CustomStatus";
+import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 
 const ChangeClassAndRate = ({ limit, page }: TQuery) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -103,18 +105,20 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
 
                         <tbody className="text-center">
                             {isLoading ? (
-                                <tr>
-                                    <td colSpan={5}>
-                                        <CustomLoader cls="h-[30vh]" />
-                                    </td>
-                                </tr>
+                                <TableLazyLoading
+                                    smallColumns={6}
+                                    largeColumns={6}
+                                    rows={6}
+                                />
                             ) : !classAndRates?.length ? (
                                 <tr>
                                     <td
-                                        colSpan={5}
+                                        colSpan={6}
                                         className="py-8 text-gray-600"
                                     >
-                                        কোনো শ্রেণি এবং রেটের ডাটা পাওয়া যায়নি
+                                        <CustomStatus
+                                            type="empty"
+                                        />
                                     </td>
                                 </tr>
                             ) : (

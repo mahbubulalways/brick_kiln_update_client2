@@ -20,6 +20,7 @@ import { TablePagination } from "@/components/Reusable/TablePagination";
 import UpdateCustomerModal from "@/components/Dashboard/Modals/EditModals/UpdateCustomerModal";
 import UpdateDuePayDateModal from "@/components/Dashboard/Modals/EditModals/UpdateDuePayDateModal";
 import SendCustomerSmsModal from "@/components/Dashboard/Modals/SendCustomerSmsModal";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 
 // =========================================================
 // Format Date
@@ -387,6 +388,9 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                                                     {/* Update Customer */}
 
                                                     <button
+                                                        disabled={
+                                                            approvalButtonDisable(customer?.updateStatus)}
+
                                                         onClick={(e) => {
                                                             e.stopPropagation();
 
@@ -399,7 +403,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                                                             );
                                                         }}
                                                         type="button"
-                                                        className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-all hover:border-[#079B67] hover:bg-[#079B67] hover:text-white"
+                                                        className="rounded-lg border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-all hover:border-[#079B67] hover:bg-[#079B67] hover:text-white"
                                                     >
                                                         আপডেট কাস্টমার
                                                     </button>

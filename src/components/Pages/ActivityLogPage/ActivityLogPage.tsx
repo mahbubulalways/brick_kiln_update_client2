@@ -7,6 +7,7 @@ import { Clock3 } from "lucide-react";
 import { TMetaConfig } from "@/interface/meta";
 import { TablePagination } from "@/components/Reusable/TablePagination";
 import { moduleNames } from "../ApprovalRequestPage/approval.field";
+import CustomStatus from "@/components/Reusable/CustomStatus";
 
 type TActivityAction = "CREATE" | "UPDATE" | "DELETE";
 
@@ -29,19 +30,54 @@ const ActivityLogPage = ({ limit, page }: TQuery) => {
     });
 
     const activityLogs = data?.data?.data || [];
-    const meta = data?.data?.meta as TMetaConfig
+    const meta = data?.data?.meta as TMetaConfig;
 
-
-    if (isError) {
+    if (isLoading) {
         return (
-            <div className="flex min-h-[300px] items-center justify-center rounded-md border border-red-200 bg-red-50 p-5 text-sm text-red-600">
-                অ্যাক্টিভিটি লগ লোড করা যায়নি।
+            <div className="rounded-md bg-white">
+                <div className="flex items-center gap-2 border-b border-gray-200 px-3 py-2">
+                    <Clock3
+                        size={18}
+                        className="text-[#039A63]"
+                    />
+                    <h2 className="text-sm font-semibold text-gray-800">
+                        অ্যাক্টিভিটি লগ
+                    </h2>
+                </div>
+
+                <div className="space-y-2 p-3">
+                    {[1, 2, 3, 4, 5].map((item) => (
+                        <div
+                            key={item}
+                            className="animate-pulse rounded-md border border-gray-200 bg-gray-50 p-3"
+                        >
+                            <div className="flex items-center justify-between gap-3">
+                                <div className="flex gap-2">
+                                    <div className="h-6 w-24 rounded bg-gray-200" />
+                                    <div className="h-6 w-16 rounded bg-gray-200" />
+                                </div>
+
+                                <div className="h-4 w-32 rounded bg-gray-200" />
+                            </div>
+
+                            <div className="mt-3 h-4 w-3/4 rounded bg-gray-200" />
+
+                            <div className="mt-2 h-3 w-28 rounded bg-gray-200" />
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }
 
+    if (isError) {
+        return (
+            <CustomStatus type="error" />
+        );
+    }
+
     return (
-        <div className="">
+        <div className="relative">
             <div className="rounded-t-md bg-white">
                 <div className="flex items-center gap-2 border-b border-gray-200 px-3 py-2">
                     <Clock3
@@ -54,24 +90,17 @@ const ActivityLogPage = ({ limit, page }: TQuery) => {
                     </h2>
                 </div>
 
-                <div className="space-y-2 p-3">
+                <div className="relative space-y-2 p-3">
                     {!activityLogs.length ? (
-                        <div className="py-10 text-center text-sm text-gray-500">
-                            কোনো অ্যাক্টিভিটি লগ পাওয়া যায়নি।
-                        </div>
+                        <CustomStatus type="empty" />
                     ) : (
                         activityLogs.map((item: any) => {
                             const action =
                                 item.action as TActivityAction;
 
-                            const isUpdate =
-                                action === "UPDATE";
-
-                            const isDelete =
-                                action === "DELETE";
-
-                            const isCreate =
-                                action === "CREATE";
+                            const isUpdate = action === "UPDATE";
+                            const isDelete = action === "DELETE";
+                            const isCreate = action === "CREATE";
 
                             return (
                                 <div
@@ -91,9 +120,7 @@ const ActivityLogPage = ({ limit, page }: TQuery) => {
                                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                                         <div className="flex flex-wrap items-center gap-2">
                                             <span className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-700 shadow-sm">
-                                                {moduleNameMap[
-                                                    item.module
-                                                ] ||
+                                                {moduleNameMap[item.module] ||
                                                     item.module}
                                             </span>
 
@@ -108,13 +135,8 @@ const ActivityLogPage = ({ limit, page }: TQuery) => {
                                                     }
                                                 `}
                                             >
-                                                {
-                                                    actionNameMap[
-                                                    action
-                                                    ]
-                                                }
+                                                {actionNameMap[action]}
                                             </span>
-
                                         </div>
 
                                         <span className="text-xs text-gray-500">
@@ -124,10 +146,8 @@ const ActivityLogPage = ({ limit, page }: TQuery) => {
                                                 ).toLocaleString(
                                                     "bn-BD",
                                                     {
-                                                        dateStyle:
-                                                            "medium",
-                                                        timeStyle:
-                                                            "short",
+                                                        dateStyle: "medium",
+                                                        timeStyle: "short",
                                                     },
                                                 )
                                                 : "-"}

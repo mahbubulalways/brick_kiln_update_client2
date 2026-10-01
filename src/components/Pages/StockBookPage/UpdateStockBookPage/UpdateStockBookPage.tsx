@@ -9,6 +9,7 @@ import { TMetaConfig } from "@/interface/meta";
 import { TQuery } from "@/interface/query";
 import { TStockBook } from "@/interface/stock_book";
 import { useDeleteStockMutation, useGetAllStocksQuery } from "@/redux/features/stock_book.features";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
 
@@ -37,7 +38,7 @@ export default function UpdateStockBookPage({
     );
 
 
-    const [deleteStock, {isLoading:deleteLoading}]=useDeleteStockMutation()
+    const [deleteStock, { isLoading: deleteLoading }] = useDeleteStockMutation()
 
     const stocks = (data?.data?.data ?? []) as TStockBook[];
     const meta = data?.data?.meta as TMetaConfig;
@@ -45,41 +46,40 @@ export default function UpdateStockBookPage({
 
 
 
-   const handleDelete = async (id:string) => {
-    const result = await Swal.fire({
-        title: "আপনি কি নিশ্চিত?",
-        text: "এই স্টকটি ডিলেট করলে এটি আর ফিরে পাওয়া যাবে না!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#039A63",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "হ্যাঁ, ডিলেট করুন",
-        cancelButtonText: "বাতিল",
-    });
-
-    if (!result.isConfirmed) return;
-    try {
-        await deleteStock(id).unwrap();
-
-        await Swal.fire({
-            title: "ডিলেট হয়েছে!",
-            text: "স্টকের তথ্য সফলভাবে ডিলেট করা হয়েছে।",
-            icon: "success",
+    const handleDelete = async (id: string) => {
+        const result = await Swal.fire({
+            title: "আপনি কি নিশ্চিত?",
+            text: "এই স্টকটি ডিলেট করলে এটি আর ফিরে পাওয়া যাবে না!",
+            icon: "warning",
+            showCancelButton: true,
             confirmButtonColor: "#039A63",
-            confirmButtonText: "ঠিক আছে",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "হ্যাঁ, ডিলেট করুন",
+            cancelButtonText: "বাতিল",
         });
-    } catch (error: any) {
-        await Swal.fire({
-            title: "ডিলেট ব্যর্থ!",
-            text:
-                error?.data?.message ||
-                "স্টকের তথ্য ডিলেট করা সম্ভব হয়নি।",
-            icon: "error",
-            confirmButtonColor: "#d33",
-            confirmButtonText: "ঠিক আছে",
-        });
-    }
-};
+
+        if (!result.isConfirmed) return;
+        try {
+            const result = await deleteStock(id).unwrap();
+            await Swal.fire({
+                title: "ডিলেট হয়েছে!",
+                text: result?.message,
+                icon: "success",
+                confirmButtonColor: "#039A63",
+                confirmButtonText: "ঠিক আছে",
+            });
+        } catch (error: any) {
+            await Swal.fire({
+                title: "ডিলেট ব্যর্থ!",
+                text:
+                    error?.data?.message ||
+                    "স্টকের তথ্য ডিলেট করা সম্ভব হয়নি।",
+                icon: "error",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "ঠিক আছে",
+            });
+        }
+    };
 
     return (
         <div className="bg-white rounded-md border border-gray-200 shadow-sm">
@@ -123,7 +123,7 @@ export default function UpdateStockBookPage({
                     </thead>
 
                     <tbody className="text-center">
-                        {isLoading  ? (
+                        {isLoading ? (
                             <tr>
                                 <td
                                     colSpan={7}
@@ -176,14 +176,14 @@ export default function UpdateStockBookPage({
                                         td={stock?.createdBy?.name || "-"}
                                     />
 
-                                    <td className="px-4 py-1">
+                                    <td className="px-4 py-1 flex justify-center">
                                         <button
                                             type="button"
-                                            disabled={deleteLoading}
+                                            disabled={deleteLoading || approvalButtonDisable(stock?.deleteStatus)}
                                             onClick={() => {
                                                 handleDelete(stock.id);
                                             }}
-                                            className="inline-flex cursor-pointer h-8 w-8 items-center justify-center rounded-md border border-red-200 text-red-500 transition-all hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                                            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                                             title="ডিলিট"
                                         >
                                             <Trash2 size={15} />

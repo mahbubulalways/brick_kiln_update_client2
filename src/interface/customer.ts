@@ -1,5 +1,6 @@
 import { TSeason } from "@/components/Dashboard/Modals/SeasonModal";
 import { IChallanForDataShow } from "@/types/types";
+import { TApprovalStatus } from "./approval";
 
 export interface TCustomer {
   id: number;
@@ -15,10 +16,12 @@ export interface TCustomer {
   note: string;
   customerCode: string;
   nextPaymentDate: string;
-  customerDues: ICustomerDue[]
-  currentSeasonDue: number,
-  previousDue: number
-  createdAt:string
+  customerDues: ICustomerDue[];
+  currentSeasonDue: number;
+  previousDue: number;
+  createdAt: string;
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 }
 
 export interface ICustomerDue {
@@ -32,7 +35,7 @@ export interface ICustomerDue {
   nextPaymentDate: string | null;
   createdAt: string;
   updatedAt: string;
-  customer: TCustomer
+  customer: TCustomer;
 
   season: TSeason;
 

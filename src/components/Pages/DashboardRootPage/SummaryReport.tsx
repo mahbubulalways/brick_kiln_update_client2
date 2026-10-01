@@ -558,17 +558,11 @@ const OverviewReport = ({
                     </div>
                 </div>
 
-                <div className="text-center text-[8px] text-slate-400">
-                    <p>
-                        রিপোর্ট প্রস্তুত :{" "}
-                        {formatBanglaDate({ date: new Date() })}
-                    </p>
-
-                    <p className="mt-1 font-semibold text-[#039A63]">
-                        Brick Management
-                    </p>
+                <div className="text-center">
+                    <div className="border-t border-slate-400 pt-1.5 text-[8px] text-slate-500">
+                        অপারেটরের স্বাক্ষর
+                    </div>
                 </div>
-
                 <div className="text-center">
                     <div className="border-t border-slate-400 pt-1.5 text-[8px] text-slate-500">
                         মালিকের স্বাক্ষর

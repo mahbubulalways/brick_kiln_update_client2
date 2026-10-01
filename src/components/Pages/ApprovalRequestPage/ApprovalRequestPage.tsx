@@ -19,6 +19,8 @@ import ApprovalViewModal from "./ApprovalViewModal";
 import Swal from "sweetalert2";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { moduleNames } from "./approval.field";
+import CustomStatus from "@/components/Reusable/CustomStatus";
+import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 
 
 const approvalStatusOptions = [
@@ -174,18 +176,17 @@ const ApprovalRequestPage = ({ page, limit }: TQuery) => {
 
                         <tbody className="text-center">
                             {isLoading ? (
-                                <tr>
-                                    <td colSpan={7}>
-                                        <CustomLoader cls="h-[30vh]" />
-                                    </td>
-                                </tr>
+                                <TableLazyLoading
+                                    smallColumns={7}
+                                    largeColumns={7}
+                                    rows={6}
+                                />
                             ) : !approvals.length ? (
                                 <tr>
                                     <td
                                         colSpan={7}
-                                        className="py-8 text-gray-600"
                                     >
-                                        কোনো অনুমোদনের অনুরোধ পাওয়া যায়নি
+                                        <CustomStatus type="empty" />
                                     </td>
                                 </tr>
                             ) : (

@@ -12,6 +12,7 @@ export enum UserRole {
     MANAGER = "MANAGER",
     SYSTEM_ADMIN = "SYSTEM_ADMIN",
     SUPER_ADMIN = "SUPER_ADMIN",
+    OPERATOR = "OPERATOR",
 }
 
 type TTokenPayload = {
@@ -23,6 +24,7 @@ const USER_ROLES: UserRole[] = [
     UserRole.OWNER,
     UserRole.ADMIN,
     UserRole.MANAGER,
+    UserRole.OPERATOR,
 ];
 
 const SYSTEM_ROLES: UserRole[] = [

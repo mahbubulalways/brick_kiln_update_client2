@@ -1,11 +1,15 @@
+import { TApprovalStatus } from "./approval";
+
 export interface IUser {
   id: string;
   name: string;
   username: string;
-  role: "OWNER" | "ADMIN" | "MANAGER";
+  role: "OWNER" | "ADMIN" | "MANAGER" | "OPERATOR";
   password: string;
   createdAt: Date;
   updatedAt: Date;
+  deleteStatus: TApprovalStatus;
+  updateStatus: TApprovalStatus;
 }
 
 export interface IUserActivity {
@@ -16,5 +20,5 @@ export interface IUserActivity {
   ipAddress: string;
   userId: string;
   createdAt: string;
-  user: IUser
+  user: IUser;
 }

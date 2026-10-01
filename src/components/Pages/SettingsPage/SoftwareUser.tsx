@@ -14,6 +14,9 @@ import { useDeleteUserMutation, useGetAllUsersQuery } from "@/redux/features/use
 import { IUser } from "@/interface/user";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import Swal from "sweetalert2";
+import approvalButtonDisable from "@/utils/approvalButtonDisable";
+import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
+import CustomStatus from "@/components/Reusable/CustomStatus";
 
 const SoftwareUser = () => {
   const {
@@ -23,8 +26,8 @@ const SoftwareUser = () => {
     error,
   } = useGetAllUsersQuery(undefined);
 
- const [deleteUser, { isLoading: isDeleting }] =
-  useDeleteUserMutation();
+  const [deleteUser, { isLoading: isDeleting }] =
+    useDeleteUserMutation();
 
 
   const users = (data?.data ?? []) as IUser[];
@@ -61,42 +64,42 @@ const SoftwareUser = () => {
   // Delete User
   // =========================
 
-const handleDeleteUser = async (id: string) => {
-  const result = await Swal.fire({
-    title: "আপনি কি নিশ্চিত?",
-    text: "এই ইউজারটি ডিলেট করলে এটি আর ফিরে পাওয়া যাবে না!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#039A63",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "হ্যাঁ, ডিলেট করুন",
-    cancelButtonText: "বাতিল",
-  });
-
-  if (!result.isConfirmed) return;
-
-  try {
-    await deleteUser(id).unwrap();
-
-    await Swal.fire({
-      title: "ডিলেট হয়েছে!",
-      text: "ইউজারটি সফলভাবে ডিলেট করা হয়েছে।",
-      icon: "success",
+  const handleDeleteUser = async (id: string) => {
+    const result = await Swal.fire({
+      title: "আপনি কি নিশ্চিত?",
+      text: "এই ইউজারটি ডিলেট করলে এটি আর ফিরে পাওয়া যাবে না!",
+      icon: "warning",
+      showCancelButton: true,
       confirmButtonColor: "#039A63",
-      confirmButtonText: "ঠিক আছে",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "হ্যাঁ, ডিলেট করুন",
+      cancelButtonText: "বাতিল",
     });
-  } catch (error: any) {
-    await Swal.fire({
-      title: "ব্যর্থ!",
-      text:
-        error?.data?.message ||
-        "ইউজারটি ডিলেট করা সম্ভব হয়নি।",
-      icon: "error",
-      confirmButtonColor: "#d33",
-      confirmButtonText: "ঠিক আছে",
-    });
-  }
-};
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const response = await deleteUser(id).unwrap();
+
+      await Swal.fire({
+        title: "ডিলেট হয়েছে!",
+        text: response?.message,
+        icon: "success",
+        confirmButtonColor: "#039A63",
+        confirmButtonText: "ঠিক আছে",
+      });
+    } catch (error: any) {
+      await Swal.fire({
+        title: "ব্যর্থ!",
+        text:
+          error?.data?.message ||
+          "ইউজারটি ডিলেট করা সম্ভব হয়নি।",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "ঠিক আছে",
+      });
+    }
+  };
 
   // =========================
   // Role Label
@@ -111,6 +114,8 @@ const handleDeleteUser = async (id: string) => {
 
       case "MANAGER":
         return "ম্যানেজার";
+      case "OPERATOR":
+        return "অপারেটর";
 
       default:
         return role;
@@ -149,27 +154,29 @@ const handleDeleteUser = async (id: string) => {
 
           <tbody className="text-center">
             {isLoading ? (
-              <tr>
-                <td colSpan={5} className="border p-8">
-                  <CustomLoader cls="h-[30vh]" />
-                </td>
-              </tr>
+              <TableLazyLoading
+                smallColumns={5}
+                largeColumns={5}
+                rows={6}
+              />
             ) : isError ? (
               <tr>
                 <td
                   colSpan={5}
-                  className="border p-8 text-center text-sm text-gray-500"
                 >
-                  {SERVER_ERROR_MESSAGE}
+                  <CustomStatus
+                    type="error"
+                  />
                 </td>
               </tr>
             ) : !users.length ? (
               <tr>
                 <td
                   colSpan={5}
-                  className="border p-8 text-center text-sm text-gray-500"
                 >
-                  কোনো ইউজার পাওয়া যায়নি।
+                  <CustomStatus
+                    type="empty"
+                  />
                 </td>
               </tr>
             ) : (
@@ -195,9 +202,10 @@ const handleDeleteUser = async (id: string) => {
                     <div className="flex items-center justify-center gap-2">
                       {/* Edit */}
                       <button
+                        disabled={approvalButtonDisable(row?.updateStatus)}
                         type="button"
                         onClick={() => handleEditUser(row)}
-                        className="cursor-pointer rounded p-1.5 text-blue-600 transition hover:bg-blue-50"
+                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-blue-200 bg-blue-50 text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <Pencil size={16} />
                       </button>
@@ -205,8 +213,11 @@ const handleDeleteUser = async (id: string) => {
                       {/* Delete */}
                       <button
                         type="button"
+                        disabled={isDeleting
+                          || approvalButtonDisable(row?.deleteStatus)
+                        }
                         onClick={() => handleDeleteUser(row.id)}
-                        className="cursor-pointer rounded p-1.5 text-red-600 transition hover:bg-red-50"
+                        className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-red-200 bg-red-50 text-red-600 transition-all duration-200 hover:border-red-300 hover:bg-red-100 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <Trash2 size={16} />
                       </button>

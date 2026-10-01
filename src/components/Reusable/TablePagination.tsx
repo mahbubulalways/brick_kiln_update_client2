@@ -36,7 +36,7 @@ export const TablePagination = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const limitOptions = [1, 10, 30, 40, 50];
+  const limitOptions = [10, 30, 40, 50];
 
   const updateParams = (newPage: number, newLimit: number) => {
     const params = new URLSearchParams(searchParams.toString());

@@ -78,9 +78,9 @@ const PasswordChange = () => {
           {isLoading ? "পরিবর্তন হচ্ছে..." : "কনফার্ম"}
         </button>
 
-        <p className="text-[11px] text-center mt-4 text-orange-400">
+        {/* <p className="text-[11px] text-center mt-4 text-orange-400">
           নোটঃ পাসওয়ার্ড পরিবর্তন হলে অটোমেটিক লগআউট হয়ে যাবে
-        </p>
+        </p> */}
       </form>
     </div>
   );
