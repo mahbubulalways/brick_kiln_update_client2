@@ -14,6 +14,7 @@ import {
     BrickWall,
     ChevronRight,
     Download,
+    DatabaseBackup,
 } from "lucide-react";
 
 const menuItems = [
@@ -51,6 +52,13 @@ const menuItems = [
         icon: UserRoundCog,
         iconColor: "text-red-500",
         bgColor: "bg-red-50",
+    },
+    {
+        title: "ব্যাকআপ",
+        href: "/settings/backup",
+        icon: DatabaseBackup,
+        iconColor: "text-green-600",
+        bgColor: "bg-green-50",
     },
     // {
     //     title: "ইউজার লিমিট",

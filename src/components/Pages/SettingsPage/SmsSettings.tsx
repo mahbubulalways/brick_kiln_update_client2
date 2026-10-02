@@ -126,7 +126,7 @@ export default function SmsSettings() {
 
     return (
         <div className="min-h-screen bg-white">
-            <div className="bg-[#f8fafc] px-4 py-5 sm:px-6 lg:px-8">
+            <div className="p-5">
                 <div className="mx-auto max-w-[1450px]">
                     <div className="mb-6 flex items-center gap-3 border-b border-gray-200 pb-4">
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#00a86b] text-white shadow-sm">

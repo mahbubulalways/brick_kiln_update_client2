@@ -38,9 +38,9 @@ export default function RootLayout({
           />
 
           <Providers>
-            {/* <NetworkStatusProvider> */}
-            {children}
-            {/* </NetworkStatusProvider> */}
+            <NetworkStatusProvider>
+              {children}
+            </NetworkStatusProvider>
 
             <Toaster
               position="top-center"

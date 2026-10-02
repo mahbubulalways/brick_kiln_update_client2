@@ -126,8 +126,8 @@ const Khotiyan = ({
   };
 
   return (
-    <div className="w-full rounded-lg bg-white p-2 pb-5">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="w-full rounded-lg bg-white  pb-5">
+      <div className="mb-4 flex items-center justify-between p-2">
         <h1 className="py-3 text-xl font-semibold text-gray-900">
           খতিয়ান অ্যাড/আপডেট
         </h1>

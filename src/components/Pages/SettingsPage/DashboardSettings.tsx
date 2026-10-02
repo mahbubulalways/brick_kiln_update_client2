@@ -17,6 +17,7 @@ import { TQuery } from "@/interface/query";
 import DownloadAppPage from "../DownloadAppPage/DownloadAppPage";
 import SmsSettings from "./SmsSettings";
 import SeasonCreate from "./SeasonCreate";
+import VataBackupPage from "./VataBackupPage";
 
 const DashboardSettings = ({
     limit,
@@ -70,9 +71,10 @@ const DashboardSettings = ({
 
             case 8: return <SmsSettings />
 
-            case 9: return <DownloadAppPage />
+            case 9: return <VataBackupPage />
+            case 10: return <DownloadAppPage />
 
-            case 10: return <SeasonCreate />
+            // case 10: return <SeasonCreate />
 
             default:
                 return <VataInformation />;
@@ -80,33 +82,44 @@ const DashboardSettings = ({
     };
 
     return (
-        <div className="min-h-[90vh] w-full rounded-md bg-white p-2 sm:p-3">
+        <div className="min-h-[90vh] w-full">
+            {/* Desktop */}
             <div className="hidden md:block">
-                <div
-                    className="
-                        flex
-                        flex-row
-                        items-start
-                        gap-5
+                <div className="relative">
+                    {/* Fixed Settings Sidebar */}
+                    <div
+                        className="
+                        fixed
+                        top-20
+                        left-[214px]
+                        z-30
+                        h-[calc(100vh-90px)]
+                        w-[248px]
                     "
-                >
-                    <SidebarMenu setPage={setPage} />
+                    >
+                        <SidebarMenu setPage={setPage} />
+                    </div>
+
+                    {/* Scrollable Content */}
                     <main
                         className="
-                            min-w-0
-                            flex-1
-                            rounded-md
-                            bg-white
-                        "
+                        ml-[270px]
+                        min-w-0
+                        rounded
+                    bg-white
+                        overflow-y-auto
+                        h-[calc(100vh-80px)]
+                    "
                     >
                         {renderContent()}
                     </main>
                 </div>
             </div>
+
+            {/* Mobile */}
             <div className="block md:hidden">
                 <SettingsMenu />
             </div>
-
         </div>
     );
 };

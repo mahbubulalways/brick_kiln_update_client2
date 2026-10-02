@@ -55,6 +55,7 @@ export const baseApi = createApi({
     "APPROVAL",
     "ACTIVITY_LOG",
     "LOAD_UNLOAD_INFO",
+    "BACKUP",
     "FAQ", //both
     "ABOUT_US", //both
     "SOFTWARE_PAYMENT", // both\

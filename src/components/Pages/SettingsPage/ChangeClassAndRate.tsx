@@ -76,7 +76,7 @@ const ChangeClassAndRate = ({ limit, page }: TQuery) => {
     return (
         <div className="bg-white">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-2">
                 <h1 className="py-3 text-xl font-semibold text-gray-900">
                     শ্রেণি এবং রেট পরিবর্তন
                 </h1>

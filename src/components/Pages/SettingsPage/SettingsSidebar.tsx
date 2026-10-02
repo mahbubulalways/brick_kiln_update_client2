@@ -1,5 +1,6 @@
 "use client";
 
+import { DatabaseBackup } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   FiUser,
@@ -60,6 +61,11 @@ const menuItems = [
   },
   {
     id: 9,
+    label: "ব্যাকআপ",
+    icon: DatabaseBackup,
+  },
+  {
+    id: 10,
     label: "অ্যাপ ইনস্টল করুন",
     icon: FiDownload,
   },

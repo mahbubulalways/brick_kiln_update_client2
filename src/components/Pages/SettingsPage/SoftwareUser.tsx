@@ -125,7 +125,7 @@ const SoftwareUser = () => {
   return (
     <div className="bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between py-3">
+      <div className="flex items-center justify-between p-3">
         <h1 className="text-xl font-semibold text-gray-900">
           সফটওয়্যার ইউজার
         </h1>
