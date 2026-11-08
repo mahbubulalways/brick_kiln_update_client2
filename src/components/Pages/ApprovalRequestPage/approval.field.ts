@@ -4,6 +4,7 @@ export const fieldNameMap: Record<string, Record<string, string>> = {
   USER: {
     id: "ইউজার আইডি",
     name: "ইউজারের নাম",
+    email: "ইমেইল",
     username: "ইউজারনেম",
     role: "ইউজারের ভূমিকা",
     password: "পাসওয়ার্ড",

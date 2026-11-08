@@ -49,7 +49,7 @@ const AdvanceInvoicePage = ({ limit, page, search }: TQuery) => {
 
   return (
     <div className="bg-white rounded-md shadow border">
-      <div className="flex justify-between items-center p-3 gap-4  bg-gray-50">
+      <div className="flex justify-between items-center p-1.5 lg:p-3 gap-1 lg:gap-4  bg-gray-50">
         <SearchBar value={searchItems} onChange={(e) => setSearchItems(e.target.value)} />
         <CustomReportButton
           onClick={() => setOpenReportModal(true)}

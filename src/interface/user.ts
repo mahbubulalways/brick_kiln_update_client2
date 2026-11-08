@@ -10,6 +10,13 @@ export interface IUser {
   updatedAt: Date;
   deleteStatus: TApprovalStatus;
   updateStatus: TApprovalStatus;
+  email: string;
+  loginLimits: {
+    status: boolean;
+    blockTime: Date;
+    totalTry: number;
+    id: string;
+  };
 }
 
 export interface IUserActivity {
@@ -21,4 +28,5 @@ export interface IUserActivity {
   userId: string;
   createdAt: string;
   user: IUser;
+  status: boolean;
 }

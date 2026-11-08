@@ -48,6 +48,7 @@ export type TVata = {
         name: string;
         username: string;
         password: string;
+        email: string;
     };
 };
 
@@ -83,7 +84,6 @@ const CreateBrickPage = () => {
                 ownerPhoneNumber: "01407128177",
                 shortForm: "SBM",
                 challanManagerPhoneNumber: "01407128178",
-
                 challanPersonOneName: "বিহার",
                 challanPersonOnePhoneNumber: "01407128179",
 
@@ -100,6 +100,7 @@ const CreateBrickPage = () => {
                 name: "Suvash Babu",
                 username: "suvash",
                 password: "12345678",
+                email: "mahbubulhasan523@gmail.com",
             },
         },
     });
@@ -302,6 +303,8 @@ const CreateBrickPage = () => {
                                     }}
                                 />
 
+
+
                                 <CustomInput
                                     label="ভাটার ঠিকানা"
                                     placeholder="ধামরাই, ঢাকা"
@@ -389,6 +392,7 @@ const CreateBrickPage = () => {
                                         },
                                     }}
                                 />
+
                             </div>
                         </div>
                     </section>
@@ -595,7 +599,7 @@ const CreateBrickPage = () => {
                         </div>
 
                         <div className="p-5">
-                            <div className="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-3">
+                            <div className="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-4">
                                 <CustomInput
                                     label="ইউজারের নাম"
                                     placeholder="সোহেল মিয়া"
@@ -641,7 +645,21 @@ const CreateBrickPage = () => {
                                         },
                                     }}
                                 />
-
+                                <CustomInput
+                                    label="ভাটার ইমেইল"
+                                    placeholder="example@gmail.com"
+                                    type="email"
+                                    error={errors.owner?.email}
+                                    register={register}
+                                    name="owner.email"
+                                    rules={{
+                                        required: "ভাটার ইমেইল দিন",
+                                        pattern: {
+                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                            message: "সঠিক ইমেইল ঠিকানা দিন",
+                                        },
+                                    }}
+                                />
                                 <CustomInput
                                     label="পাসওয়ার্ড"
                                     placeholder="••••••••"
@@ -664,6 +682,8 @@ const CreateBrickPage = () => {
                                         },
                                     }}
                                 />
+
+
                             </div>
 
                             <div className="mt-5 flex items-start gap-3 rounded-lg border border-[#039A63]/10 bg-[#039A63]/5 p-3">

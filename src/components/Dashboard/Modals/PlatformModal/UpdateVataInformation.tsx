@@ -1,3 +1,4 @@
+
 "use client";
 
 import CustomInput from "@/components/Reusable/CustomInput";
@@ -17,8 +18,12 @@ type TVataInformationForm = {
     nameBangla: string;
     nameEnglish: string;
     ownerName: string;
-    challansPhoneNumber: string;
     ownerPhoneNumber: string;
+    challanManagerPhoneNumber: string;
+    challanPersonOneName: string;
+    challanPersonOnePhoneNumber: string;
+    challanPersonTwoName: string;
+    challanPersonTwoPhoneNumber: string;
     subdomain: string;
 };
 
@@ -33,11 +38,7 @@ const UpdateVataInformation = ({
     onClose,
     id,
 }: TCustomModal) => {
-    const {
-        isError,
-        isLoading,
-        data,
-    } = useGetSingleVataInforQuery(id, {
+    const { isError, isLoading, data } = useGetSingleVataInforQuery(id, {
         skip: !id || !isOpen,
         refetchOnMountOrArgChange: true,
     });
@@ -56,14 +57,16 @@ const UpdateVataInformation = ({
             nameBangla: "",
             nameEnglish: "",
             ownerName: "",
-            challansPhoneNumber: "",
             ownerPhoneNumber: "",
+            challanManagerPhoneNumber: "",
+            challanPersonOneName: "",
+            challanPersonOnePhoneNumber: "",
+            challanPersonTwoName: "",
+            challanPersonTwoPhoneNumber: "",
             subdomain: "",
-
         },
     });
 
-    // Set API data into form
     useEffect(() => {
         if (data?.data) {
             const vata = data.data;
@@ -73,19 +76,22 @@ const UpdateVataInformation = ({
                 nameBangla: vata.nameBangla || "",
                 nameEnglish: vata.nameEnglish || "",
                 ownerName: vata.ownerName || "",
-                challansPhoneNumber:
-                    vata.challansPhoneNumber || "",
-                ownerPhoneNumber:
-                    vata.ownerPhoneNumber || "",
+                ownerPhoneNumber: vata.ownerPhoneNumber || "",
+                challanManagerPhoneNumber:
+                    vata.challanManagerPhoneNumber || "",
+                challanPersonOneName: vata.challanPersonOneName || "",
+                challanPersonOnePhoneNumber:
+                    vata.challanPersonOnePhoneNumber || "",
+                challanPersonTwoName: vata.challanPersonTwoName || "",
+                challanPersonTwoPhoneNumber:
+                    vata.challanPersonTwoPhoneNumber || "",
                 subdomain: vata.subdomain || "",
-
             });
         }
     }, [data, reset]);
 
-    // Submit
     const onSubmit: SubmitHandler<TVataInformationForm> = async (
-        formData
+        formData,
     ) => {
         try {
             const payload = {
@@ -93,13 +99,16 @@ const UpdateVataInformation = ({
                 nameBangla: formData.nameBangla,
                 nameEnglish: formData.nameEnglish,
                 ownerName: formData.ownerName,
-                challansPhoneNumber:
-                    formData.challansPhoneNumber,
-                ownerPhoneNumber:
-                    formData.ownerPhoneNumber,
+                ownerPhoneNumber: formData.ownerPhoneNumber,
+                challanManagerPhoneNumber:
+                    formData.challanManagerPhoneNumber,
+                challanPersonOneName: formData.challanPersonOneName,
+                challanPersonOnePhoneNumber:
+                    formData.challanPersonOnePhoneNumber,
+                challanPersonTwoName: formData.challanPersonTwoName,
+                challanPersonTwoPhoneNumber:
+                    formData.challanPersonTwoPhoneNumber,
                 subdomain: formData.subdomain,
-
-
             };
 
             const result = await updateVata({
@@ -110,8 +119,7 @@ const UpdateVataInformation = ({
             if (result?.success) {
                 showToast({
                     title:
-                        result?.message ||
-                        "তথ্য সফলভাবে আপডেট হয়েছে",
+                        result?.message || "তথ্য সফলভাবে আপডেট হয়েছে",
                     type: "success",
                 });
 
@@ -119,22 +127,18 @@ const UpdateVataInformation = ({
             } else {
                 showToast({
                     title:
-                        result?.message ||
-                        "তথ্য আপডেট করা সম্ভব হয়নি",
+                        result?.message || "তথ্য আপডেট করা সম্ভব হয়নি",
                     type: "error",
                 });
             }
         } catch (error: any) {
             showToast({
-                title:
-                    error?.data?.message ||
-                    SERVER_ERROR_MESSAGE,
+                title: error?.data?.message || SERVER_ERROR_MESSAGE,
                 type: "error",
             });
         }
     };
 
-    // Close modal
     const handleClose = () => {
         onClose();
 
@@ -143,14 +147,16 @@ const UpdateVataInformation = ({
             nameBangla: "",
             nameEnglish: "",
             ownerName: "",
-            challansPhoneNumber: "",
             ownerPhoneNumber: "",
+            challanManagerPhoneNumber: "",
+            challanPersonOneName: "",
+            challanPersonOnePhoneNumber: "",
+            challanPersonTwoName: "",
+            challanPersonTwoPhoneNumber: "",
             subdomain: "",
-
         });
     };
 
-    // Reset to current API data
     const handleReset = () => {
         if (!data?.data) return;
 
@@ -161,12 +167,16 @@ const UpdateVataInformation = ({
             nameBangla: vata.nameBangla || "",
             nameEnglish: vata.nameEnglish || "",
             ownerName: vata.ownerName || "",
-            challansPhoneNumber:
-                vata.challansPhoneNumber || "",
-            ownerPhoneNumber:
-                vata.ownerPhoneNumber || "",
+            ownerPhoneNumber: vata.ownerPhoneNumber || "",
+            challanManagerPhoneNumber:
+                vata.challanManagerPhoneNumber || "",
+            challanPersonOneName: vata.challanPersonOneName || "",
+            challanPersonOnePhoneNumber:
+                vata.challanPersonOnePhoneNumber || "",
+            challanPersonTwoName: vata.challanPersonTwoName || "",
+            challanPersonTwoPhoneNumber:
+                vata.challanPersonTwoPhoneNumber || "",
             subdomain: vata.subdomain || "",
-
         });
     };
 
@@ -175,23 +185,15 @@ const UpdateVataInformation = ({
             isOpen={isOpen}
             onClose={handleClose}
             title="ভাটা তথ্য আপডেট"
-            width="md"
+            width="xl"
         >
             {isLoading ? (
-                <CustomStatus
-                    type="loading"
-                    fullScreen={false}
-                />
+                <CustomStatus type="loading" fullScreen={false} />
             ) : isError ? (
-                <CustomStatus
-                    type="error"
-                    fullScreen={false}
-                />
+                <CustomStatus type="error" fullScreen={false} />
             ) : (
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        {/* Vata Name Bangla */}
                         <CustomInput
                             name="nameBangla"
                             label="ভাটার নাম (বাংলা)"
@@ -200,12 +202,10 @@ const UpdateVataInformation = ({
                             type="text"
                             error={errors.nameBangla}
                             rules={{
-                                required:
-                                    "ভাটার বাংলা নাম আবশ্যক",
+                                required: "ভাটার বাংলা নাম আবশ্যক",
                             }}
                         />
 
-                        {/* Vata Name English */}
                         <CustomInput
                             name="nameEnglish"
                             label="ভাটার নাম (ইংরেজি)"
@@ -214,86 +214,124 @@ const UpdateVataInformation = ({
                             type="text"
                             error={errors.nameEnglish}
                             rules={{
-                                required:
-                                    "ভাটার ইংরেজি নাম আবশ্যক",
+                                required: "ভাটার ইংরেজি নাম আবশ্যক",
                             }}
                         />
 
-                        {/* Owner Name */}
                         <CustomInput
                             name="ownerName"
                             label="মালিকের নাম"
-                            placeholder="মালিকের নাম"
+                            placeholder="মালিকের নাম লিখুন"
                             register={register}
                             type="text"
                             error={errors.ownerName}
                             rules={{
-                                required:
-                                    "মালিকের নাম আবশ্যক",
+                                required: "মালিকের নাম আবশ্যক",
                             }}
                         />
 
-                        {/* Owner Phone */}
                         <CustomInput
                             name="ownerPhoneNumber"
                             label="মালিকের মোবাইল নম্বর"
-                            placeholder="মালিকের মোবাইল নম্বর"
+                            placeholder="মালিকের মোবাইল নম্বর লিখুন"
                             register={register}
                             type="text"
                             error={errors.ownerPhoneNumber}
                             rules={{
-                                required:
-                                    "মালিকের মোবাইল নম্বর আবশ্যক",
+                                required: "মালিকের মোবাইল নম্বর আবশ্যক",
                             }}
                         />
 
-                        {/* Challan Phone */}
                         <CustomInput
-                            name="challansPhoneNumber"
-                            label="চালানের মোবাইল নম্বর"
-                            placeholder="চালানের মোবাইল নম্বর"
+                            name="challanManagerPhoneNumber"
+                            label="চালান ম্যানেজারের মোবাইল নম্বর"
+                            placeholder="মোবাইল নম্বর লিখুন"
                             register={register}
                             type="text"
-                            error={errors.challansPhoneNumber}
+                            error={errors.challanManagerPhoneNumber}
                             rules={{
                                 required:
-                                    "চালানের মোবাইল নম্বর আবশ্যক",
+                                    "চালান ম্যানেজারের মোবাইল নম্বর আবশ্যক",
                             }}
                         />
 
-                        {/* Subdomain */}
+                        <CustomInput
+                            name="challanPersonOneName"
+                            label="চালান কর্মী ১-এর নাম"
+                            placeholder="চালান কর্মী ১-এর নাম লিখুন"
+                            register={register}
+                            type="text"
+                            error={errors.challanPersonOneName}
+                            rules={{
+                                required: "চালান কর্মী ১-এর নাম আবশ্যক",
+                            }}
+                        />
+
+                        <CustomInput
+                            name="challanPersonOnePhoneNumber"
+                            label="চালান কর্মী ১-এর মোবাইল নম্বর"
+                            placeholder="মোবাইল নম্বর লিখুন"
+                            register={register}
+                            type="text"
+                            error={errors.challanPersonOnePhoneNumber}
+                            rules={{
+                                required:
+                                    "চালান কর্মী ১-এর মোবাইল নম্বর আবশ্যক",
+                            }}
+                        />
+
+                        <CustomInput
+                            name="challanPersonTwoName"
+                            label="চালান কর্মী ২-এর নাম"
+                            placeholder="চালান কর্মী ২-এর নাম লিখুন"
+                            register={register}
+                            type="text"
+                            error={errors.challanPersonTwoName}
+                            rules={{
+                                required: "চালান কর্মী ২-এর নাম আবশ্যক",
+                            }}
+                        />
+
+                        <CustomInput
+                            name="challanPersonTwoPhoneNumber"
+                            label="চালান কর্মী ২-এর মোবাইল নম্বর"
+                            placeholder="মোবাইল নম্বর লিখুন"
+                            register={register}
+                            type="text"
+                            error={errors.challanPersonTwoPhoneNumber}
+                            rules={{
+                                required:
+                                    "চালান কর্মী ২-এর মোবাইল নম্বর আবশ্যক",
+                            }}
+                        />
+
                         <CustomInput
                             name="subdomain"
                             label="সাবডোমেইন"
-                            placeholder="সাবডোমেইন"
+                            placeholder="সাবডোমেইন লিখুন"
                             register={register}
                             type="text"
                             error={errors.subdomain}
                             rules={{
-                                required:
-                                    "সাবডোমেইন আবশ্যক",
+                                required: "সাবডোমেইন আবশ্যক",
                             }}
                         />
-
-
 
                         <div className="md:col-span-2">
                             <CustomInput
                                 name="address"
-                                label="ঠিকানা"
-                                placeholder="ঠিকানা"
+                                label="ভাটার ঠিকানা"
+                                placeholder="ভাটার ঠিকানা লিখুন"
                                 register={register}
                                 type="text"
                                 error={errors.address}
                                 rules={{
-                                    required:
-                                        "ঠিকানা আবশ্যক",
+                                    required: "ভাটার ঠিকানা আবশ্যক",
                                 }}
                             />
                         </div>
                     </div>
 
-                    {/* Buttons */}
                     <div className="flex items-center justify-between pt-6">
                         <button
                             type="button"

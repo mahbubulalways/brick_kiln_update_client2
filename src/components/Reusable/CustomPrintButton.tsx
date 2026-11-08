@@ -34,7 +34,7 @@ const CustomPrintButton = ({
     >
       <FiPrinter className="h-4 w-4" />
       {/* hidden lg:block */}
-      <span className=" text-[15px]">প্রিন্ট</span>
+      <span className="hidden lg:block text-[15px]">প্রিন্ট</span>
     </button>
   );
 };

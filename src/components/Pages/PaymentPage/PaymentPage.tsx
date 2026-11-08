@@ -39,6 +39,7 @@ import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomDateFilter from "@/components/Reusable/CustomDateFilter";
 import LedgerPrintModal from "@/components/Dashboard/PrintModal/LedgerPrint/LedgerPrintModal";
 import approvalButtonDisable from "@/utils/approvalButtonDisable";
+import { formatBanglaDate } from "@/utils/formatBanglaDate";
 
 const PaymentPage = ({ limit, page, search }: TQuery) => {
   const [searchItems, setSearchItem] = useState("");
@@ -129,78 +130,95 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
 
   return (
     <div className="bg-white rounded-md shadow border ">
-      <div className="p-2">
-        <span className="bg-green-100 text-center text-green-800 px-3 py-1 rounded   border border-green-300 font-medium lg:hidden block">
-          মোট পেমেন্ট: {totalCredit} টাকা
-        </span>
-        <div className="flex w-full flex-col gap-2 pt-2 lg:flex-row lg:items-center lg:justify-between lg:gap-5 lg:pt-0">
+      <div className="w-full p-2">
+        <div className="flex w-full flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-5">
 
-          <div className="flex w-full items-center gap-2 lg:w-auto">
-            <CustomNewButton
-              title="নতুন পেমেন্ট"
-              onClick={() => setIsModalOpen(true)}
-              className="flex-1 lg:flex-none"
-            />
+          {/* Left Section */}
+          <div className="flex w-full min-w-0 items-center gap-2 lg:w-auto">
 
+            <div className="min-w-0 flex-1 lg:flex-none">
+              <CustomNewButton
+                title="নতুন পেমেন্ট"
+                onClick={() => setIsModalOpen(true)}
+                className="w-full lg:w-auto"
+              />
+            </div>
 
-            <span className="hidden whitespace-nowrap rounded border border-green-300 bg-green-100 px-3 py-1 font-medium text-green-800 lg:block">
-              মোট পেমেন্ট: {totalCredit} টাকা
+            <span className="min-w-0 flex-1 whitespace-nowrap rounded border border-green-300 bg-green-100 px-2 py-1.5 text-center text-sm font-medium text-green-800 lg:w-auto lg:flex-none lg:px-3">
+              মোট পেমেন্ট: {totalCredit ?? "00"} টাকা
             </span>
+
           </div>
 
-          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-full sm:items-center sm:justify-end">
-            {/* Date Filter */}
-            <div className="min-w-0 sm:w-auto">
-              <CustomDateFilter
-                value={filterDate}
-                onChange={setDateFiter}
-                placeholder="তারিখ ফিল্টার করুন"
-                className="w-full sm:w-auto"
-              />
+          {/* Right Section */}
+          <div className="flex w-full min-w-0 flex-col gap-2 lg:w-auto lg:flex-row lg:items-center">
+
+            {/* Search + Date */}
+            <div className="flex w-full min-w-0 items-center gap-2 lg:w-auto">
+
+              {/* Search - Left */}
+              <div className="min-w-0 flex-1 lg:flex-none">
+                <SearchBar
+                  value={searchItems}
+                  onChange={(e) => setSearchItem(e.target.value)}
+                  onClear={() => setSearchItem("")}
+                />
+              </div>
+
+              {/* Date - Right */}
+              <div className="min-w-0 flex-1 lg:flex-none">
+                <CustomDateFilter
+                  value={filterDate}
+                  onChange={setDateFiter}
+                  placeholder="তারিখ ফিল্টার করুন"
+                  className="w-full lg:w-auto"
+                />
+              </div>
+
             </div>
 
-            {/* Search */}
-            <div className="col-span-2 min-w-0 sm:min-w-0 sm:flex-1 lg:flex-none">
-              <SearchBar
-                value={searchItems}
-                onChange={(e) => setSearchItem(e.target.value)}
-                onClear={() => setSearchItem("")}
-              />
+            {/* Print + Report */}
+            <div className="flex w-full items-center gap-2 lg:w-auto">
+
+              <div className="min-w-0 flex-1 lg:flex-none">
+                <CustomPrintButton
+                  onClick={() => printRef.current?.print()}
+                  className="w-full lg:w-max"
+                />
+              </div>
+
+              <div className="min-w-0 flex-1 lg:flex-none">
+                <CustomReportButton
+                  onClick={() => setReportModalOpen(true)}
+                  className="w-full lg:w-max"
+                />
+              </div>
+
             </div>
 
-            {/* Print */}
-            <div className="min-w-0">
-              <CustomPrintButton
-                onClick={() => printRef.current?.print()}
-              />
-            </div>
-
-            {/* Report */}
-            <div className="min-w-0">
-              <CustomReportButton
-                onClick={() => setReportModalOpen(true)}
-              />
-            </div>
           </div>
+
         </div>
       </div>
-
       <div >
         <div className="overflow-x-auto mt-2  ">
           <table className="min-w-full border-collapse ">
             <thead>
               <tr className="bg-[#039A63] text-white text-center">
-                <TableHead th="#" cls="hidden lg:table-cell" />
-                <TableHead th="খতিয়ান" cls="hidden lg:table-cell" />
-                <TableHead th="ঠিকানা" cls="hidden lg:table-cell" />
+                <TableHead th="#" />
+                <TableHead th="তারিখ" />
+                <TableHead th="পেমেন্টের ধরণ" />
+                <TableHead th="খতিয়ান" />
+                <TableHead th="ঠিকানা" />
                 <TableHead th="পেমেন্টের বিবরণ" />
                 <TableHead th="পরিমাণ" />
-                <TableHead th="মোট বিল" cls="hidden lg:table-cell" />
-                <TableHead th="অগ্রিম" cls="hidden lg:table-cell" />
-                <TableHead th="কর্তন" cls="hidden lg:table-cell" />
+                <TableHead th="মোট বিল" />
+                <TableHead th="বাকি" />
+                <TableHead th="অগ্রিম" />
+                <TableHead th="কর্তন" />
                 <TableHead th="পেমেন্ট" />
-                <TableHead th="কম/বেশি" cls="hidden lg:table-cell" />
-                <TableHead th="ডক" cls="hidden lg:table-cell" />
+                <TableHead th="কম/বেশি" />
+                <TableHead th="ডক" />
                 <TableHead th="বাটন" />
               </tr>
             </thead>
@@ -208,13 +226,13 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
 
               {isLoading || isFetching ? (
                 <TableLazyLoading
-                  smallColumns={4}
-                  largeColumns={11}
+                  smallColumns={15}
+                  largeColumns={15}
                   rows={10}
                 />
               ) : isError ? (
                 <tr>
-                  <td colSpan={11}>
+                  <td colSpan={15}>
                     <CustomStatus
                       type="error"
                       description={SERVER_ERROR_MESSAGE}
@@ -223,7 +241,7 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                 </tr>
               ) : !payments?.length ? (
                 <tr>
-                  <td colSpan={11}>
+                  <td colSpan={15}>
                     <CustomStatus
                       type="empty"
                       description="কোনো পেমেন্ট পাওয়া যায়নি"
@@ -236,30 +254,42 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                     className="hover:bg-gray-50"
                     onClick={() => toggleRow(row.id)}
                   >
-                    <TableData td={index + 1} cls="hidden lg:table-cell" />
+                    <TableData td={index + 1} />
+                    <TableData td={formatBanglaDate({ date: row?.paymentDate })} />
+                    <TableData
+                      td={row?.paymentType}
+                      cls={`${row?.paymentType === "বাকি পেমেন্ট" ? "text-violet-700"
+                        : row?.paymentType === "অগ্রিম পেমেন্ট" ? " text-red-500 " : ""}`}
+
+                    />
                     <TableData
                       td={row?.ledger?.name}
-                      cls="hidden lg:table-cell"
+
                     />
                     <TableData
                       td={row?.address || "-"}
-                      cls="hidden lg:table-cell"
+
                     />
+
                     <TableData
-                      td={row?.paymentDetails as string}
-                      cls="hidden lg:table-cell"
+                      td={
+                        (row?.paymentDetails?.substring(0, 25) +
+                          "...") as string
+                      }
+
+                    />
+                    <TableData td={row?.quantity || "0"} />
+                    <TableData
+                      td={`৳ ${row?.totalBill || "0"}`}
+
                     />
                     <TableData
                       td={
-                        (row?.paymentDetails?.substring(0, 20) +
-                          "...") as string
+                        row?.paymentType === "বাকি পেমেন্ট"
+                          ? `৳ ${row?.payment}`
+                          : "৳ 0"
                       }
-                      cls="lg:hidden table-cell"
-                    />
-                    <TableData td={row?.quantity} />
-                    <TableData
-                      td={`৳ ${row?.totalBill}`}
-                      cls="hidden lg:table-cell"
+                      cls="border p-2 text-violet-700"
                     />
                     <TableData
                       td={
@@ -267,10 +297,10 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                           ? `৳ ${row?.payment}`
                           : "৳ 0"
                       }
-                      cls="border p-2 text-red-500 hidden lg:table-cell"
+                      cls="border p-2 text-red-500 "
                     />
                     <TableData
-                      cls="border p-2 text-green-600 hidden lg:table-cell"
+                      cls="border p-2 text-green-600 "
                       td={`৳ ${row?.cutting}`}
                     />
                     <TableData
@@ -278,13 +308,13 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                       td={`৳ ${row?.payment}`}
                     />
                     <TableData
-                      cls={`border hidden lg:table-cell p-2 ${row?.paymentDifference < 0
+                      cls={`border p-2 ${row?.paymentDifference < 0
                         ? "text-red-500"
                         : row?.paymentDifference > 0
                           ? "text-green-600"
                           : "text-gray-600 "
                         }`}
-                      td={`৳ ${row?.paymentDifference}`}
+                      td={`৳ ${row?.paymentDifference || "0"}`}
                     />
 
                     <td className="border p-2 text-center align-middle">
@@ -362,7 +392,7 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                       </DropdownMenu>
                     </td>
                   </tr>
-                  {expandedRow === row?.id && (
+                  {/* {expandedRow === row?.id && (
                     <tr className="lg:hidden">
                       <td
                         colSpan={100}
@@ -407,7 +437,7 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
                         </div>
                       </td>
                     </tr>
-                  )}
+                  )} */}
                 </React.Fragment>
               )))}
 
@@ -454,7 +484,8 @@ const PaymentPage = ({ limit, page, search }: TQuery) => {
       </CommonPrint>
       {
 
-      }{
+      }
+      {
         openLedgerPrint &&
         <LedgerPrintModal
           ledgerId={String(selectedPaymentId)}

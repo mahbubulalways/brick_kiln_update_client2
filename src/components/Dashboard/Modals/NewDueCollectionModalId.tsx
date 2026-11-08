@@ -213,7 +213,7 @@ const NewDueCollectionModalId = ({ isOpen, onClose, id }: TCustomModal) => {
               </div>
             </div>
 
-            <div className="grid gap-2 grid-cols-3">
+            <div className="grid gap-2 lg:grid-cols-3">
               <div className="rounded-lg border border-red-100 bg-white p-2.5 shadow-sm">
                 <div className="mb-1 flex items-center justify-between">
                   <span className="text-[11px] font-medium text-gray-500">
@@ -282,7 +282,7 @@ const NewDueCollectionModalId = ({ isOpen, onClose, id }: TCustomModal) => {
               </div>
             </div>
 
-            <div className="mt-2 grid  gap-2 grid-cols-2">
+            <div className="mt-2 grid  gap-2 lg:grid-cols-2">
               <div className="rounded-lg border border-gray-200 bg-white p-2.5">
                 <CustomDatePickerState
                   height="8"

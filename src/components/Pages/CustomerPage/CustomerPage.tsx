@@ -114,7 +114,7 @@ const CustomerPage = ({ limit, page, search }: TQuery) => {
                     Header
                 ================================================= */}
 
-                <div className="flex flex-col gap-3 border-b border-gray-200 p-4 md:flex-row md:items-center md:justify-between">
+                <div className="flex gap-3 border-b border-gray-200 p-4 md:flex-row md:items-center md:justify-between">
                     {/* Customer Count */}
                     <div className="shrink-0">
                         <div className="flex w-fit items-center gap-2 rounded-lg border border-[#079B67] bg-white px-2 py-1.5 md:px-5">

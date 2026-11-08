@@ -42,7 +42,7 @@ const ledgerAPi = baseApi.injectEndpoints({
 
     getAllLedgerDetails: builder.query({
       query: (payload) => ({
-        url: `/ledger/details/${payload.id}?page=${payload?.params?.page}&limit=${payload?.params?.limit}&date=${payload.date}`,
+        url: `/ledger/details/${payload.id}?page=${payload?.params?.page}&limit=${payload?.params?.limit}&date=${payload.date}&search=${payload?.search}`,
         method: "GET",
       }),
       providesTags: ["LEDGER"],

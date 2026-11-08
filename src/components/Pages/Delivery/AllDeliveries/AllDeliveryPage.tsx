@@ -75,10 +75,11 @@ const AllDeliveryPage = ({ limit, page, search }: TQuery) => {
 
   return (
     <div className="bg-white rounded-md shadow border">
-      <div className="flex p-2 flex-col gap-2 
-       lg:flex-row lg:items-center lg:justify-between ">
-        {/* Left Section */}
-        <div className="flex w-full items-center gap-2 lg:w-auto">
+      <div className="flex w-full flex-col gap-2 p-2 lg:flex-row lg:items-center lg:justify-between">
+
+        {/* Search + Date */}
+        <div className="flex w-full min-w-0 items-center gap-2 lg:w-auto">
+
           <div className="min-w-0 flex-1 lg:flex-none">
             <SearchBar
               value={searchItem}
@@ -87,41 +88,38 @@ const AllDeliveryPage = ({ limit, page, search }: TQuery) => {
             />
           </div>
 
-          {/* Date - Mobile/Tablet */}
-          <div className="lg:hidden">
+          {/* Date */}
+          <div className="min-w-0 flex-1 lg:flex-none">
             <CustomDateFilter
               value={filterDate}
               onChange={setDateFiter}
               placeholder="তারিখ ফিল্টার করুন"
-              className=""
+              className="w-full lg:w-auto"
             />
           </div>
+
         </div>
 
-        {/* Right Section */}
+        {/* Print + Report */}
         <div className="flex w-full items-center gap-2 lg:w-auto lg:justify-end">
-          {/* Date - Large */}
-          <div className="hidden lg:block">
-            <CustomDateFilter
-              value={filterDate}
-              onChange={setDateFiter}
-              placeholder="তারিখ ফিল্টার করুন"
-              className=""
+
+          <div className="flex-1 lg:flex-none">
+            <CustomPrintButton
+              className="w-full lg:w-max"
+              onClick={() => printRef.current?.print()}
             />
           </div>
 
-          <CustomPrintButton
-            className="w-full md:w-max"
-            onClick={() => printRef.current?.print()}
-          />
+          <div className="flex-1 lg:flex-none">
+            <CustomReportButton
+              className="w-full lg:w-max"
+              onClick={() => setOpenDeliveryReport(true)}
+            />
+          </div>
 
-          <CustomReportButton
-            className="w-full md:w-max"
-            onClick={() => setOpenDeliveryReport(true)}
-          />
         </div>
-      </div>
 
+      </div>
       <div >
         <div className="overflow-x-auto mt-2">
           <table className="min-w-full border-collapse ">
@@ -129,15 +127,15 @@ const AllDeliveryPage = ({ limit, page, search }: TQuery) => {
               <tr className="bg-[#039A63] text-white text-center">
                 <TableHead th={"চালান নং"} />
                 <TableHead th={"কাস্টমার"} />
-                <TableHead th={"ঠিকানা"} cls="hidden lg:table-cell" />
-                <TableHead th={"টাকা বাকি"} cls="hidden lg:table-cell" />
-                <TableHead th={"নোট"} cls="hidden lg:table-cell" />
+                <TableHead th={"ঠিকানা"} />
+                <TableHead th={"টাকা বাকি"} />
+                <TableHead th={"নোট"} />
                 <TableHead th={"শ্রেণি"} />
-                <TableHead th={"ক্রয়"} cls="hidden lg:table-cell" />
-                <TableHead th={"ডেলিভারি"} cls="hidden lg:table-cell" />
+                <TableHead th={"ক্রয়"} />
+                <TableHead th={"ডেলিভারি"} />
                 <TableHead th={"ডে.বাকি"} />
                 <TableHead th={"মোট ডে.বাকি"} />
-                <TableHead th={"ডে.তারিখ"} cls="hidden lg:table-cell" />
+                <TableHead th={"ডে.তারিখ"} />
                 <TableHead th={"বাটন"} />
               </tr>
             </thead>
@@ -181,18 +179,18 @@ const AllDeliveryPage = ({ limit, page, search }: TQuery) => {
                             <TableData
                               td={row?.customer?.address}
                               rowSpan={row.items.length}
-                              cls="hidden lg:table-cell"
+
                             />
                             <TableData
                               td={
                                 toBanglaNumber(row?.totalDue)
                               }
                               rowSpan={row.items.length}
-                              cls="hidden lg:table-cell"
+
                             />
                             <TableData
                               td={row?.note as string}
-                              cls="text-gray-700 hidden lg:table-cell"
+                              cls="text-gray-700 "
                               rowSpan={row.items.length}
                             />
                           </>
@@ -200,10 +198,10 @@ const AllDeliveryPage = ({ limit, page, search }: TQuery) => {
 
                         {/* These change per item */}
                         <TableData td={item?.class} />
-                        <TableData td={toBanglaNumber(item?.quantity)} cls="hidden lg:table-cell" />
+                        <TableData td={toBanglaNumber(item?.quantity)} />
                         <TableData
                           td={item?.delivered}
-                          cls="hidden lg:table-cell"
+
                         />
                         <TableData td={toBanglaNumber(item?.quantity - item?.delivered)} />
                         {index === 0 && (
@@ -222,7 +220,7 @@ const AllDeliveryPage = ({ limit, page, search }: TQuery) => {
                               ? moment(item.deliveryDate).format("DD-MM-YYYY")
                               : "---"
                           }
-                          cls="hidden lg:table-cell"
+
                         />
 
                         {/* Actions only once per challan */}

@@ -61,23 +61,37 @@ const TodaysHaveToDelivery = ({ limit, page, search }: TQuery) => {
   return (
     <div className="bg-white rounded-md shadow border ">
 
-      <div className="flex justify-between items-center p-2  gap-5">
-        <SearchBar
-          value={searchItem}
-          onChange={(e) => setSearchItem(e.target.value)}
-          onClear={() => setSearchItem("")}
-        />
+      <div className="flex w-full flex-col gap-2 p-2 md:flex-row md:items-center md:gap-5">
 
-        <div className="flex items-center gap-2 ">
-          <CustomDateFilter
-            value={filterDate}
-            onChange={setDateFiter}
-            placeholder="তারিখ ফিল্টার করুন"
-            className=""
+        {/* Search */}
+        <div className="min-w-0 flex-1">
+          <SearchBar
+            value={searchItem}
+            onChange={(e) => setSearchItem(e.target.value)}
+            onClear={() => setSearchItem("")}
           />
-
-          <CustomReportButton onClick={() => setOpenDeliveryReport(true)} />
         </div>
+
+        {/* Date + Report */}
+        <div className="flex w-full min-w-0 items-center gap-2 md:w-auto md:flex-none">
+
+          <div className="min-w-0 flex-1 md:flex-none">
+            <CustomDateFilter
+              value={filterDate}
+              onChange={setDateFiter}
+              placeholder="তারিখ ফিল্টার করুন"
+              className="w-full md:w-auto"
+            />
+          </div>
+
+          <div className="shrink-0">
+            <CustomReportButton
+              onClick={() => setOpenDeliveryReport(true)}
+            />
+          </div>
+
+        </div>
+
       </div>
 
       <div >

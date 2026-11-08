@@ -57,7 +57,7 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                     </button>
 
                     <Link href="/">
-                        <h1 className="pl-3 text-lg font-semibold text-gray-900 lg:pl-0">
+                        <h1 className=" text-lg font-semibold text-gray-900 lg:pl-0">
                             {title}
                         </h1>
                     </Link>
@@ -66,15 +66,13 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
                 {/* Right */}
                 <div className="flex items-center gap-2">
                     <Seasons />
-
-
-                    <NavbarIcon
-                        Icon={History}
-                        path="/dashboard/activity-log"
-                        title="অ্যাক্টিভিটি লগ"
-                    />
                     <div className="hidden lg:block">
                         <div className="flex items-center gap-2">
+                            <NavbarIcon
+                                Icon={History}
+                                path="/dashboard/activity-log"
+                                title="অ্যাক্টিভিটি লগ"
+                            />
                             {/* Notification */}
                             <div className="relative">
                                 <NavbarIcon

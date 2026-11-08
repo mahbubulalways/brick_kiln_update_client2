@@ -893,7 +893,8 @@ export default function CustomDateFilter({
                 onClick={handleOpen}
                 className="
                     flex
-                    min-w-[200px]
+                    lg:min-w-[200px]
+                    
                     h-9
                     w-full
                     items-center
@@ -902,7 +903,7 @@ export default function CustomDateFilter({
                     border
                     border-gray-200
                     bg-white
-                    px-2  lg:px-3
+                    px-1  lg:px-3
                     transition
                     hover:border-gray-300
                 "
@@ -910,7 +911,7 @@ export default function CustomDateFilter({
                 <div className="flex items-center gap-1 lg:gap-2">
                     <CalendarDays
                         size={18}
-                        className="text-gray-500"
+                        className="text-gray-500 "
                     />
 
                     <span

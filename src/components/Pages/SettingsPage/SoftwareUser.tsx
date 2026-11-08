@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { LockIcon, Pencil, Trash2 } from "lucide-react";
 
 import SoftwareUserModal from "@/components/Dashboard/Modals/SoftwareUserModal";
 import SoftwareUserUpdateModal from "@/components/Dashboard/Modals/EditModals/SoftwareUserUpdateModal";
@@ -10,13 +10,15 @@ import CustomLoader from "@/components/Reusable/CustomLoader";
 import TableHead from "@/components/Reusable/TableHead";
 import TableData from "@/components/Reusable/TableData";
 
-import { useDeleteUserMutation, useGetAllUsersQuery } from "@/redux/features/user.features";
+import { useDeleteUserMutation, useGetAllUsersQuery, useUnblockUserMutation } from "@/redux/features/user.features";
 import { IUser } from "@/interface/user";
 import { SERVER_ERROR_MESSAGE } from "@/constant";
 import Swal from "sweetalert2";
 import approvalButtonDisable from "@/utils/approvalButtonDisable";
 import TableLazyLoading from "@/components/Dashboard/common/TableLazyLoading";
 import CustomStatus from "@/components/Reusable/CustomStatus";
+import { formatBanglaDate } from "@/utils/formatBanglaDate";
+import { getUserInformation } from "@/service/auth.services";
 
 const SoftwareUser = () => {
   const {
@@ -28,6 +30,8 @@ const SoftwareUser = () => {
 
   const [deleteUser, { isLoading: isDeleting }] =
     useDeleteUserMutation();
+  const [unblockUser, { isLoading: isUnblocking }] =
+    useUnblockUserMutation();
 
 
   const users = (data?.data ?? []) as IUser[];
@@ -101,6 +105,44 @@ const SoftwareUser = () => {
     }
   };
 
+
+  // 
+  const handleUnblockUser = async (id: string) => {
+    const result = await Swal.fire({
+      title: "আপনি কি নিশ্চিত?",
+      text: "এই ইউজারের অ্যাকাউন্ট আনব্লক করতে চান?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#039A63",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "হ্যাঁ, আনব্লক করুন",
+      cancelButtonText: "বাতিল",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const response = await unblockUser(id).unwrap();
+
+      await Swal.fire({
+        title: "সফল হয়েছে!",
+        text: response?.message || "অ্যাকাউন্ট আনব্লক করা হয়েছে।",
+        icon: "success",
+        confirmButtonColor: "#039A63",
+        confirmButtonText: "ঠিক আছে",
+      });
+    } catch (error: any) {
+      await Swal.fire({
+        title: "ব্যর্থ!",
+        text:
+          error?.data?.message ||
+          "অ্যাকাউন্ট আনব্লক করা যায়নি।",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "ঠিক আছে",
+      });
+    }
+  };
   // =========================
   // Role Label
   // =========================
@@ -122,6 +164,8 @@ const SoftwareUser = () => {
     }
   };
 
+  const currentUserRole = getUserInformation().role
+
   return (
     <div className="bg-white">
       {/* Header */}
@@ -140,14 +184,18 @@ const SoftwareUser = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-t-md border">
+      <div className="overflow-x-auto">
         <table className="min-w-full border-collapse">
           <thead>
             <tr className="bg-[#039A63] text-center text-white">
               <TableHead th="#" />
               <TableHead th="নাম" />
               <TableHead th="ইউজারনেম" />
+              <TableHead th="ইমেইল" />
               <TableHead th="ইউজারের ধরন" />
+              <TableHead th="স্ট্যাটাস" />
+              <TableHead th="ব্লক টাইম" />
+              <TableHead th="মোট চেষ্টা" />
               <TableHead th="বাটন" />
             </tr>
           </thead>
@@ -193,9 +241,23 @@ const SoftwareUser = () => {
 
                   {/* Username */}
                   <TableData td={row.username} />
+                  <TableData td={row.email} />
 
                   {/* Role */}
                   <TableData td={getRoleLabel(row.role)} />
+                  <TableData
+                    td={
+                      row?.loginLimits?.status === true
+                        ? "ব্লক"
+                        : row?.loginLimits?.status === false
+                          ? "চালু"
+                          : "-"
+                    }
+                  />
+                  <TableData td={row?.loginLimits?.blockTime ?
+                    formatBanglaDate({ date: row?.loginLimits?.blockTime, showTime: true }) : "-"} />
+                  <TableData td={row?.loginLimits?.totalTry || "-"} />
+
 
                   {/* Actions */}
                   <td className="border px-4 py-2">
@@ -221,6 +283,18 @@ const SoftwareUser = () => {
                       >
                         <Trash2 size={16} />
                       </button>
+                      {row?.loginLimits?.status === true &&
+                        (currentUserRole === "ADMIN" || currentUserRole === "OWNER") ? (
+                        <button
+                          type="button"
+                          disabled={isUnblocking}
+                          onClick={() => handleUnblockUser(row.id)}
+                          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-green-200 bg-green-50 text-[#039A63] transition-all duration-200 hover:border-green-300 hover:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          <LockIcon size={16} />
+                        </button>
+                      ) : ""}
+
                     </div>
                   </td>
                 </tr>

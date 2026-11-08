@@ -8,7 +8,7 @@ const widthClasses: Record<TModalWidth, string> = {
   md: "max-w-md",
   lg: "max-w-lg",
   xl: "max-w-xl",
-  xxl:" max-w-3xl",
+  xxl: " max-w-3xl",
   full: "max-w-5xl",
 };
 
@@ -37,7 +37,7 @@ const CustomModalBottom = ({
       <div
         className={`relative bg-white w-full ${widthClasses[width]} 
         md:rounded-md rounded-t-2xl shadow-xl
-        h-[90vh] md:h-auto md:max-h-[90vh]
+        max-h-[90vh] md:h-auto md:max-h-[90vh]
         flex flex-col overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >

@@ -1,9 +1,10 @@
+
 "use client";
 
 import CustomInput from "@/components/Reusable/CustomInput";
 import CustomModalBottom from "@/components/Reusable/CustomModalBottom";
 import CustomSelect from "@/components/Reusable/CustomSelect";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   useGetSinglePaymentReportQuery,
@@ -18,9 +19,9 @@ import CustomFilePicker from "@/components/Reusable/CustomImagePicker/CustomFile
 import { TPaymentResponse } from "@/interface/payment";
 import SelectLedgerModal from "../SelectLedgerModal";
 import CustomStatus from "@/components/Reusable/CustomStatus";
-import UpdatePaymentModalPart2 from "./UpdatePaymentModalPart2";
 import CustomDatePicker from "@/components/Reusable/CustomDatePicker";
 import { TLedger } from "@/interface/ledger";
+import Image from "next/image";
 
 type TCustomModal = {
   isOpen: boolean;
@@ -66,6 +67,9 @@ const UpdatePaymentModal = ({
   const [ledger, setLedger] = useState<TLedger | null>(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  const skipPaymentCalculation = useRef(false);
+  const skipDifferenceCalculation = useRef(false);
+
   const {
     register,
     handleSubmit,
@@ -86,15 +90,20 @@ const UpdatePaymentModal = ({
       payment: 0,
       paymentDifference: 0,
     },
+    shouldUnregister: true,
   });
 
   // ================================
   // SET API DATA INTO FORM
   // ================================
+
   useEffect(() => {
     if (!paymentData) return;
 
     setIsInitialLoad(true);
+
+    skipPaymentCalculation.current = true;
+    skipDifferenceCalculation.current = true;
 
     reset({
       ledger: paymentData?.ledger?.name || "",
@@ -109,9 +118,8 @@ const UpdatePaymentModal = ({
       paymentDate: paymentData?.paymentDate || "",
     });
 
-    setLedger(paymentData?.ledger);
+    setLedger(paymentData?.ledger ?? null);
 
-    // API data set হওয়ার পর calculation enable
     const timer = setTimeout(() => {
       setIsInitialLoad(false);
     }, 0);
@@ -122,84 +130,74 @@ const UpdatePaymentModal = ({
   // ================================
   // WATCH VALUES
   // ================================
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const quantity = Number(watch("quantity") || 0);
   const rate = Number(watch("rate") || 0);
   const cutting = Number(watch("cutting") || 0);
+  const paymentType = watch("paymentType");
   const payment = Number(watch("payment") || 0);
   const paymentDifference = Number(
-    watch("paymentDifference") || 0,
+    watch("paymentDifference") || 0
   );
 
   // ================================
-  // TOTAL BILL CALCULATION
-  // quantity × rate
+  // TOTAL BILL & PAYMENT CALCULATION
+  // Same as NewPaymentModal
   // ================================
+
   useEffect(() => {
     if (isInitialLoad) return;
 
-    const totalBill = quantity * rate;
+    if (skipPaymentCalculation.current) {
+      skipPaymentCalculation.current = false;
+      return;
+    }
 
-    setValue("totalBill", totalBill, {
-      shouldDirty: true,
-    });
+    // Advance payment has no quantity/rate calculation
+    if (paymentType === "অগ্রিম পেমেন্ট") return;
+
+    const totalBill = quantity * rate;
+    const expectedPayment = totalBill - cutting;
+
+    setValue("totalBill", totalBill);
+    setValue("payment", expectedPayment);
   }, [
     quantity,
     rate,
+    cutting,
+    paymentType,
     isInitialLoad,
     setValue,
   ]);
 
   // ================================
-  // PAYMENT AUTO CALCULATION
-  //
-  // quantity / rate change হলে payment
-  // সেই অনুযায়ী auto update হবে।
-  // (cutting এখানে বিয়োগ হবে না —
-  //  cutting শুধু difference-এ প্রভাব ফেলবে)
-  //
-  // Payment = Total Bill
-  // ================================
-  useEffect(() => {
-    if (isInitialLoad) return;
-
-    const totalBill = quantity * rate - cutting + paymentDifference;
-
-    setValue("payment", totalBill, {
-      shouldDirty: true,
-    });
-  }, [
-    quantity,
-    rate,
-    isInitialLoad, cutting,
-    setValue,
-  ]);
-
-  // ================================
   // PAYMENT DIFFERENCE CALCULATION
-  //
-  // Expected Payment = Total Bill - Cutting
-  // Difference = Actual Payment - Expected Payment
   // ================================
+
   useEffect(() => {
     if (isInitialLoad) return;
+
+    if (skipDifferenceCalculation.current) {
+      skipDifferenceCalculation.current = false;
+      return;
+    }
+
+    // Advance payment has no payment difference
+    if (paymentType === "অগ্রিম পেমেন্ট") return;
 
     const totalBill = quantity * rate;
+    const expectedPayment = totalBill - cutting;
 
-    const expectedPayment =
-      totalBill - cutting;
+    const difference = payment - expectedPayment;
 
-    const difference =
-      payment - expectedPayment;
-
-    setValue("paymentDifference", difference, {
-      shouldDirty: true,
-    });
+    setValue("paymentDifference", difference);
   }, [
     quantity,
     rate,
     cutting,
     payment,
+    paymentType,
     isInitialLoad,
     setValue,
   ]);
@@ -207,9 +205,8 @@ const UpdatePaymentModal = ({
   // ================================
   // SUBMIT
   // ================================
-  const onSubmit: SubmitHandler<TKhatiyan> = async (
-    data,
-  ) => {
+
+  const onSubmit: SubmitHandler<TKhatiyan> = async (data) => {
     const formdata = modifyPayload(data);
 
     const payload = {
@@ -228,16 +225,13 @@ const UpdatePaymentModal = ({
           type: "success",
           options: {
             duration: 4000,
-            icon: (
-              <FaCircleCheck className="h-5 w-5" />
-            ),
+            icon: <FaCircleCheck className="h-5 w-5" />,
           },
         });
       }
     } catch (error: any) {
       toast.error(
-        error?.data?.message ||
-        SERVER_ERROR_MESSAGE,
+        error?.data?.message || SERVER_ERROR_MESSAGE
       );
     }
   };
@@ -245,11 +239,15 @@ const UpdatePaymentModal = ({
   // ================================
   // CLOSE MODAL
   // ================================
+
   const handleCloseModal = () => {
     setId(null);
     setLedger(null);
     setOpenLedgerModal(false);
     setIsInitialLoad(true);
+
+    skipPaymentCalculation.current = true;
+    skipDifferenceCalculation.current = true;
 
     reset({
       ledger: "",
@@ -269,28 +267,33 @@ const UpdatePaymentModal = ({
   // ================================
   // CLEAR FORM
   // ================================
+
   const handleClear = () => {
     if (!paymentData) return;
+
+    setIsInitialLoad(true);
+
+    skipPaymentCalculation.current = true;
+    skipDifferenceCalculation.current = true;
 
     reset({
       ledger: paymentData?.ledger?.name || "",
       cutting: paymentData?.cutting ?? 0,
       payment: paymentData?.payment ?? 0,
-      paymentDifference:
-        paymentData?.paymentDifference ?? 0,
-      paymentDetails:
-        paymentData?.paymentDetails || "",
-      paymentType:
-        paymentData?.paymentType || "",
+      paymentDifference: paymentData?.paymentDifference ?? 0,
+      paymentDetails: paymentData?.paymentDetails || "",
+      paymentType: paymentData?.paymentType || "",
       quantity: paymentData?.quantity ?? 0,
       rate: paymentData?.rate ?? 0,
       totalBill: paymentData?.totalBill ?? 0,
       paymentDate: paymentData?.paymentDate || "",
     });
 
-    setLedger(
-      paymentData?.ledger
-    );
+    setLedger(paymentData?.ledger ?? null);
+
+    setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 0);
   };
 
   return (
@@ -305,35 +308,13 @@ const UpdatePaymentModal = ({
       ) : isError ? (
         <CustomStatus type="error" />
       ) : (
-        // <>
-
-        //   {
-        //     paymentData?.paymentType === "অগ্রিম পেমেন্ট" ?
-
-        //       <UpdatePaymentModalPart2
-        //         paymentData={paymentData}
-        //         onSubmit={onSubmit} />
-        //       : <>
-
-        //       </>
-        //   }
-        // </>
-
-
         <>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-          >
-
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mt-2">
               <div className="flex flex-col gap-5 rounded-b-md pb-4 pt-2">
                 <div className="grid grid-cols-2 gap-2">
                   {/* Ledger */}
-                  {/* <div
-                          onClick={() =>
-                            setOpenLedgerModal(true)
-                          }
-                        > */}
+
                   <CustomInput
                     name="ledger"
                     label="খতিয়ান"
@@ -343,10 +324,11 @@ const UpdatePaymentModal = ({
                     type="text"
                     error={errors.ledger}
                     rules={{
-                      required:
-                        "খতিয়ান নির্বাচন করুন",
+                      required: "খতিয়ান নির্বাচন করুন",
                     }}
                   />
+
+                  {/* Payment Type */}
 
                   <CustomSelect
                     name="paymentType"
@@ -355,31 +337,25 @@ const UpdatePaymentModal = ({
                     control={control}
                     options={[
                       {
-                        label:
-                          "রেগুলার পেমেন্ট",
-                        value:
-                          "রেগুলার পেমেন্ট",
+                        label: "রেগুলার পেমেন্ট",
+                        value: "রেগুলার পেমেন্ট",
                       },
                       {
-                        label:
-                          "অগ্রিম পেমেন্ট",
-                        value:
-                          "অগ্রিম পেমেন্ট",
+                        label: "অগ্রিম পেমেন্ট",
+                        value: "অগ্রিম পেমেন্ট",
                       },
                       {
-                        label:
-                          "বাকি পেমেন্ট",
-                        value:
-                          "বাকি পেমেন্ট",
+                        label: "বাকি পেমেন্ট",
+                        value: "বাকি পেমেন্ট",
                       },
                     ]}
                     error={errors.paymentType}
                     rules={{
-                      required:
-                        "পেমেন্টের ধরণ",
+                      required: "পেমেন্টের ধরণ",
                     }}
                   />
                 </div>
+
                 <CustomInput
                   name="paymentDetails"
                   label="পেমেন্টের বিস্তারিত বর্ণনা লিখুন"
@@ -388,117 +364,150 @@ const UpdatePaymentModal = ({
                   type="text"
                   error={errors.paymentDetails}
                   rules={{
-                    required:
-                      "পেমেন্টের বিস্তারিত বর্ণনা লিখুন",
+                    required: "পেমেন্টের বিস্তারিত বর্ণনা লিখুন",
                   }}
+                />
+                <CustomDatePicker
+                  control={control}
+                  name="paymentDate"
+                  label="পেমেন্টের তারিখ"
+                  placeholder="পেমেন্টের তারিখ"
                 />
               </div>
             </div>
+
+            {/* ================================
+                CONDITIONAL PAYMENT INPUTS
+            ================================= */}
 
             <div className="mt-2">
-              <div className="grid grid-cols-3 gap-2 rounded-b-md pb-4 pt-2">
-                <CustomInput
-                  name="quantity"
-                  label="পরিমাণ"
-                  placeholder="পরিমাণ লিখুন"
-                  register={register}
-                  type="number"
-                  error={errors.quantity}
-                  rules={{
-                    required:
-                      "পরিমাণ লিখুন",
-                  }}
-                />
-                <CustomInput
-                  name="rate"
-                  label="রেট"
-                  placeholder="রেট লিখুন"
-                  register={register}
-                  type="number"
-                  error={errors.rate}
-                  rules={{
-                    required: "রেট লিখুন",
-                  }}
-                />
+              <div className="grid grid-cols-3 gap-2 rounded-b-md pb-4">
+                {paymentType === "অগ্রিম পেমেন্ট" ? (
+                  // ADVANCE PAYMENT
+                  <div className="col-span-3">
+                    <CustomInput
+                      name="payment"
+                      label="পেমেন্ট"
+                      placeholder="পেমেন্ট দেওয়া হল"
+                      register={register}
+                      type="number"
+                      error={errors.payment}
+                      rules={{
+                        required: "পেমেন্ট লিখুন",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  // REGULAR & DUE PAYMENT
+                  <>
+                    <CustomInput
+                      name="quantity"
+                      label="পরিমাণ"
+                      placeholder="পরিমাণ লিখুন"
+                      register={register}
+                      type="number"
+                      error={errors.quantity}
+                      rules={{
+                        required: "পরিমাণ লিখুন",
+                      }}
+                    />
 
-                <CustomInput
-                  name="totalBill"
-                  label="মোট বিল"
-                  placeholder="মোট বিল"
-                  register={register}
-                  type="number"
-                  readonly
-                  error={errors.totalBill}
-                  rules={{
-                    required: "মোট বিল",
-                  }}
-                />
+                    <CustomInput
+                      name="rate"
+                      label="রেট"
+                      placeholder="রেট লিখুন"
+                      register={register}
+                      type="number"
+                      error={errors.rate}
+                      rules={{
+                        required: "রেট লিখুন",
+                      }}
+                    />
 
-                <CustomInput
-                  name="cutting"
-                  label="কর্তন"
-                  placeholder="কেটে রাখা হল"
-                  register={register}
-                  type="number"
-                  error={errors.cutting}
-                  rules={{
-                    required:
-                      "কর্তন লিখুন",
-                  }}
-                />
+                    <CustomInput
+                      name="totalBill"
+                      label="মোট বিল"
+                      placeholder="মোট বিল"
+                      register={register}
+                      type="number"
+                      readonly
+                      error={errors.totalBill}
+                      rules={{
+                        required: "মোট বিল",
+                      }}
+                    />
 
-                <CustomInput
-                  name="payment"
-                  label="পেমেন্ট"
-                  placeholder="পেমেন্ট দেওয়া হল"
-                  register={register}
-                  type="number"
-                  error={errors.payment}
-                  rules={{
-                    required:
-                      "পেমেন্ট লিখুন",
-                  }}
-                />
+                    <CustomInput
+                      name="cutting"
+                      label="কর্তন"
+                      placeholder="কেটে রাখা হল"
+                      register={register}
+                      type="number"
+                      error={errors.cutting}
+                      rules={{
+                        required: "কর্তন লিখুন",
+                      }}
+                    />
 
-                <CustomInput
-                  name="paymentDifference"
-                  label={
-                    paymentDifference === 0
-                      ? "পেমেন্ট কম/বেশি"
-                      : paymentDifference < 0
-                        ? "পেমেন্ট বাকি"
-                        : "বেশি পেমেন্ট"
-                  }
-                  register={register}
-                  type="number"
-                  readonly
-                  placeholder="পেমেন্ট কম/বেশি"
-                  error={
-                    errors.paymentDifference
-                  }
-                  rules={{
-                    required:
-                      "পেমেন্ট কম/বেশি লিখুন",
-                  }}
-                />
+                    <CustomInput
+                      name="payment"
+                      label="পেমেন্ট"
+                      placeholder="পেমেন্ট দেওয়া হল"
+                      register={register}
+                      type="number"
+                      error={errors.payment}
+                      rules={{
+                        required: "পেমেন্ট লিখুন",
+                      }}
+                    />
+
+                    <CustomInput
+                      name="paymentDifference"
+                      label={
+                        paymentDifference === 0
+                          ? "পেমেন্ট কম/বেশি"
+                          : paymentDifference < 0
+                            ? "পেমেন্ট বাকি"
+                            : "বেশি পেমেন্ট"
+                      }
+                      register={register}
+                      type="number"
+                      readonly
+                      placeholder="পেমেন্ট কম/বেশি"
+                      error={errors.paymentDifference}
+                      rules={{
+                        required: "পেমেন্ট কম/বেশি লিখুন",
+                      }}
+                    />
+                  </>
+                )}
               </div>
             </div>
-            <div className="pt-2 space-y-3">
+
+            {/* FILE & DATE */}
+
+            <div className="space-y-3 pt-2">
+              {
+                paymentData?.document ?
+                  <Image
+                    alt="image"
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_API}/uploads/${paymentData?.document}`}
+                    width={500}
+                    height={500}
+                    unoptimized
+                  /> : ""
+              }
               <CustomFilePicker
                 control={control}
                 name="file"
                 label="ডকুমেন্ট / মানি রিসিপ্ট"
                 error={errors.file}
-
               />
 
-              <CustomDatePicker
-                control={control}
-                name="paymentDate"
-                label="পেমেন্টের তারিখ"
-                placeholder="পেমেন্টের তারিখ"
-              />
             </div>
+
+            {/* BUTTONS */}
+
             <div className="flex items-center justify-between pt-5">
               <button
                 type="button"
@@ -513,27 +522,20 @@ const UpdatePaymentModal = ({
                 disabled={isLoading}
                 className="cursor-pointer rounded bg-[#039A63] px-8 py-1.5 text-[14px] font-medium text-gray-100 disabled:cursor-not-allowed disabled:bg-gray-500"
               >
-                {isLoading
-                  ? "আপডেট হচ্ছে..."
-                  : "আপডেট করুন"}
+                {isLoading ? "আপডেট হচ্ছে..." : "আপডেট করুন"}
               </button>
             </div>
           </form>
-
 
           {openLedgerModal && (
             <SelectLedgerModal
               isOpen={openLedgerModal}
               ledger={ledger}
               setLedger={setLedger}
-              onClose={() =>
-                setOpenLedgerModal(false)
-              }
+              onClose={() => setOpenLedgerModal(false)}
             />
           )}
-
         </>
-
       )}
     </CustomModalBottom>
   );

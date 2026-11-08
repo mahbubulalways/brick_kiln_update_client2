@@ -58,6 +58,11 @@ export default function LayoutGuard({
             setIsChecking(false);
             return;
         }
+        if (pathname === "/forgot-password") {
+            setIsAuthorized(true);
+            setIsChecking(false);
+            return;
+        }
 
         /*
         |--------------------------------------------------------------------------

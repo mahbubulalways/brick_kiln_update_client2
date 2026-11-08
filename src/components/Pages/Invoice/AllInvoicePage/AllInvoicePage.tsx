@@ -66,20 +66,49 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
     const meta = data?.data?.meta as TMetaConfig;
     return (
         <div className="bg-white rounded-md shadow border">
-            <div className="flex justify-between flex-col md:flex-row w-full gap-2 items-center p-3  bg-gray-50">
-                <SearchBar value={searchItems} onChange={(e) => setSearchItem(e.target.value)}
-                    onClear={() => setSearchItem("")} />
-                <div className="flex items-center w-full md:w-max gap-4">
-                    <CustomDateFilter
-                        value={filterDate}
-                        onChange={setDateFiter}
-                        placeholder="তারিখ ফিল্টার করুন"
-                        className=""
-                    />
-                    <CustomReportButton
-                        onClick={() => setOpenReportModal(true)}
-                    />
+            <div className="flex w-full flex-col gap-2 bg-gray-50 p-1.5 md:flex-row md:items-center md:justify-between lg:p-3">
+
+                {/* Search */}
+                <div className="flex w-full min-w-0 items-center gap-2 md:flex-1">
+
+                    <div className="min-w-0 flex-1">
+                        <SearchBar
+                            value={searchItems}
+                            onChange={(e) => setSearchItem(e.target.value)}
+                            onClear={() => setSearchItem("")}
+                        />
+                    </div>
+
+                    {/* Mobile Report */}
+                    <div className="shrink-0 md:hidden">
+                        <CustomReportButton
+                            onClick={() => setOpenReportModal(true)}
+                        />
+                    </div>
+
                 </div>
+
+                {/* Date + Desktop Report */}
+                <div className="flex w-full min-w-0 items-center gap-2 md:w-max md:gap-4">
+
+                    <div className="min-w-0 flex-1 md:flex-none">
+                        <CustomDateFilter
+                            value={filterDate}
+                            onChange={setDateFiter}
+                            placeholder="তারিখ ফিল্টার করুন"
+                            className="w-full"
+                        />
+                    </div>
+
+                    {/* Desktop Report */}
+                    <div className="hidden md:block md:flex-none">
+                        <CustomReportButton
+                            onClick={() => setOpenReportModal(true)}
+                        />
+                    </div>
+
+                </div>
+
             </div>
             <div >
                 <div className="overflow-x-auto mt-2  ">
@@ -89,17 +118,17 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                 <TableHead th={"চালান নং"} />
                                 <TableHead th={"ধরন"} />
                                 <TableHead th={"কাস্টমার"} />
-                                <TableHead th={"ঠিকানা"} cls="hidden lg:table-cell" />
+                                <TableHead th={"ঠিকানা"} />
                                 <TableHead th={"শ্রেণি"} />
                                 <TableHead th={"পরিমাণ"} />
-                                <TableHead th={"রেট"} cls="hidden lg:table-cell" />
-                                <TableHead th={"মূল্য"} cls="hidden lg:table-cell" />
-                                <TableHead th={"মোট মূল্য"} cls="hidden lg:table-cell" />
-                                <TableHead th={"ছাড়"} cls="hidden lg:table-cell" />
-                                <TableHead th={"ভাড়া"} cls="hidden lg:table-cell" />
+                                <TableHead th={"রেট"} />
+                                <TableHead th={"মূল্য"} />
+                                <TableHead th={"মোট মূল্য"} />
+                                <TableHead th={"ছাড়"} />
+                                <TableHead th={"ভাড়া"} />
                                 <TableHead th={"সর্বমোট"} />
-                                <TableHead th={"নগদ"} cls="hidden lg:table-cell" />
-                                <TableHead th={"বাকি"} cls="hidden lg:table-cell" />
+                                <TableHead th={"নগদ"} />
+                                <TableHead th={"বাকি"} />
                                 <TableHead th={"বাটন"} />
                             </tr>
                         </thead>
@@ -145,7 +174,6 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
 
                                                         <TableData
                                                             td={row?.customer?.address}
-                                                            cls="hidden lg:table-cell"
                                                             rowSpan={row?.items?.length}
                                                         />
                                                     </>
@@ -164,13 +192,13 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                 {/* Rate */}
                                                 <TableData
                                                     td={toBanglaNumber(item?.rate)}
-                                                    cls="hidden lg:table-cell"
+
                                                 />
 
                                                 {/* Item Price */}
                                                 <TableData
                                                     td={`৳ ${toBanglaNumber(item?.price)}`}
-                                                    cls="hidden lg:table-cell"
+
                                                 />
 
                                                 {index === 0 && (
@@ -178,21 +206,21 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                         {/* Product Price */}
                                                         <TableData
                                                             td={`৳ ${toBanglaNumber(row?.productPrice)}`}
-                                                            cls="text-green-600 hidden lg:table-cell"
+                                                            cls="text-green-600"
                                                             rowSpan={row?.items?.length}
                                                         />
 
                                                         {/* Discount */}
                                                         <TableData
                                                             td={`৳ ${toBanglaNumber(row?.discount)}`}
-                                                            cls="text-orange-500 hidden lg:table-cell"
+                                                            cls="text-orange-500"
                                                             rowSpan={row?.items?.length}
                                                         />
 
                                                         {/* Car Rent */}
                                                         <TableData
                                                             td={`৳ ${toBanglaNumber(row?.carRent)}`}
-                                                            cls="text-blue-600 hidden lg:table-cell"
+                                                            cls="text-blue-600"
                                                             rowSpan={row?.items?.length}
                                                         />
 
@@ -205,7 +233,7 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                         {/* Cash */}
                                                         <TableData
                                                             td={`৳ ${toBanglaNumber(row?.cash)}`}
-                                                            cls="text-green-600 hidden lg:table-cell"
+                                                            cls="text-green-600"
                                                             rowSpan={row?.items?.length}
                                                         />
 
@@ -215,7 +243,7 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                             cls={`border p-2 ${row?.due > 0
                                                                 ? "text-red-500"
                                                                 : "text-green-600"
-                                                                } hidden lg:table-cell`}
+                                                                }`}
                                                             rowSpan={row?.items?.length}
                                                         />
 
@@ -318,7 +346,7 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
 
                                             <TableData
                                                 td={row?.customer?.address}
-                                                cls="hidden lg:table-cell"
+
                                             />
 
                                             <TableData
@@ -331,35 +359,35 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
 
                                             <TableData
                                                 td={toBanglaNumber(row?.items[0]?.rate)}
-                                                cls="hidden lg:table-cell"
+
                                             />
 
                                             <TableData
                                                 td={`৳ ${toBanglaNumber(
                                                     row?.items[0]?.price?.toLocaleString()
                                                 )}`}
-                                                cls="hidden lg:table-cell"
+
                                             />
 
                                             <TableData
                                                 td={`৳ ${toBanglaNumber(
                                                     row?.productPrice?.toLocaleString()
                                                 )}`}
-                                                cls="text-green-600 hidden lg:table-cell"
+                                                cls="text-green-600"
                                             />
 
                                             <TableData
                                                 td={`৳ ${toBanglaNumber(
                                                     row?.discount?.toLocaleString()
                                                 )}`}
-                                                cls="text-orange-500 hidden lg:table-cell"
+                                                cls="text-orange-500"
                                             />
 
                                             <TableData
                                                 td={`৳ ${toBanglaNumber(
                                                     row?.carRent?.toLocaleString()
                                                 )}`}
-                                                cls="text-blue-600 hidden lg:table-cell"
+                                                cls="text-blue-600"
                                             />
 
                                             <TableData
@@ -372,7 +400,7 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                 td={`৳ ${toBanglaNumber(
                                                     row?.cash?.toLocaleString()
                                                 )}`}
-                                                cls="text-green-600 hidden lg:table-cell"
+                                                cls="text-green-600"
                                             />
 
                                             <TableData
@@ -382,7 +410,7 @@ const AllInvoicePage = ({ limit, page, search }: TQuery) => {
                                                 cls={`border p-2 ${row?.due > 0
                                                     ? "text-red-500"
                                                     : "text-green-600"
-                                                    } hidden lg:table-cell`}
+                                                    }`}
                                             />
 
                                             <td className="border p-2">

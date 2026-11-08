@@ -41,7 +41,7 @@ export default function StockBookPage() {
     const meta = stockBook?.data?.meta as TMetaConfig;
 
     return (
-        <div className="p-4 bg-white min-h-screen">
+        <div className=" bg-white min-h-screen">
             <div>
                 <div className="mb-4 flex items-center justify-between rounded-lg bg-white p-4 shadow-sm">
                     <div>
@@ -227,77 +227,99 @@ export default function StockBookPage() {
             </div>
 
 
-            <div className="grid grid-cols-6 pt-10 gap-5">
-                <div className="col-span-2">
+            <div className="grid grid-cols-1 gap-5 pt-8 lg:grid-cols-6 lg:gap-5">
+                {/* Raw Brick Stock */}
+                <div className="w-full min-w-0 lg:col-span-2">
                     <RawBrickStock />
                 </div>
-                <div className="col-span-4">
-                    <div className="border rounded-lg">
-                        <table className="overflow-hidden rounded-lg w-full border-collapse border">
-                            <thead>
-                                <tr className="bg-[#039A63] text-center text-white">
-                                    <TableHead th="তারিখ" />
-                                    <TableHead th="বিবরণ" />
-                                    <TableHead th="শ্রেণি" />
-                                    <TableHead th="স্টক ++" cls="text-green-100" />
-                                    <TableHead th="স্টক --" cls="text-red-100" />
 
-                                </tr>
-                            </thead>
-
-                            <tbody className="text-center">
-                                {stockBookLoading ? (
-                                    <tr>
-                                        <td colSpan={6} className="py-10">
-                                            <CustomLoader cls="h-[20vh]" />
-                                        </td>
+                {/* Stock History */}
+                <div className="w-full min-w-0 lg:col-span-4">
+                    <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white">
+                        {/* Table Scroll */}
+                        <div className="w-full overflow-x-auto">
+                            <table className="w-full min-w-[650px] border-collapse">
+                                <thead>
+                                    <tr className="bg-[#039A63] text-center text-white">
+                                        <TableHead th="তারিখ" />
+                                        <TableHead th="বিবরণ" />
+                                        <TableHead th="শ্রেণি" />
+                                        <TableHead
+                                            th="স্টক ++"
+                                            cls="text-green-100"
+                                        />
+                                        <TableHead
+                                            th="স্টক --"
+                                            cls="text-red-100"
+                                        />
                                     </tr>
-                                ) : !stocks.length ? (
-                                    <tr>
-                                        <td colSpan={6} className="py-8 text-gray-500">
-                                            কোনো স্টকের তথ্য পাওয়া যায়নি।
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    stocks.map((stock: TStockBook) => (
-                                        <tr
-                                            key={stock.id}
-                                            className="border-b border-gray-200 transition-colors last:border-b-0 hover:bg-gray-50"
-                                        >
-                                            <TableData
-                                                td={formatBanglaDate({
-                                                    date: stock.createdAt,
-                                                })}
-                                            />
+                                </thead>
 
-                                            <TableData
-                                                td={stock.description || "-"}
-                                                cls="text-left"
-                                            />
-
-                                            <TableData td={stock.class || "-"} />
-
-                                            <TableData
-                                                td={toBanglaNumber(stock.stockIn)}
-                                                cls="font-medium text-green-600"
-                                            />
-
-                                            <TableData
-                                                td={toBanglaNumber(stock.stockOut)}
-                                                cls="font-medium text-red-500"
-                                            />
+                                <tbody className="text-center">
+                                    {stockBookLoading ? (
+                                        <tr>
+                                            <td
+                                                colSpan={5}
+                                                className="py-10"
+                                            >
+                                                <CustomLoader cls="h-[20vh]" />
+                                            </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                                    ) : !stocks.length ? (
+                                        <tr>
+                                            <td
+                                                colSpan={5}
+                                                className="py-8 text-sm text-gray-500"
+                                            >
+                                                কোনো স্টকের তথ্য পাওয়া যায়নি।
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        stocks.map((stock: TStockBook) => (
+                                            <tr
+                                                key={stock.id}
+                                                className="border-b h-[40px] border-gray-200 transition-colors last:border-b-0 hover:bg-gray-50"
+                                            >
+                                                <TableData
+                                                    td={formatBanglaDate({
+                                                        date: stock.createdAt,
+                                                    })}
+                                                />
 
-                        <TablePagination
-                            page={meta?.page ?? 1}
-                            totalPages={meta?.totalPages ?? 1}
-                            dataLength={stocks.length}
-                            title="স্টক"
-                        />
+                                                <TableData
+                                                    td={stock.description || "-"}
+                                                    cls="max-w-[250px] text-left"
+                                                />
+
+                                                <TableData
+                                                    td={stock.class || "-"}
+                                                />
+
+                                                <TableData
+                                                    td={toBanglaNumber(stock.stockIn)}
+                                                    cls="font-medium text-green-600"
+                                                />
+
+                                                <TableData
+                                                    td={toBanglaNumber(stock.stockOut)}
+                                                    cls="font-medium text-red-500"
+                                                />
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Pagination */}
+                        <div className="w-full overflow-x-auto">
+                            <TablePagination
+                                page={meta?.page ?? 1}
+                                totalPages={meta?.totalPages ?? 1}
+                                dataLength={stocks.length}
+                                title="স্টক"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

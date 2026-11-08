@@ -152,39 +152,73 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
 
   return (
     <div className="bg-white rounded-md shadow border ">
-      <div className="flex w-full flex-col gap-3 border-b bg-gray-50 p-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex w-full flex-col gap-3 border-b bg-gray-50 p-1.5 md:flex-row md:items-center md:justify-between lg:p-3">
 
-        <div className="flex w-full min-w-0 items-center gap-2 md:flex-1">
+        {/* Mobile Top Buttons */}
+        <div className="flex w-full gap-1.5 md:hidden">
           <CustomNewButton
             title="নতুন চালান"
-            className="w-full flex-1 md:w-auto md:flex-none"
+            className="min-w-0 w-0 flex-1"
             onClick={() => setIsOpen(true)}
           />
 
-          <div className="w-full md:hidden block flex-1">
-            <CustomPrintButton
-              className="w-full md:w-auto md:flex-none"
-              onClick={() => setOpenReportModal(true)}
-            />
-          </div>
-          <div className="w-full block md:hidden flex-1">
-            <CustomReportButton
-              className="w-full md:w-auto md:flex-none"
-              onClick={() => setOpenReportModal(true)}
-            />
-          </div>
+          <CustomPrintButton
+            className="min-w-0 w-0 flex-1"
+            onClick={() => printRef.current?.print()}
+          />
 
-          <div className="min-w-0 flex-1 hidden md:block">
+          <CustomReportButton
+            className="min-w-0 w-0 flex-1"
+            onClick={() => setOpenReportModal(true)}
+          />
+
+        </div>
+
+        {/* Desktop Left */}
+        <div className="hidden w-full min-w-0 items-center gap-2 md:flex md:flex-1">
+
+          <CustomNewButton
+            title="নতুন চালান"
+            className="w-auto flex-none"
+            onClick={() => setIsOpen(true)}
+          />
+
+          <div className="min-w-0 flex-1">
             <SearchBar
               value={searchItems}
               onChange={(e) => setSearchItem(e.target.value)}
               onClear={() => setSearchItem("")}
             />
           </div>
+
         </div>
 
-        <div className="flex w-full items-center gap-2 md:w-auto">
-          <div className="flex-1 md:flex-none">
+        {/* Mobile Date + Search */}
+        <div className="flex w-full min-w-0 gap-1 md:hidden">
+          {/* Search */}
+          <div className="min-w-0 w-0 flex-1">
+            <SearchBar
+              value={searchItems}
+              onChange={(e) => setSearchItem(e.target.value)}
+              onClear={() => setSearchItem("")}
+            />
+          </div>
+          {/* Date */}
+          <div className="min-w-0 w-0 flex-1">
+            <CustomDateFilter
+              value={filterDate}
+              onChange={setDateFiter}
+              placeholder="তারিখ"
+              className="w-full min-w-0"
+            />
+          </div>
+
+        </div>
+
+        {/* Desktop Right */}
+        <div className="hidden md:flex md:w-auto md:items-center md:gap-2">
+
+          <div className="flex-none">
             <CustomDateFilter
               value={filterDate}
               onChange={setDateFiter}
@@ -193,30 +227,23 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
             />
           </div>
 
-          <div className="min-w-0 flex-1 md:hidden block">
-            <SearchBar
-              value={searchItems}
-              onChange={(e) => setSearchItem(e.target.value)}
-              onClear={() => setSearchItem("")}
-            />
-          </div>
-          {/* Report */}
-          <div className="w-full hidden md:block flex-1">
+          <div className="flex-none">
             <CustomPrintButton
-              className="w-full md:w-auto md:flex-none"
+              className="w-auto"
               onClick={() => printRef.current?.print()}
             />
           </div>
-          <div className="w-full hidden md:block flex-1">
+
+          <div className="flex-none">
             <CustomReportButton
-              className="w-full md:w-auto md:flex-none"
+              className="w-auto"
               onClick={() => setOpenReportModal(true)}
             />
           </div>
+
         </div>
 
       </div>
-
 
       <div >
         <div className="overflow-x-auto mt-2 ">
@@ -354,7 +381,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
 
                                   {/* for lg desktop */}
                                   <DropdownMenuItem
-                                    className="hidden lg:block"
+                                    className=""
                                     onClick={() => {
                                       setOpenPrintModal(true);
                                       setInvoiceId(row?.serial);
@@ -366,11 +393,11 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                                     />
                                   </DropdownMenuItem>
 
-                                  {/* for mobile */}
+                                  {/* for mobile
                                   <DropdownMenuItem
                                     className="lg:hidden block"
                                     onClick={() => {
-                                      setOpenThermalModal(true);
+                                      setOpenPrintModal(true);
                                       setInvoiceId(row?.serial);
                                     }}
                                   >
@@ -378,7 +405,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                                       Icon={Printer}
                                       title="প্রিন্ট চালান"
                                     />
-                                  </DropdownMenuItem>
+                                  </DropdownMenuItem> */}
 
                                   <DropdownMenuItem
                                     onClick={() => {
@@ -538,7 +565,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
 
                             {/* for lg desktop */}
                             <DropdownMenuItem
-                              className="hidden lg:block"
+
                               onClick={() => {
                                 setOpenPrintModal(true);
                                 setInvoiceId(row?.serial);
@@ -551,7 +578,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                             </DropdownMenuItem>
 
                             {/* for mobile */}
-                            <DropdownMenuItem
+                            {/* <DropdownMenuItem
                               className="lg:hidden block"
                               onClick={() => {
                                 setOpenThermalModal(true);
@@ -562,7 +589,7 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
                                 Icon={Printer}
                                 title="প্রিন্ট চালান"
                               />
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DropdownMenuItem
                               onClick={() => {
                                 setIsDeliveryModalOpen(true);
@@ -679,14 +706,14 @@ const TodaysInVoicePage = ({ limit, page, search }: TQuery) => {
           onClose={() => setOpenChalanDetailsModal(false)}
         />
       )}
-      {openThermalModal && (
+      {/* {openThermalModal && (
         <PrintThermalInvoice
           invoiceId={invoiceId!}
           setInvoiceId={setInvoiceId}
           isOpen={openThermalModal}
           onClose={() => setOpenThermalModal(false)}
         />
-      )}
+      )} */}
 
       {isDeliveryModalOpen && (
         <NewDeliveryModal

@@ -45,8 +45,7 @@ export default function LoginRecordPage({ limit, page }: TQuery) {
                 </h1>
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="bg-[#119f70] text-center text-white">
@@ -56,6 +55,7 @@ export default function LoginRecordPage({ limit, page }: TQuery) {
                             <TableHead th="ডিভাইস" />
                             <TableHead th="ব্রাউজার" />
                             <TableHead th="আইপি" />
+                            <TableHead th="স্ট্যাটাস" />
                         </tr>
                     </thead>
 
@@ -90,48 +90,60 @@ export default function LoginRecordPage({ limit, page }: TQuery) {
                         ) : (
                             /* Data */
                             activity.map((row) => {
-                                const isLogin = row.type === "Login";
+                                const isLogout = row.type === "Logout";
+                                const isSuccess = row.status === true;
+                                const isFailed = row.status === false;
 
-                                const colorClass = isLogin
-                                    ? "font-medium text-[#039A63]"
-                                    : "font-medium text-[#ff7900]";
+                                const rowClass = isFailed
+                                    ? "bg-red-50 hover:bg-red-100"
+                                    : isLogout
+                                        ? "bg-orange-50 hover:bg-orange-100"
+                                        : isSuccess
+                                            ? "bg-green-50 hover:bg-green-100"
+                                            : "hover:bg-gray-50";
+
+                                const colorClass = isFailed
+                                    ? "font-medium text-red-600"
+                                    : isLogout
+                                        ? "font-medium text-[#ff7900]"
+                                        : isSuccess
+                                            ? "font-medium text-[#039A63]"
+                                            : "font-medium text-gray-700";
 
                                 return (
                                     <tr
                                         key={row.id}
-                                        className="transition-colors hover:bg-gray-50"
+                                        className={`transition-colors duration-200 ${rowClass}`}
                                     >
-                                        {/* Type */}
-                                        <TableData
-                                            td={row.type}
-                                            cls={colorClass}
-                                        />
+                                        <TableData td={row.type} cls={colorClass} />
 
-                                        {/* User */}
                                         <TableData
                                             td={row.user?.name || "-"}
                                             cls={colorClass}
                                         />
 
-                                        {/* Time */}
                                         <TableData
                                             td={formatDate(row.createdAt)}
                                             cls={colorClass}
                                         />
 
-                                        {/* Device */}
                                         <TableData
                                             td={row.device || "-"}
                                             cls={colorClass}
                                         />
+
                                         <TableData
                                             td={row.browser || "-"}
                                             cls={colorClass}
                                         />
 
-                                        {/* IP */}
                                         <TableData
                                             td={row.ipAddress || "-"}
+                                            cls={colorClass}
+                                        />
+
+                                        <TableData
+                                            td={isSuccess ? "Success" : "Failed"}
                                             cls={colorClass}
                                         />
                                     </tr>
@@ -140,14 +152,14 @@ export default function LoginRecordPage({ limit, page }: TQuery) {
                         )}
                     </tbody>
                 </table>
-                
+
             </div>
             <TablePagination
-                    page={meta?.page ?? 1}
-                    totalPages={meta?.totalPages ?? 1}
-                    dataLength={activity?.length}
-                    title="রেকর্ড"
-                />
+                page={meta?.page ?? 1}
+                totalPages={meta?.totalPages ?? 1}
+                dataLength={activity?.length}
+                title="রেকর্ড"
+            />
         </div>
     );
 }

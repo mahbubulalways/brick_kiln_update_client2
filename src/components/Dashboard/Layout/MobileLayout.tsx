@@ -14,7 +14,7 @@ const MobileLayout = ({ children }: TChildren) => {
 
   const information = data?.data as TVataResponse
   return (
-    <div className="pb-2">
+    <div className="pb-0 lg:pb-2">
       {isActive ? (
         <div className="flex items-center justify-between px-2 py-4 border-b border-gray-300 shadow">
           <div className="flex items-center gap-1">
@@ -32,7 +32,7 @@ const MobileLayout = ({ children }: TChildren) => {
         <DashboardNavbar />
       )}
 
-      <div className="pt-3 px-2">{children}</div>
+      <div className="p-2">{children}</div>
     </div>
   );
 };

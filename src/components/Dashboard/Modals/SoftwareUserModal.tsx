@@ -17,6 +17,7 @@ type TSoftwareUserForm = {
   username: string;
   role: "OWNER" | "ADMIN" | "MANAGER" | "OPERATOR";
   password: string;
+  email: string
 
 };
 
@@ -60,6 +61,7 @@ const SoftwareUserModal = ({
         username: data.username,
         role: data.role,
         password: data.password,
+        email: data.email,
       }).unwrap();
 
       showToast({
@@ -115,7 +117,21 @@ const SoftwareUserModal = ({
               required: "ইউজারনেম লিখুন",
             }}
           />
-
+          <CustomInput
+            label="ইমেইল"
+            placeholder="example@gmail.com"
+            type="email"
+            error={errors.email}
+            register={register}
+            name="email"
+            rules={{
+              required: "ইমেইল দিন",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "সঠিক ইমেইল ঠিকানা দিন",
+              },
+            }}
+          />
           {/* User Type */}
           <CustomSelect
             name="role"

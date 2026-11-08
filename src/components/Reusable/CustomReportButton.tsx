@@ -19,7 +19,7 @@ const CustomReportButton = ({
     >
       <FiFileText className="h-4 w-4" />
       {/* hidden lg:block  */}
-      <span className="text-[15px]">{children || "রিপোর্ট"}</span>
+      <span className="text-[15px] hidden lg:block">{children || "রিপোর্ট"}</span>
     </button>
   );
 };

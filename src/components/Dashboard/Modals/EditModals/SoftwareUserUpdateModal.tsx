@@ -24,6 +24,7 @@ type TSoftwareUserForm = {
   name: string;
   username: string;
   role: "OWNER" | "ADMIN" | "MANAGER" | "OPERATOR";
+  email: string
 };
 
 const SoftwareUserUpdateModal = ({
@@ -84,6 +85,7 @@ const SoftwareUserUpdateModal = ({
       name: user.name ?? "",
       username: user.username ?? "",
       role: user.role,
+      email: user.email,
     });
   }, [data, reset]);
 
@@ -97,6 +99,7 @@ const SoftwareUserUpdateModal = ({
           name: formData.name,
           username: formData.username,
           role: formData.role,
+          email: formData.email,
         },
       }).unwrap();
 
@@ -164,7 +167,21 @@ const SoftwareUserUpdateModal = ({
                 required: "নাম লিখুন",
               }}
             />
-
+            <CustomInput
+              label="ইমেইল"
+              placeholder="example@gmail.com"
+              type="email"
+              error={errors.email}
+              register={register}
+              name="email"
+              rules={{
+                required: "ইমেইল দিন",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "সঠিক ইমেইল ঠিকানা দিন",
+                },
+              }}
+            />
             <CustomSelect
               name="role"
               label="ইউজারের ধরন"

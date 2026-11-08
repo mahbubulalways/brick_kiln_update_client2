@@ -151,7 +151,7 @@ export default function AllVataPage() {
 
     return (
         <div className="min-h-full space-y-5">
-            <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white  sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#039A63]/10">
                         <Store

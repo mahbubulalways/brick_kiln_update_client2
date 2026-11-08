@@ -47,7 +47,7 @@ const SearchBar = ({
         h-9
         w-full
         min-w-[120]
-        max-w-[250px]
+        max-w-[350px]
         items-center
         overflow-hidden
         rounded-md

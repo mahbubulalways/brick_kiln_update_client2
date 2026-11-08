@@ -183,15 +183,6 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                     <div className="flex w-full flex-col gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-end">
                         {/* Date + Round */}
                         <div className="flex w-full items-center gap-2 lg:w-auto">
-                            <div className="min-w-0 flex-1 lg:w-auto lg:flex-none">
-                                <CustomDateFilter
-                                    value={filterDate}
-                                    onChange={setDateFiter}
-                                    placeholder="তারিখ ফিল্টার করুন"
-                                    className="w-full lg:w-auto"
-                                />
-                            </div>
-
                             <div className="min-w-0 flex-1 lg:w-[160px] lg:flex-none">
                                 <CustomSelect2
                                     options={formatRound || []}
@@ -199,6 +190,14 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                                     onChange={(value) => setSelected(value)}
                                     isError={roundError}
                                     isLoading={roundLoading}
+                                />
+                            </div>
+                            <div className="min-w-0 flex-1 lg:w-auto lg:flex-none">
+                                <CustomDateFilter
+                                    value={filterDate}
+                                    onChange={setDateFiter}
+                                    placeholder="তারিখ ফিল্টার করুন"
+                                    className="w-full lg:w-auto"
                                 />
                             </div>
                         </div>
@@ -301,7 +300,7 @@ const UnloadPage = ({ limit, page }: TQuery) => {
 
                                                 <tr
                                                     key={row.id}
-                                                    className="hover:bg-gray-50"
+                                                    className="hover:bg-gray-50 h-[40px]"
                                                 >
 
                                                     {/* ================= DATE ================= */}
@@ -319,7 +318,7 @@ const UnloadPage = ({ limit, page }: TQuery) => {
                                                             row.round?.name ||
                                                             "-"
                                                         )}
-                                                        cls="hidden lg:table-cell"
+
                                                     />
 
                                                     {/* ================= CLASS COLUMNS ================= */}

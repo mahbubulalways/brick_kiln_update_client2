@@ -69,8 +69,7 @@ export default function ShowMobileNavbar() {
     }, [pathname, setTitle]);
 
     return (
-        <div className="z-[9999] mx-auto mt-4 w-full max-w-5xl pb-8">
-
+        <div className="z-[9999] mx-auto w-full max-w-5xl">
 
             {/* <div className="grid grid-cols-2 overflow-hidden rounded bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-sm">
 
@@ -97,8 +96,7 @@ export default function ShowMobileNavbar() {
             </div> */}
 
 
-            <div className="pt-5">
-
+            <div className="pt-2">
                 {chunkArray(
                     dashboardItemsForMobile1,
                     3
