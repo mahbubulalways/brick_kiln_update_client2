@@ -4,6 +4,7 @@ import { TPaymentResponse } from "@/interface/payment";
 import { TVataInformation } from "@/interface/vata";
 import { formatBanglaDate } from "@/utils/formatBanglaDate";
 import { toBanglaNumber } from "@/utils/toBanglaNumber";
+import LedgerUserInformation from "../Pages/LedgerPage/LedgerUserInformation";
 
 type TLedgerDetails = {
     id: string;
@@ -25,6 +26,11 @@ type TLedgerDetails = {
         payments: number;
     };
 };
+type TPaymentFilter =
+    | "সব"
+    | "রেগুলার পেমেন্ট"
+    | "বাকি পেমেন্ট"
+    | "অগ্রিম পেমেন্ট";
 
 type TLedgerDetailsPrintProps = {
     payments: TPaymentResponse[];
@@ -32,8 +38,8 @@ type TLedgerDetailsPrintProps = {
     vataInformation: TVataInformation;
     startDate?: Date | null;
     endDate?: Date | null;
+    paymentType: TPaymentFilter
 };
-
 
 const LedgerDetailsPrint = ({
     payments = [],
@@ -41,7 +47,9 @@ const LedgerDetailsPrint = ({
     vataInformation,
     startDate,
     endDate,
+    paymentType
 }: TLedgerDetailsPrintProps) => {
+    // Payment calculations
     const totalAdvance = payments.reduce((sum, row) => {
         if (row?.paymentType === "অগ্রিম পেমেন্ট") {
             return sum + Number(row?.payment || 0);
@@ -50,34 +58,38 @@ const LedgerDetailsPrint = ({
         return sum;
     }, 0);
 
-    const totalPayment = payments.reduce((sum, row) => {
-        if (row?.paymentType !== "অগ্রিম পেমেন্ট") {
+    const totalBaki = payments.reduce((sum, row) => {
+        if (row?.paymentType === "বাকি পেমেন্ট") {
             return sum + Number(row?.payment || 0);
         }
 
         return sum;
     }, 0);
 
-    const totalAdvanceDue = payments.reduce((sum, row) => {
-        if (row?.paymentType === "অগ্রিম পেমেন্ট") {
-            const difference = Number(row?.paymentDifference || 0);
-
-            return sum + Math.max(difference, 0);
+    const totalRegular = payments.reduce((sum, row) => {
+        if (row?.paymentType === "রেগুলার পেমেন্ট") {
+            return sum + Number(row?.payment || 0);
         }
 
         return sum;
     }, 0);
 
-    const totalDue = payments.reduce((sum, row) => {
-        const totalBill = Number(row?.totalBill || 0);
-        const cutting = Number(row?.cutting || 0);
-        const payment = Number(row?.payment || 0);
+    const totalPayment = totalAdvance + totalBaki + totalRegular;
 
-        const due = totalBill - cutting - payment;
+    // Opening balance calculation
+    const openingBalance = Number(ledger?.openingBalance ?? 0);
+    const openingBalanceType = ledger?.openingBalanceType ?? "";
 
-        return sum + Math.max(due, 0);
-    }, 0);
+    const signedOpeningBalance =
+        openingBalanceType === "দেনা"
+            ? -openingBalance
+            : openingBalance;
 
+    // Final balance calculation
+    const finalBalance = signedOpeningBalance + totalPayment;
+    const balanceAmount = Math.abs(finalBalance);
+
+    // Table calculations
     const totalQuantity = payments.reduce((sum, row) => {
         return sum + Number(row?.quantity || 0);
     }, 0);
@@ -93,6 +105,7 @@ const LedgerDetailsPrint = ({
     const totalCutting = payments.reduce((sum, row) => {
         return sum + Number(row?.cutting || 0);
     }, 0);
+
     const totalKombesi = payments.reduce((sum, row) => {
         return sum + Number(row?.paymentDifference || 0);
     }, 0);
@@ -115,11 +128,33 @@ const LedgerDetailsPrint = ({
         return "সকল হিসাব";
     };
 
+
+
+
+
+    // Advance payment
+    const ogrimPayment = payments
+        .filter((p) => p.paymentType === "অগ্রিম পেমেন্ট")
+        .reduce((sum, p) => sum + Number(p.payment || 0), 0);
+
+    // Due payment
+    const bakiPayment = payments
+        .filter((p) => p.paymentType === "বাকি পেমেন্ট")
+        .reduce((sum, p) => sum + Number(p.payment || 0), 0);
+
+    // Regular payment
+    const regularPayment = payments
+        .filter((p) => p.paymentType === "রেগুলার পেমেন্ট")
+        .reduce((sum, p) => sum + Number(p.payment || 0), 0);
+
+
+
     return (
         <div
             id="ledger-details-print"
             className="relative w-full bg-white text-black"
         >
+            {/* Watermark */}
             <div
                 aria-hidden
                 className="pointer-events-none absolute left-1/2 top-[100%] z-0 flex -translate-x-1/2 -translate-y-1/2 select-none"
@@ -130,18 +165,15 @@ const LedgerDetailsPrint = ({
                         fontSize: "170px",
                     }}
                 >
-                    {vataInformation?.shortForm
-                        ?.split("")
-                        .join(".")}
+                    {vataInformation?.shortForm?.split("").join(".")}
                 </span>
             </div>
 
             <div className="relative z-10 text-black">
+                {/* Header */}
                 <div className="flex items-center justify-between border-b-2 border-black pb-2">
                     <div className="flex h-11 w-[85px] items-center justify-center rounded border-2 border-black bg-white text-[22px] font-extrabold leading-none tracking-wide">
-                        {vataInformation?.shortForm
-                            ?.split("")
-                            .join(".")}
+                        {vataInformation?.shortForm?.split("").join(".")}
                     </div>
 
                     <div className="min-w-[150px] text-right leading-tight">
@@ -159,6 +191,7 @@ const LedgerDetailsPrint = ({
                     </div>
                 </div>
 
+                {/* Vata Information */}
                 <div className="mt-3 text-center">
                     <h1 className="text-[32px] font-extrabold leading-tight tracking-tight">
                         {vataInformation?.nameBangla}
@@ -194,10 +227,7 @@ const LedgerDetailsPrint = ({
                                     <span className="font-bold">
                                         {vataInformation?.challanPersonOneName}
                                     </span>
-                                    :{" "}
-                                    {
-                                        vataInformation?.challanPersonOnePhoneNumber
-                                    }
+                                    : {vataInformation?.challanPersonOnePhoneNumber}
                                 </span>
                             )}
 
@@ -206,264 +236,139 @@ const LedgerDetailsPrint = ({
                                     <span className="font-bold">
                                         {vataInformation?.challanPersonTwoName}
                                     </span>
-                                    :{" "}
-                                    {
-                                        vataInformation?.challanPersonTwoPhoneNumber
-                                    }
+                                    : {vataInformation?.challanPersonTwoPhoneNumber}
                                 </span>
                             )}
 
                             {vataInformation?.challanManagerPhoneNumber && (
                                 <span>
-                                    <span className="font-bold">
-                                        ম্যানেজার
-                                    </span>
-                                    :{" "}
-                                    {vataInformation?.challanManagerPhoneNumber}
+                                    <span className="font-bold">ম্যানেজার</span>
+                                    : {vataInformation?.challanManagerPhoneNumber}
                                 </span>
                             )}
                         </div>
                     )}
             </div>
-            <div className=" flex  items-center justify-center rounded-full bg-[#E5E7EB] px-6 w-max mx-auto mt-3 py-1">
+
+            {/* Page Title */}
+            <div className="mx-auto mt-3 flex w-max items-center justify-center rounded-full bg-[#E5E7EB] px-6 py-1">
                 <p className="whitespace-nowrap text-[15px] font-bold leading-none">
                     খতিয়ান বিস্তারিত
                 </p>
             </div>
 
-            <div className="mt-2 overflow-hidden border border-gray-300">
-                {/* Ledger Person */}
-                <div className="flex items-center justify-between border-b border-gray-300 bg-[#F1F2F3] px-3 py-1.5">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[12px] font-bold">
-                            {ledger?.name || "-"}
-                        </span>
 
-                        {ledger?.phoneNumber && (
-                            <>
-                                <span className="text-gray-400">•</span>
-
-                                <span className="text-[10px]">
-                                    {ledger.phoneNumber}
-                                </span>
-                            </>
-                        )}
-
-                        {ledger?.season?.name && (
-                            <>
-                                <span className="text-gray-400">•</span>
-
-                                <span className="text-[10px] font-semibold">
-                                    {ledger.season.name}
-                                </span>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="flex items-center gap-3 text-[10px]">
-                        {/* {ledger?.serial !== null && (
-                            <span>
-                                সিরিয়াল:{" "}
-                                <span className="font-bold">
-                                    {toBanglaNumber(ledger?.serial!)}
-                                </span>
-                            </span>
-                        )} */}
-
-                        <span>
-                            মোট পেমেন্ট:{" "}
-                            <span className="font-bold">
-                                {toBanglaNumber(
-                                    ledger?._count?.payments ?? 0
-                                )}
-                            </span>
-                            টি
-                        </span>
-                    </div>
-                </div>
-
-                {/* Ledger Information */}
-                <div className="grid grid-cols-6">
-                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-gray-500">
-                            রেট
-                        </p>
-
-                        <p className="text-[11px] font-bold">
-                            ৳ {toBanglaNumber(ledger?.rate ?? 0)}
-                        </p>
-                    </div>
-
-                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-gray-500">
-                            পরিমাণ
-                        </p>
-
-                        <p className="text-[11px] font-bold">
-                            {toBanglaNumber(ledger?.quantity ?? 0)}
-                        </p>
-                    </div>
-
-                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-gray-500">
-                            বেতন
-                        </p>
-
-                        <p className="text-[11px] font-bold">
-                            ৳ {toBanglaNumber(ledger?.salary ?? 0)}
-                        </p>
-                    </div>
-
-                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-gray-500">
-                            সাপ্তাহিক খোরাকি
-                        </p>
-
-                        <p className="text-[11px] font-bold">
-                            ৳ {toBanglaNumber(ledger?.weeklyFood ?? 0)}
-                        </p>
-                    </div>
-
-                    <div className="border-r border-gray-300 px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-gray-500">
-                            যোগদানের তারিখ
-                        </p>
-
-                        <p className="text-[11px] font-bold">
-                            {ledger?.startDate
-                                ? formatBanglaDate({
-                                    date: ledger.startDate,
-                                })
-                                : "-"}
-                        </p>
-                    </div>
-
-                    <div className="px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-gray-500">
-                            ওপেনিং ব্যালেন্স
-                        </p>
-
-                        <p className="text-[11px] font-bold">
-                            ৳ {toBanglaNumber(
-                                ledger?.openingBalance ?? 0
-                            )}
-
-                            {ledger?.openingBalanceType && (
-                                <span className="ml-1 text-[9px] font-normal">
-                                    ({ledger.openingBalanceType})
-                                </span>
-                            )}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-
+            {/* Date Period */}
             <div className="relative mt-4 flex min-h-[30px] items-center justify-between">
                 <p className="text-[12px] font-semibold leading-none">
                     হিসাবের সময়ঃ {formatDatePeriod()}
                 </p>
+            </div>
+            <div className="rounded border border-gray-200 bg-white px-2 py-1.5">
+                <h3 className="mb-1 text-xs font-bold text-black">
+                    চূড়ান্ত দেনা-পাওনা হিসাব
+                </h3>
+
+                <div className="space-y-1 text-[11px] text-black">
+                    <div className="flex justify-between gap-2">
+                        <span>প্রারম্ভিক ব্যালেন্স ({openingBalanceType || "-"})</span>
+                        <span className="font-semibold">
+                            ৳ {toBanglaNumber(signedOpeningBalance)}
+                        </span>
+                    </div>
+                    {paymentType === "সব" ? (
+                        <>
 
 
+                            <div className="flex justify-between gap-2">
+                                <span>রেগুলার পেমেন্ট</span>
+                                <span className="font-semibold">
+                                    ৳ {toBanglaNumber(regularPayment)}
+                                </span>
+                            </div>
 
+                            <div className="flex justify-between gap-2">
+                                <span>অগ্রিম পেমেন্ট</span>
+                                <span className="font-semibold">
+                                    ৳ {toBanglaNumber(ogrimPayment)}
+                                </span>
+                            </div>
+
+                            <div className="flex justify-between gap-2">
+                                <span>বাকি পেমেন্ট</span>
+                                <span className="font-semibold">
+                                    ৳ {toBanglaNumber(bakiPayment)}
+                                </span>
+                            </div>
+
+
+                        </>
+                    ) : paymentType === "অগ্রিম পেমেন্ট" ? (
+                        <div className="flex justify-between gap-2">
+                            <span>অগ্রিম পেমেন্ট</span>
+                            <span className="font-semibold">
+                                ৳ {toBanglaNumber(ogrimPayment)}
+                            </span>
+                        </div>
+                    ) : paymentType === "বাকি পেমেন্ট" ? (
+                        <div className="flex justify-between gap-2">
+                            <span>বাকি পেমেন্ট</span>
+                            <span className="font-semibold">
+                                ৳ {toBanglaNumber(bakiPayment)}
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="flex justify-between gap-2">
+                            <span>রেগুলার পেমেন্ট</span>
+                            <span className="font-semibold">
+                                ৳ {toBanglaNumber(regularPayment)}
+                            </span>
+                        </div>
+                    )}
+
+                    <div className="flex justify-between gap-2 border-t border-gray-300 pt-1 font-bold">
+                        <span>মোট পেমেন্ট</span>
+                        <span>
+                            ৳ {toBanglaNumber(balanceAmount)}
+                        </span>
+                    </div>
+                </div>
             </div>
 
-            {/* <div className="mt-3 grid grid-cols-5 gap-2">
-                <div className="rounded border border-gray-300 bg-[#F1F2F3] px-2 py-1 text-center">
-                    <p className="text-[10px] font-semibold">
-                        মোট বিল
-                    </p>
-                    <p className="mt-0.5 text-[12px] font-bold">
-                        ৳ {toBanglaNumber(totalBill.toLocaleString())}
-                    </p>
-                </div>
-
-                <div className="rounded border border-gray-300 bg-[#F1F2F3] px-2 py-1 text-center">
-                    <p className="text-[10px] font-semibold">
-                        মোট পেমেন্ট
-                    </p>
-                    <p className="mt-0.5 text-[12px] font-bold">
-                        ৳{" "}
-                        {toBanglaNumber(
-                            totalPaymentAmount.toLocaleString()
-                        )}
-                    </p>
-                </div>
-
-                <div className="rounded border border-gray-300 bg-[#F1F2F3] px-2 py-1 text-center">
-                    <p className="text-[10px] font-semibold">
-                        অগ্রিম
-                    </p>
-                    <p className="mt-0.5 text-[12px] font-bold">
-                        ৳ {toBanglaNumber(totalAdvance.toLocaleString())}
-                    </p>
-                </div>
-
-                <div className="rounded border border-gray-300 bg-[#F1F2F3] px-2 py-1 text-center">
-                    <p className="text-[10px] font-semibold">
-                        অগ্রিম বাকি
-                    </p>
-                    <p className="mt-0.5 text-[12px] font-bold">
-                        ৳{" "}
-                        {toBanglaNumber(
-                            totalAdvanceDue.toLocaleString()
-                        )}
-                    </p>
-                </div>
-
-                <div className="rounded border border-gray-300 bg-[#F1F2F3] px-2 py-1 text-center">
-                    <p className="text-[10px] font-semibold">
-                        বাকি
-                    </p>
-                    <p className="mt-0.5 text-[12px] font-bold">
-                        ৳ {toBanglaNumber(totalDue.toLocaleString())}
-                    </p>
-                </div>
-            </div> */}
-
+            {/* Payment Table */}
             <table className="mt-2 w-full border-collapse text-[9px] text-black">
                 <thead>
                     <tr className="bg-[#F1F2F3]">
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             ক্রম
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             তারিখ
                         </th>
-
                         <th className="border border-gray-300 px-1 py-1 font-semibold">
                             পেমেন্টের বিবরণ
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             পেমেন্টের ধরণ
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             পরিমাণ
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             দর
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             মোট বিল
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             অগ্রিম
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             কর্তন
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             পেমেন্ট
                         </th>
-
                         <th className="whitespace-nowrap border border-gray-300 px-1 py-1 font-semibold">
                             কম/বেশি
                         </th>
@@ -474,10 +379,7 @@ const LedgerDetailsPrint = ({
                     {payments?.length > 0 ? (
                         <>
                             {payments.map(
-                                (
-                                    row: TPaymentResponse,
-                                    index: number
-                                ) => (
+                                (row: TPaymentResponse, index: number) => (
                                     <tr
                                         key={row?.id || index}
                                         className="font-normal"
@@ -580,6 +482,7 @@ const LedgerDetailsPrint = ({
                                 )
                             )}
 
+                            {/* Total Row */}
                             <tr className="bg-[#F1F2F3] font-semibold">
                                 <td
                                     colSpan={4}
@@ -646,44 +549,10 @@ const LedgerDetailsPrint = ({
                 </tbody>
             </table>
 
-            {/* <div className="mt-3 grid grid-cols-3 gap-2">
-                <div className="border border-gray-300 px-2 py-1.5 text-center">
-                    <p className="text-[10px] font-semibold">
-                        মোট পরিমাণ
-                    </p>
-                    <p className="text-[12px] font-bold">
-                        {toBanglaNumber(
-                            totalQuantity.toLocaleString()
-                        )}
-                    </p>
-                </div>
-
-                <div className="border border-gray-300 px-2 py-1.5 text-center">
-                    <p className="text-[10px] font-semibold">
-                        মোট কর্তন
-                    </p>
-                    <p className="text-[12px] font-bold">
-                        ৳{" "}
-                        {toBanglaNumber(
-                            totalCutting.toLocaleString()
-                        )}
-                    </p>
-                </div>
-
-                <div className="border border-gray-300 px-2 py-1.5 text-center">
-                    <p className="text-[10px] font-semibold">
-                        মোট বাকি
-                    </p>
-                    <p className="text-[12px] font-bold">
-                        ৳ {toBanglaNumber(totalDue.toLocaleString())}
-                    </p>
-                </div>
-            </div> */}
-
+            {/* Signature */}
             <div className="mt-14 grid grid-cols-3">
                 <div className="text-center">
                     <div className="mx-auto w-[150px] border-t border-black" />
-
                     <p className="mt-1 text-[11px] font-semibold">
                         ম্যানেজার
                     </p>
@@ -691,15 +560,14 @@ const LedgerDetailsPrint = ({
 
                 <div className="text-center">
                     <div className="mx-auto w-[150px] border-t border-black" />
-
                     <p className="mt-1 text-[11px] font-semibold">
                         মালিক
                     </p>
                 </div>
 
                 <div className="text-center">
-                    <div className="border-t border-black w-[150px] mx-auto" />
-                    <p className="text-[10px] font-semibold mt-1">
+                    <div className="mx-auto w-[150px] border-t border-black" />
+                    <p className="mt-1 text-[10px] font-semibold">
                         অপারেটর
                     </p>
                 </div>

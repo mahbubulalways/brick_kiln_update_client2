@@ -456,6 +456,7 @@ const LedgerDetailsPage = ({
                     vataInformation={vata?.data}
                     startDate={filterDate.startDate}
                     endDate={filterDate.endDate}
+                    paymentType={paymentFilter}
                 />
             </CommonPrint>
         </>
